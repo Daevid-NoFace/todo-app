@@ -1,0 +1,68 @@
+@if (isEditing()) {
+  <app-todo-form
+    [editTodo]="todo()"
+    (todoCreated)="onEdit($event)"
+    (cancelled)="isEditing.set(false)" />
+} @else {
+  <div class="group relative bg-white dark:bg-surface-900 rounded-xl
+              border border-surface-200 dark:border-surface-800 border-l-4
+              hover:shadow-md hover:border-r-surface-300 dark:hover:border-r-surface-700
+              transition-all duration-200 p-4"
+        [class]="priorityBorderClass"
+        [class.opacity-60]="todo().completed">
+
+    <div class="flex items-start gap-3">
+      <button (click)="toogled.emit(todo().id)"
+              [attr.aria-label]="todo().completed ? 'Mark as active' : 'Mark as completed'"
+              class="mt-0.5 w-5 h-5 rounded-full border-2 shrink-0
+                    transition-colors duration-150 flex items-center justify-center"
+              [class]="todo().completed ? 'bg-primary-600 border-primary-600'
+                                        : 'border-surface-300 dark:border-surface-600 hover:border-primary-500'">
+        @if (todo().completed) {
+          <svg class="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        }
+      </button>
+
+      <div class="flex-1 min-w-0">
+        <p class="font-medium text-surface-900 dark:text-surface-100 wrap-break-words"
+           [class.line-through]="todo().completed"
+           [class.text-surface-400]="todo().completed">
+          {{ todo().title }}
+        </p>
+
+        @if (todo().description) {
+          <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5 wrap-break-word">
+            {{ todo().description }}
+          </p>
+        }
+
+        <div class="flex items-center gap-2 mt-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                [class]="priorityBadgeClass">
+            {{ todo().priority }}
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+        <button (click)="isEditing.set(true)"
+                aria-label="Edit todo"
+                class="p-1 rounded hover:bg-surface-100 dark:hover:bg-surface-700">
+          <svg class="w-4 h-4 text-surface-500" viewBox="0 0 16 16" fill="none">
+            <path d="M2 12.5V14H3.5L11.873 5.627L10.373 4.127L2 12.5ZM14.707 3.293C15.098 2.902 15.098 2.318 14.707 1.927L13.073 0.293C12.682 -0.098 12.098 -0.098 11.707 0.293L10.373 1.627L12.873 4.127L14.707 3.293Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        <button (click)="deleted.emit(todo().id)"
+                aria-label="Delete todo"
+                class="p-1 rounded hover:bg-surface-100 dark:hover:bg-surface-700">
+          <svg class="w-4 h-4 text-surface-500" viewBox="0 0 16 16" fill="none">
+            <path d="M6 2H10M2 6H14M5 6V13C5 13.5523 5.44772 14 6 14H10C10.5523 14 11 13.5523 11 13V6M7 10V8M9 10V8M3 6V14C3 15.6569 4.34315 17 6 17H10C11.6569 17 13 15.6569 13 14V6M4 6V4C4 2.34315 5.34315 1 7 1H9C10.6569 1 12 2.34315 12 4V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+}
