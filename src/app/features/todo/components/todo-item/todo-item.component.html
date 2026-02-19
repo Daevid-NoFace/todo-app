@@ -15,7 +15,7 @@
       <button (click)="toggled.emit(todo().id)"
               [attr.aria-label]="todo().completed ? 'Mark as active' : 'Mark as completed'"
               class="mt-0.5 w-5 h-5 rounded-full border-2 shrink-0
-                    transition-colors duration-150 flex items-center justify-center"
+                    transition-colors duration-200 flex items-center justify-center"
               [class]="todo().completed ? 'bg-primary-600 border-primary-600'
                                         : 'border-surface-300 dark:border-surface-600 hover:border-primary-500'">
         @if (todo().completed) {
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+      <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <button (click)="isEditing.set(true)"
                 aria-label="Edit todo"
                 class="p-1 rounded hover:bg-surface-100 dark:hover:bg-surface-700">

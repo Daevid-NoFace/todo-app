@@ -4,7 +4,7 @@
   <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
     <span>{{ todoService.activeCount() }} items left</span>
     @if (todoService.completedCount() > 0) {
-      <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-150">
+      <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-200">
         Clear completed
       </button>
     }
