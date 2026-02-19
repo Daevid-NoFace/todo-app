@@ -10,7 +10,7 @@ import { TodoFormComponent } from "../todo-form/todo-form.component";
 export class TodoItemComponent {
   todo = input.required<Todo>();
 
-  toogled = output<string>();
+  toggled = output<string>();
   deleted = output<string>();
   edited = output<{ id: string; title: string; description?: string; priority: Priority }>();
 
