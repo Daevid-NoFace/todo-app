@@ -1,0 +1,18 @@
+<div class="space-y-6">
+  <app-todo-form (todoCreated)="onTodoCreated($event)" />
+
+  <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
+    <span>{{ todoService.activeCount() }} items left</span>
+    @if (todoService.completedCount() > 0) {
+      <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-150">
+        Clear completed
+      </button>
+    }
+  </div>
+
+  <app-todo-list
+    [todos]="todoService.todos()"
+    (toggled)="onTodoToggled($event)"
+    (deleted)="onTodoDeleted($event)"
+    (edited)="onTodoEdited($event)" />
+</div>

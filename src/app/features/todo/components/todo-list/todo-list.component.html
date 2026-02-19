@@ -1,0 +1,13 @@
+<ul role="list" class="space-y-3">
+  @for (todo of todos(); track todo.id) {
+  <li>
+    <app-todo-item [todo]="todo" (toggled)="toggled.emit($event)" (deleted)="deleted.emit($event)"
+      (edited)="edited.emit($event)" />
+  </li>
+  } @empty {
+  <li class="text-center py-16 text-surface-400 dark:text-surface-500">
+    <p class="text-lg font-medium">No tasks yet</p>
+    <p class="text-sm mt-1">Create your first one above</p>
+  </li>
+  }
+</ul>
