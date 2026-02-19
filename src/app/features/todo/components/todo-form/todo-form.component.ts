@@ -17,7 +17,7 @@ export class TodoFormComponent {
 
   cancelled = output<void>();
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: [''],
     priority: ['medium' as Priority],

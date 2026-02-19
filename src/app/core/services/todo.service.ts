@@ -84,7 +84,7 @@ export class TodoService {
     this.persist(); // Save the updated list to storage
   }
 
-  toogleCompletion(id: string): void {
+  toggleComplete(id: string): void {
     this._todos.update(
       (todos) =>
         todos.map((t) =>

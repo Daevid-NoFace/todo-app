@@ -26,6 +26,6 @@ export class TodoPageComponent {
   }
 
   onTodoToggled(id: string): void {
-    this.todoService.toogleCompletion(id);
+    this.todoService.toggleComplete(id);
   }
 }
