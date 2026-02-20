@@ -32,7 +32,7 @@ export class I18nService {
   }
 
   private loadTranslations(lang: Language): void {
-    fetch(`/i18n/${lang}.json`)
+    fetch(`i18n/${lang}.json`)
       .then(res => res.json())
       .then(data => this.translations.set(data));
   }
