@@ -1,6 +1,8 @@
 <div class="space-y-6">
   <app-todo-form (todoCreated)="onTodoCreated($event)" />
 
+  <app-todo-filters />
+
   <div class="flex items-center justify-between text-sm pt-2 text-surface-500 dark:text-surface-400">
     <span>
       {{ todoService.activeCount() === 1

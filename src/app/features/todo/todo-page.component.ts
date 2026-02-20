@@ -4,10 +4,12 @@ import { TodoFormComponent } from "./components/todo-form/todo-form.component";
 import { TodoListComponent } from "./components/todo-list/todo-list.component";
 import { Priority } from "../../core/models/todo.model";
 import { TranslatePipe } from "../../shared/pipes/translate.pipe";
+import { TodoFilter } from "../../core/models/todo.model";
+import { TodoFiltersComponent } from "./components/todo-filters/todo-filters.component";
 
 @Component({
   selector: 'app-todo-page',
-  imports: [TodoFormComponent, TodoListComponent, TranslatePipe],
+  imports: [TodoFormComponent, TodoListComponent, TranslatePipe, TodoFiltersComponent],
   templateUrl: './todo-page.component.html',
 })
 export class TodoPageComponent {
