@@ -1,0 +1,46 @@
+{
+  "app": {
+    "title": "ToDo App",
+    "subtitle": "Organize your tasks efficiently"
+  },
+  "todo": {
+    "add": "Add Task",
+    "edit": "Edit Task",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "placeholder": "What needs to be done?",
+    "description_placeholder": "Add a description (optional)",
+    "no_tasks": "No tasks yet. Create your first one!",
+    "no_results": "No tasks match your current filters",
+    "items_left": "{{count}} items left",
+    "item_left": "1 item left",
+    "clear_completed": "Clear Completed",
+    "created": "Task created successfully",
+    "deleted": "Task deleted successfully"
+  },
+  "filter": {
+    "all": "All",
+    "active": "Active",
+    "completed": "Completed",
+    "search": "Search tasks..."
+  },
+  "priority": {
+    "label": "Priority",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "theme": {
+    "light": "Light Theme",
+    "dark": "Dark Theme"
+  },
+  "validation": {
+    "required": "This field is required",
+    "minlength": "Minimum length is {{min}} characters"
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  }
+}

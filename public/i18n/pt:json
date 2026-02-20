@@ -1,0 +1,46 @@
+{
+  "app": {
+    "title": "Lista de Tarefas",
+    "subtitle": "Organize as suas tarefas de forma eficiente"
+  },
+  "todo": {
+    "add": "Adicionar Tarefa",
+    "edit": "Editar Tarefa",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "placeholder": "O que precisa ser feito?",
+    "description_placeholder": "Adicionar uma descrição (opcional)",
+    "no_tasks": "Nenhuma tarefa ainda. Crie a sua primeira!",
+    "no_results": "Nenhuma tarefa corresponde aos seus filtros atuais",
+    "items_left": "{{count}} itens restantes",
+    "item_left": "1 item restante",
+    "clear_completed": "Limpar Concluídas",
+    "created": "Tarefa criada com sucesso",
+    "deleted": "Tarefa excluída com sucesso"
+  },
+  "filter": {
+    "all": "Todas",
+    "active": "Ativas",
+    "completed": "Concluídas",
+    "search": "Pesquisar tarefas..."
+  },
+  "priority": {
+    "label": "Prioridade",
+    "low": "Baixa",
+    "medium": "Média",
+    "high": "Alta"
+  },
+  "theme": {
+    "light": "Tema Claro",
+    "dark": "Tema Escuro"
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "minlength": "O comprimento mínimo é de {{min}} caracteres"
+  },
+  "dialog": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  }
+}
