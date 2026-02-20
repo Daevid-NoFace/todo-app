@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from "@angular/core";
+import { Component, inject, input, output, signal, effect } from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Priority } from "../../../../core/models/todo.model";
@@ -25,6 +25,20 @@ export class TodoFormComponent {
     description: [''],
     priority: ['medium' as Priority],
   });
+
+  constructor() {
+    effect(() => {
+      const todo = this.editTodo();
+
+      if (todo) {
+        this.form.patchValue({
+          title: todo.title,
+          description: todo.description ?? '',
+          priority: todo.priority,
+        });
+      }
+    });
+  }
 
   onSubmit(): void {
     this.submitted.set(true)
