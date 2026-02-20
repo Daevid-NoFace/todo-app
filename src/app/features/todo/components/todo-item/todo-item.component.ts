@@ -27,9 +27,9 @@ export class TodoItemComponent {
 
   priorityBorderClass(): string {
     const map: Record<Priority, string> = {
-      low: 'border-l-green-500',
-      medium: 'border-l-yellow-500',
-      high: 'border-l-red-500',
+      low: '!border-l-green-500',
+      medium: '!border-l-yellow-500',
+      high: '!border-l-red-500',
     };
     return map[this.todo().priority];
   }

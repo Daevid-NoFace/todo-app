@@ -69,10 +69,10 @@
           </svg>
         </button>
       </div>
-
-      @if (showDeleteConfirm()) {
-        <app-confirm-dialog [message]="'todo.confirm_delete' | translate" (confirmed)="onDelete()" (cancelled)="showDeleteConfirm.set(false)" />
-      }
     </div>
   </div>
+}
+
+@if (showDeleteConfirm()) {
+  <app-confirm-dialog [message]="'todo.confirm_delete' | translate" (confirmed)="onDelete()" (cancelled)="showDeleteConfirm.set(false)" />
 }
