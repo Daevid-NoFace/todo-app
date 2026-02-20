@@ -6,6 +6,8 @@ import { Priority } from "../../core/models/todo.model";
 import { TranslatePipe } from "../../shared/pipes/translate.pipe";
 import { TodoFilter } from "../../core/models/todo.model";
 import { TodoFiltersComponent } from "./components/todo-filters/todo-filters.component";
+import { ToastService } from "../../core/services/toast.service";
+import { I18nService } from "../../core/services/i18n.service";
 
 @Component({
   selector: 'app-todo-page',
@@ -15,17 +17,23 @@ import { TodoFiltersComponent } from "./components/todo-filters/todo-filters.com
 export class TodoPageComponent {
   protected todoService = inject(TodoService);
 
+  private toast = inject(ToastService);
+  private i18n = inject(I18nService);
+
   onTodoCreated(data: { title: string; description?: string; priority: Priority }): void {
     this.todoService.add(data);
+    this.toast.show(this.i18n.translate('todo.created'), 'success');
   }
 
   onTodoEdited(data: { id: string; title: string; description?: string; priority: Priority }): void {
     const { id, ...updateData } = data;
     this.todoService.update(id, updateData);
+    this.toast.show(this.i18n.translate('todo.updated'), 'success');
   }
 
   onTodoDeleted(id: string): void {
     this.todoService.delete(id);
+    this.toast.show(this.i18n.translate('todo.deleted'), 'success');
   }
 
   onTodoToggled(id: string): void {

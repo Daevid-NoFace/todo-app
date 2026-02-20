@@ -19,6 +19,7 @@
     "item_left": "1 item left",
     "clear_completed": "Clear Completed",
     "created": "Task created successfully",
+    "updated": "Task updated successfully",
     "deleted": "Task deleted successfully"
   },
   "filter": {

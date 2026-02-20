@@ -19,6 +19,7 @@
     "item_left": "1 item restante",
     "clear_completed": "Limpar Concluídas",
     "created": "Tarefa criada com sucesso",
+    "updated": "Tarefa atualizada com sucesso",
     "deleted": "Tarefa excluída com sucesso"
   },
   "filter": {
