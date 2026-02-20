@@ -6,7 +6,7 @@
       focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
       placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none" />
 
-      @if (form.controls.title.touched && form.controls.title.errors) {
+      @if (submitted() && form.controls.title.errors) {
         <p id="title-error" role="alert" class="mt-1 text-sm text-red-500">
           @if (form.controls.title.errors['required']) {
             {{ 'validation.required' | translate }}

@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from "@angular/core";
+import { Component, inject, input, output, signal } from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Priority } from "../../../../core/models/todo.model";
@@ -12,6 +12,8 @@ import { Priority } from "../../../../core/models/todo.model";
 export class TodoFormComponent {
   private fb = inject(FormBuilder);
 
+  submitted = signal(false);
+  
   editTodo = input<{ title: string; description?: string; priority: Priority } | null>(null);
 
   todoCreated = output<{ title: string; description?: string; priority: Priority }>();
@@ -25,8 +27,9 @@ export class TodoFormComponent {
   });
 
   onSubmit(): void {
+    this.submitted.set(true)
+
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
       return;
     }
 
@@ -38,7 +41,7 @@ export class TodoFormComponent {
 
     if (!this.editTodo()) {
       this.form.reset({ title: '', description: '', priority: 'medium' });
+      this.submitted.set(false);
     }
   }
-
 }
