@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, HostListener } from '@angular/core';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 
 @Component({
@@ -17,6 +17,11 @@ export class ConfirmDialog {
   }
 
   onCancel(): void {
+    this.cancelled.emit();
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
     this.cancelled.emit();
   }
 }

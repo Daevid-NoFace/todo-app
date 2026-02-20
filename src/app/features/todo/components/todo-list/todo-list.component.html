@@ -1,4 +1,4 @@
-<ul role="list" class="space-y-3">
+<ul role="list" [attr.aria-label]="'app.title' | translate" class="space-y-3">
   @for (todo of todos(); track todo.id) {
   <li [@fadeSlideIn]>
     <app-todo-item [todo]="todo" (toggled)="toggled.emit($event)" (deleted)="deleted.emit($event)"

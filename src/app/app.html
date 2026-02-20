@@ -1,6 +1,11 @@
-<div class="min-h-screen bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-100 transition-colors duration-200">
-  <app-header/>
-  <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<a href="#main-content"
+  class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2">
+  Skip to main content
+</a>
+<div
+  class="min-h-screen bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-100 transition-colors duration-200">
+  <app-header />
+  <main id="main-content" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <router-outlet />
   </main>
 </div>

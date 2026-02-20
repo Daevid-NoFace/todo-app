@@ -10,15 +10,18 @@
       : ('todo.items_left' | translate: { count: todoService.activeCount() }) }}
     </span>
     @if (todoService.completedCount() > 0) {
-      <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-200">
-        {{ 'todo.clear_completed' | translate }}
-      </button>
+    <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-200">
+      {{ 'todo.clear_completed' | translate }}
+    </button>
     }
   </div>
 
-  <app-todo-list
-    [todos]="todoService.filteredTodos()"
-    (toggled)="onTodoToggled($event)"
-    (deleted)="onTodoDeleted($event)"
-    (edited)="onTodoEdited($event)" />
+  <div aria-live="polite" class="sr-only">
+    {{ todoService.activeCount() === 1
+    ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+    : ('todo.items_left' | translate: { count: todoService.activeCount() }) }}
+  </div>
+
+  <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
+    (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
 </div>

@@ -9,6 +9,7 @@
     "save": "Salvar",
     "cancel": "Cancelar",
     "delete": "Excluir",
+    "update": "Atualizar",
     "confirm_delete": "Tem certeza que deseja excluir esta tarefa?",
     "placeholder": "O que precisa ser feito?",
     "description_placeholder": "Adicionar uma descrição (opcional)",
