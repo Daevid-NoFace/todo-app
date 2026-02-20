@@ -2,10 +2,14 @@
   <app-todo-form (todoCreated)="onTodoCreated($event)" />
 
   <div class="flex items-center justify-between text-sm pt-2 text-surface-500 dark:text-surface-400">
-    <span>{{ todoService.activeCount() }} items left</span>
+    <span>
+      {{ todoService.activeCount() === 1
+      ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+      : ('todo.items_left' | translate: { count: todoService.activeCount() }) }}
+    </span>
     @if (todoService.completedCount() > 0) {
       <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-200">
-        Clear completed
+        {{ 'todo.clear_completed' | translate }}
       </button>
     }
   </div>

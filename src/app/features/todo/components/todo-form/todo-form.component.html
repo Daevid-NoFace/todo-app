@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-surface-50 dark:bg-surface-900 rounded-xl p-4 sm:p-6 border border-surface-200 dark:border-surface-800 space-y-4">
 
   <div>
-    <input formControlName="title" type="text" placeholder="What needs to be done?"
+    <input formControlName="title" type="text" [placeholder]="'todo.placeholder' | translate"
       class="w-full px-4 py-3 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
       focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
       placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none" />
@@ -9,16 +9,16 @@
       @if (form.controls.title.touched && form.controls.title.errors) {
         <p class="mt-1 text-sm text-red-500">
           @if (form.controls.title.errors['required']) {
-            This field is required.
+            {{ 'validation.required' | translate }}
           } @else if (form.controls.title.errors['minlength']) {
-            Title must be at least 3 characters long.
+            {{ 'validation.minlength' | translate:{min: 3} }}
           }
         </p>
       }
   </div>
 
   <div>
-    <textarea formControlName="description" rows="2" placeholder="Add a description (optional)"
+    <textarea formControlName="description" rows="2" [placeholder]="'todo.description_placeholder' | translate"
       class="w-full px-4 py-3 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
       focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
       placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none"></textarea>
@@ -26,28 +26,28 @@
 
   <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
     <div class="flex items-center gap-2">
-      <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">Priority</label>
+      <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">{{ 'priority.label' | translate }}</label>
       <select formControlName="priority" id="priority"
         class="px-3 py-2 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
         focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
         text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
+        <option value="low">{{ 'priority.low' | translate }}</option>
+        <option value="medium">{{ 'priority.medium' | translate }}</option>
+        <option value="high">{{ 'priority.high' | translate }}</option>
       </select>
     </div>
 
     <div class="flex gap-2">
       @if (editTodo()) {
-        <button type="button" (click)="cancelled.emit()" class="px-6 py-2 rounded-lg text-sm font-medium bg-primary-600 hover:bg-primary-500 text-white transition-colors duration-200">
-          Cancel
+        <button type="button" (click)="cancelled.emit()" class="px-4 py-2 rounded-lg text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors duration-200">
+          {{ 'todo.cancel' | translate }}
         </button>
       }
       <button type="submit" class="px-6 py-2 rounded-lg text-sm font-medium bg-primary-600 hover:bg-primary-500 text-white transition-colors duration-200">
         @if (editTodo()) {
-          Update
+          {{ 'todo.update' | translate }}
         } @else {
-          Add
+          {{ 'todo.add' | translate }}
         }
       </button>
     </div>

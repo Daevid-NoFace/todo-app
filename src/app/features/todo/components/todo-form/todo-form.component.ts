@@ -1,11 +1,12 @@
 import { Component, inject, input, output } from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Priority } from "../../../../core/models/todo.model";
 
 @Component({
   selector: 'app-todo-form',
   templateUrl: './todo-form.component.html',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
 })
 
 export class TodoFormComponent {

@@ -3,10 +3,11 @@ import { TodoService } from "../../core/services/todo.service";
 import { TodoFormComponent } from "./components/todo-form/todo-form.component";
 import { TodoListComponent } from "./components/todo-list/todo-list.component";
 import { Priority } from "../../core/models/todo.model";
+import { TranslatePipe } from "../../shared/pipes/translate.pipe";
 
 @Component({
   selector: 'app-todo-page',
-  imports: [TodoFormComponent, TodoListComponent],
+  imports: [TodoFormComponent, TodoListComponent, TranslatePipe],
   templateUrl: './todo-page.component.html',
 })
 export class TodoPageComponent {

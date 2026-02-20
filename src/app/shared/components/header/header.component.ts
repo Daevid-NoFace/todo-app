@@ -1,32 +1,34 @@
-import { Component, inject } from "@angular/core";
-import { ThemeService } from "../../../core/services/theme.service";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ThemeService } from '../../../core/services/theme.service';
+import { I18nService } from '../../../core/services/i18n.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-header',
+  imports: [TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
-      class="sticky top-0 z-10 bg-surface-50/80
-  dark:bg-surface-900/80
-                 backdrop-blur-sm border-b
-  border-surface-200 dark:border-surface-800"
+      class="sticky top-0 z-10 bg-surface-50/80 dark:bg-surface-900/80 backdrop-blur-sm border-b
+            border-surface-200 dark:border-surface-800"
     >
-      <div
-        class="max-w-2xl mx-auto px-4 sm:px-6 py-3
-  sm:py-4
-                flex items-center justify-between"
-      >
-        <h1 class="text-xl sm:text-2xl font-bold">Todo App</h1>
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <h1 class="text-xl sm:text-2xl font-bold">{{ 'app.title' | translate }}</h1>
         <div class="flex items-center gap-2 sm:gap-3">
           <button
+            (click)="switchLanguage()"
+            class="px-2 py-1 rounded-lg text-sm font-medium hover:bg-surface-200 dark:hover:bg-surface-700
+                  transition-colors duration-200"
+            aria-label="Switch language"
+          >
+            {{ i18n.currentLang() === 'en' ? 'PT' : 'EN' }}
+          </button>
+
+          <button
             (click)="theme.toggle()"
-            class="p-2 rounded-lg hover:bg-surface-200
-  dark:hover:bg-surface-700
-                 transition-colors duration-200"
+            class="p-2 rounded-lg hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors duration-200"
             [attr.aria-label]="
-              theme.darkMode()
-                ? 'Switch
-  to light mode'
-                : 'Switch to dark mode'
+              theme.darkMode() ? ('theme.light' | translate) : ('theme.dark' | translate)
             "
           >
             @if (theme.darkMode()) {
@@ -61,10 +63,7 @@ import { ThemeService } from "../../../core/services/theme.service";
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <path
-                  d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0
-   0 0 21 12.79z"
-                />
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
             }
           </button>
@@ -75,4 +74,10 @@ import { ThemeService } from "../../../core/services/theme.service";
 })
 export class HeaderComponent {
   protected theme = inject(ThemeService);
+  protected i18n = inject(I18nService);
+
+  switchLanguage(): void {
+    const next = this.i18n.currentLang() === 'en' ? 'pt' : 'en';
+    this.i18n.switchLanguage(next);
+  }
 }
