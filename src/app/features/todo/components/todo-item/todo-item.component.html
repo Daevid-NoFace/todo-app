@@ -57,7 +57,7 @@
           </svg>
         </button>
 
-        <button (click)="deleted.emit(todo().id)"
+        <button (click)="showDeleteConfirm.set(true)"
                 [attr.aria-label]="'todo.delete' | translate"
                 class="p-1.5 rounded-lg text-surface-400 hover:text-primary-600 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors duration-200">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -69,6 +69,10 @@
           </svg>
         </button>
       </div>
+
+      @if (showDeleteConfirm()) {
+        <app-confirm-dialog [message]="'todo.confirm_delete' | translate" (confirmed)="onDelete()" (cancelled)="showDeleteConfirm.set(false)" />
+      }
     </div>
   </div>
 }

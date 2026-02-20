@@ -9,6 +9,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
+    "confirm_delete": "Are you sure you want to delete this task?",
     "placeholder": "What needs to be done?",
     "description_placeholder": "Add a description (optional)",
     "no_tasks": "No tasks yet. Create your first one!",

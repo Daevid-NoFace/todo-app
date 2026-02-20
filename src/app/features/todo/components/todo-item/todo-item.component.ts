@@ -2,11 +2,12 @@ import { Component, input, output, signal } from "@angular/core";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Todo, Priority } from "../../../../core/models/todo.model";
 import { TodoFormComponent } from "../todo-form/todo-form.component";
+import { ConfirmDialog } from "../../../../shared/components/confirm-dialog/confirm-dialog/confirm-dialog";
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
-  imports: [TodoFormComponent, TranslatePipe],
+  imports: [TodoFormComponent, TranslatePipe, ConfirmDialog],
 })
 export class TodoItemComponent {
   todo = input.required<Todo>();
@@ -16,6 +17,8 @@ export class TodoItemComponent {
   edited = output<{ id: string; title: string; description?: string; priority: Priority }>();
 
   isEditing = signal(false);
+  showDeleteConfirm = signal(false);
+
 
   onEdit(data: { title: string; description?: string; priority: Priority }): void {
     this.edited.emit({ id: this.todo().id, ...data });
@@ -38,5 +41,10 @@ export class TodoItemComponent {
       high: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
     };
     return map[this.todo().priority];
+  }
+
+  onDelete(): void {
+    this.deleted.emit(this.todo().id);
+    this.showDeleteConfirm.set(false);
   }
 }
