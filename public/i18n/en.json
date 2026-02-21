@@ -29,7 +29,7 @@
     "search": "Search tasks...",
     "sort_by": "Ordenar por",
     "date": "Date",
-    "priority": "Prioridade"
+    "priority": "Priority"
   },
   "priority": {
     "label": "Priority",
