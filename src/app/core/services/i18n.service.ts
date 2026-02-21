@@ -1,5 +1,7 @@
-import {inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { StorageService } from './storage.service';
+import en from '../../../../public/i18n/en.json';
+import pt from '../../../../public/i18n/pt.json';
 
 export type Language = 'en' | 'pt';
 
@@ -7,17 +9,15 @@ export interface Translations {
   [key: string]: string | Translations;
 }
 
+const allTranslations: Record<Language, Translations> = { en, pt };
+
 @Injectable({ providedIn: 'root' })
 export class I18nService {
   private storage = inject(StorageService);
 
   currentLang = signal<Language>(this.loadLang());
 
-  private translations = signal<Translations>({});
-
-  constructor() {
-    this.loadTranslations(this.currentLang());
-  }
+  private translations = signal<Translations>(allTranslations[this.currentLang()]);
 
   private loadLang(): Language {
     const lang = this.storage.get<Language>('lang');
@@ -31,17 +31,11 @@ export class I18nService {
     return browserLang === 'pt' ? 'pt' : 'en';
   }
 
-  private loadTranslations(lang: Language): void {
-    fetch(`i18n/${lang}.json`)
-      .then(res => res.json())
-      .then(data => this.translations.set(data));
-  }
-
   switchLanguage(lang: Language): void {
     this.currentLang.set(lang);
     this.storage.set('lang', lang);
     document.documentElement.lang = lang;
-    this.loadTranslations(lang);
+    this.translations.set(allTranslations[lang]);
   }
 
   translate(key: string, params?: Record<string, string | number>): string {
