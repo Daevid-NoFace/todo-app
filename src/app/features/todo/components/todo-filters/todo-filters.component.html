@@ -2,25 +2,41 @@
   <div class="flex rounded-lg overflow-hidden border border-surface-200 dark:border-surface-800 w-full sm:w-auto">
 
     @for (status of filterOptions; track status) {
-      <button (click)="setStatusFilter(status)"
-              class="flex-1 sm:flex-none px-4 py-2 text-sm font-medium transition-colors duration-200"
-              [class]="todoService.filter().status === status ? 'bg-primary-600 text-white' : 'bg-white dark:bg-surface-900 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800'">
-        {{ 'filter.' + status | translate }}
-      </button>
+    <button (click)="setStatusFilter(status)"
+      class="flex-1 sm:flex-none px-4 py-2 text-sm font-medium transition-colors duration-200"
+      [class]="todoService.filter().status === status ? 'bg-primary-600 text-white' : 'bg-white dark:bg-surface-900 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800'">
+      {{ 'filter.' + status | translate }}
+    </button>
     }
   </div>
 
   <div class="relative flex-1">
-    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-surface-500 pointer-events-none" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-surface-500 pointer-events-none"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
       <circle cx="11" cy="11" r="8" />
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
-    <input type="text"
-          (input)="onSearch($event)"
-          [placeholder]="'filter.search' | translate"
-          class="w-full pl-10 pr-4 py-2 rounded-lg text-sm bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
-          dark:focus:border-primary-400 placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none"
-          />
+    <input type="text" (input)="onSearch($event)" [placeholder]="'filter.search' | translate"
+      class="w-full pl-10 pr-4 py-2 rounded-lg text-sm bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
+          dark:focus:border-primary-400 placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none" />
+  </div>
+
+  <div class="flex items-center gap-2">
+    <select (change)="onSortByChange($event)" [value]="todoService.filter().sortBy" class="px-3 py-2 rounded-lg text-sm bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
+                  transition-all duration-200 outline-none cursor-pointer">
+      <option value="createdAt">{{ 'filter.date' | translate }}</option>
+      <option value="priority">{{ 'filter.priority' | translate }}</option>
+    </select>
+
+    <button (click)="onSortOrderChange()" class="p-2 rounded-lg border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800
+                  transition-colors duration-200" [attr.aria-label]="'filter.sort_by | translate'">
+      <svg class="w-4 h-4 transition-transform duration-200"
+        [class.rotate-180]="todoService.filter().sortOrder === 'asc'" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
+    </button>
   </div>
 </div>

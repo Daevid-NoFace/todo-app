@@ -26,7 +26,10 @@
     "all": "Todas",
     "active": "Ativas",
     "completed": "Concluídas",
-    "search": "Pesquisar tarefas..."
+    "search": "Pesquisar tarefas...",
+    "sort_by": "Ordenar por",
+    "date": "Data",
+    "priority": "Prioridade"
   },
   "priority": {
     "label": "Prioridade",
