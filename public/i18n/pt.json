@@ -20,7 +20,8 @@
     "clear_completed": "Limpar Concluídas",
     "created": "Tarefa criada com sucesso",
     "updated": "Tarefa atualizada com sucesso",
-    "deleted": "Tarefa excluída com sucesso"
+    "deleted": "Tarefa excluída com sucesso",
+    "due_date": "Data de vencimento"
   },
   "filter": {
     "all": "Todas",
@@ -29,7 +30,8 @@
     "search": "Pesquisar tarefas...",
     "sort_by": "Ordenar por",
     "date": "Data",
-    "priority": "Prioridade"
+    "priority": "Prioridade",
+    "due_date":"Data de vencimento"
   },
   "priority": {
     "label": "Prioridade",

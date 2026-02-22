@@ -13,10 +13,10 @@ export class TodoFormComponent {
   private fb = inject(FormBuilder);
 
   submitted = signal(false);
-  
-  editTodo = input<{ title: string; description?: string; priority: Priority } | null>(null);
 
-  todoCreated = output<{ title: string; description?: string; priority: Priority }>();
+  editTodo = input<{ title: string; description?: string; priority: Priority, dueDate?: string } | null>(null);
+
+  todoCreated = output<{ title: string; description?: string; priority: Priority, dueDate?: string }>();
 
   cancelled = output<void>();
 
@@ -24,6 +24,7 @@ export class TodoFormComponent {
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: [''],
     priority: ['medium' as Priority],
+    dueDate: [''],
   });
 
   constructor() {
@@ -35,6 +36,7 @@ export class TodoFormComponent {
           title: todo.title,
           description: todo.description ?? '',
           priority: todo.priority,
+          dueDate: todo.dueDate ?? '',
         });
       }
     });
@@ -51,10 +53,11 @@ export class TodoFormComponent {
       title: this.form.value.title!,
       description: this.form.value.description || undefined,
       priority: this.form.value.priority!,
+      dueDate: this.form.value.dueDate || undefined,
     });
 
     if (!this.editTodo()) {
-      this.form.reset({ title: '', description: '', priority: 'medium' });
+      this.form.reset({ title: '', description: '', priority: 'medium', dueDate: '' });
       this.submitted.set(false);
     }
   }

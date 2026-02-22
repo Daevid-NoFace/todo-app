@@ -20,16 +20,18 @@
     "clear_completed": "Clear Completed",
     "created": "Task created successfully",
     "updated": "Task updated successfully",
-    "deleted": "Task deleted successfully"
+    "deleted": "Task deleted successfully",
+    "due_date": "Due Date"
   },
   "filter": {
     "all": "All",
     "active": "Active",
     "completed": "Completed",
     "search": "Search tasks...",
-    "sort_by": "Ordenar por",
+    "sort_by": "Sort by",
     "date": "Date",
-    "priority": "Priority"
+    "priority": "Priority",
+    "due_date":"Due Date"
   },
   "priority": {
     "label": "Priority",

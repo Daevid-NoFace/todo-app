@@ -20,12 +20,12 @@ export class TodoPageComponent {
   private toast = inject(ToastService);
   private i18n = inject(I18nService);
 
-  onTodoCreated(data: { title: string; description?: string; priority: Priority }): void {
+  onTodoCreated(data: { title: string; description?: string; priority: Priority; dueDate?: string }): void {
     this.todoService.add(data);
     this.toast.show(this.i18n.translate('todo.created'), 'success');
   }
 
-  onTodoEdited(data: { id: string; title: string; description?: string; priority: Priority }): void {
+  onTodoEdited(data: { id: string; title: string; description?: string; priority: Priority; dueDate?: string }): void {
     const { id, ...updateData } = data;
     this.todoService.update(id, updateData);
     this.toast.show(this.i18n.translate('todo.updated'), 'success');

@@ -9,12 +9,11 @@ export class TodoService {
 
   private _todos = signal<Todo[]>(this.storage.get<Todo[]>(this.storageKey) ?? []);
 
-  todos = this._todos.asReadonly(); // Expose as readonly to prevent external mutation
+  todos = this._todos.asReadonly();
 
-  activeCount = computed(() => this.todos().filter((todo) => !todo.completed).length); // Number of active (not completed) todos
-  completedCount = computed(() => this.todos().filter((todo) => todo.completed).length); // Number of completed todos
+  activeCount = computed(() => this.todos().filter((todo) => !todo.completed).length);
+  completedCount = computed(() => this.todos().filter((todo) => todo.completed).length);
 
-  // Computed property to get filtered and sorted todos based on the current filter
   private _filter = signal<TodoFilter>({
     status: 'all',
     searchTerm: '',
@@ -22,17 +21,17 @@ export class TodoService {
     sortOrder: 'desc',
   });
 
-  filter = this._filter.asReadonly(); // Expose filter as readonly to prevent external mutation
+  filter = this._filter.asReadonly();
 
   filteredTodos = computed(() => {
-    const todos = this._todos(); // Get the current list of todos
-    const f = this._filter(); // Get the current filter settings
+    const todos = this._todos();
+    const f = this._filter();
 
     return todos
       .filter((t) => {
-        if (f.status === 'active') return !t.completed; // Show only active todos
-        if (f.status === 'completed') return t.completed; // Show only completed todos
-        return true; // Show all todos
+        if (f.status === 'active') return !t.completed;
+        if (f.status === 'completed') return t.completed;
+        return true;
       })
       .filter((t) =>
         f.searchTerm
@@ -41,33 +40,39 @@ export class TodoService {
           : true,
       )
       .sort((a, b) => {
-        const order = f.sortOrder === 'asc' ? 1 : -1; // Determine sort order
+        const order = f.sortOrder === 'asc' ? 1 : -1;
 
         if (f.sortBy === 'priority') {
-          const priorityOrder = { low: 1, medium: 2, high: 3 }; // Define priority order
-          return (priorityOrder[a.priority] - priorityOrder[b.priority]) * order; // Sort by priority
+          const priorityOrder = { low: 1, medium: 2, high: 3 };
+          return (priorityOrder[a.priority] - priorityOrder[b.priority]) * order;
         }
-        return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * order; // Sort by creation date
+
+        if (f.sortBy === 'dueDate') {
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          return (new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) * order;
+        }
+        return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * order;
       });
   });
 
-  // Method to update an existing todo
   private persist(): void {
-    this.storage.set(this.storageKey, this._todos()); // Save the current list of todos to storage
+    this.storage.set(this.storageKey, this._todos());
   }
 
-  add(data: { title: string; description?: string; priority: Priority }): void {
+  add(data: { title: string; description?: string; priority: Priority; dueDate?: string }): void {
     const newTodo: Todo = {
-      id: crypto.randomUUID(), // Generate a unique ID for the new todo
+      id: crypto.randomUUID(),
       title: data.title,
       description: data.description,
       completed: false,
       priority: data.priority,
+      dueDate: data.dueDate,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    this._todos.update((todos) => [newTodo, ...todos]); // Add the new todo to the beginning of the list
-    this.persist(); // Save the updated list to storage
+    this._todos.update((todos) => [newTodo, ...todos]);
+    this.persist();
   }
 
   update(id: string, changes: Partial<Omit<Todo, 'id' | 'createdAt'>>): void {
@@ -75,13 +80,13 @@ export class TodoService {
       todos.map((t) =>
         t.id === id ? { ...t, ...changes, updatedAt: new Date().toISOString() } : t,
       ),
-    ); // Update the specified todo with the changes
-    this.persist(); // Save the updated list to storage
+    );
+    this.persist();
   }
 
   delete(id: string): void {
-    this._todos.update((todos) => todos.filter((t) => t.id !== id)); // Remove the specified todo from the list
-    this.persist(); // Save the updated list to storage
+    this._todos.update((todos) => todos.filter((t) => t.id !== id));
+    this.persist();
   }
 
   toggleComplete(id: string): void {
@@ -89,17 +94,17 @@ export class TodoService {
       (todos) =>
         todos.map((t) =>
           t.id === id ? { ...t, completed: !t.completed, updatedAt: new Date().toISOString() } : t,
-        ), // Toggle the completion status of the specified todo
+        ),
     );
-    this.persist(); // Save the updated list to storage
+    this.persist();
   }
 
   clearCompleted(): void {
     this._todos.update((todos) => todos.filter((t) => !t.completed));
-    this.persist(); // Save the updated list to storage
+    this.persist();
   }
 
   updateFilter(changes: Partial<TodoFilter>): void {
-    this._filter.update((f) => ({ ...f, ...changes })); // Update the filter settings with the provided changes
+    this._filter.update((f) => ({ ...f, ...changes }));
   }
 }

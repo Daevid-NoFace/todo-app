@@ -16,9 +16,10 @@ A modern task management application built as a technical assessment for **Domow
 - Full CRUD (create, read, update, delete tasks)
 - Filter by status (All / Active / Completed)
 - Search tasks by title or description
-- Sort by date or priority (ascending/descending)
+- Sort by date, priority, or due date (ascending/descending)
+- Due dates with color-coded badges (overdue, upcoming, on time)
 - Dark / Light theme with system preference detection
-- Internationalization (English & Português PT-PT)
+- Internationalization (English & Português EN-PT)
 - Data persistence with localStorage
 - Fully responsive (mobile & desktop)
 
@@ -157,6 +158,5 @@ Roadmap (if more time)
 
 - User authentication with route guards
 - Drag & drop to reorder tasks
-- Due dates with calendar picker
 - Categories/tags for tasks
 - Export/import tasks (JSON)
