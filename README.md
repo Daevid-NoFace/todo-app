@@ -113,6 +113,20 @@ src/app/
 
 ---
 
+Screenshots
+
+┌────────────────────────────┬───────────────────────────┐
+│ Light Mode │ Dark Mode │
+├────────────────────────────┼───────────────────────────┤
+│ ![Light Mode](screenshots/light.png) │ ![Dark Mode](screenshots/dark.png) │
+└────────────────────────────┴───────────────────────────┘
+
+┌─────────────────────────────┬──────────────────────────────┐
+│ Mobile │ Filters │
+├─────────────────────────────┼──────────────────────────────┤
+│ ![Mobile](screenshots/mobile.png) │ ![Filters](screenshots/filters.png) │
+└─────────────────────────────┴──────────────────────────────┘
+
 ## Getting Started
 
 ### Prerequisites
@@ -142,22 +156,10 @@ Build
 ng build
 
 ---
-Screenshots
-
-
-┌────────────────────────────┬───────────────────────────┐
-│         Light Mode         │         Dark Mode         │
-├────────────────────────────┼───────────────────────────┤
-│ (screenshots/light.png)    │ (screenshots/dark.png)    │
-└────────────────────────────┴───────────────────────────┘
-
-┌─────────────────────────────┬──────────────────────────────┐
-│           Mobile            │           Filters            │
-├─────────────────────────────┼──────────────────────────────┤
-│ (screenshots/mobile.png)    │ (screenshots/filters.png)    │
-└─────────────────────────────┴──────────────────────────────┘
+```
 
 ---
+
 Roadmap (if more time)
 
 - User authentication with route guards
@@ -165,6 +167,3 @@ Roadmap (if more time)
 - Due dates with calendar picker
 - Categories/tags for tasks
 - Export/import tasks (JSON)
-
----
-```
