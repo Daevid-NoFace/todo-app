@@ -115,17 +115,10 @@ src/app/
 
 Screenshots
 
-┌────────────────────────────┬───────────────────────────┐
-│ Light Mode │ Dark Mode │
-├────────────────────────────┼───────────────────────────┤
-│ ![Light Mode](screenshots/light.png) │ ![Dark Mode](screenshots/dark.png) │
-└────────────────────────────┴───────────────────────────┘
-
-┌─────────────────────────────┬──────────────────────────────┐
-│ Mobile │ Filters │
-├─────────────────────────────┼──────────────────────────────┤
-│ ![Mobile](screenshots/mobile.png) │ ![Filters](screenshots/filters.png) │
-└─────────────────────────────┴──────────────────────────────┘
+![Light Mode](screenshots/light.png)
+![Dark Mode](screenshots/dark.png)
+![Mobile](screenshots/mobile.png)
+![Filters](screenshots/filters.png)
 
 ## Getting Started
 
