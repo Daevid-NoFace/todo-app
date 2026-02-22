@@ -148,13 +148,13 @@ Screenshots
 ┌────────────────────────────┬───────────────────────────┐
 │         Light Mode         │         Dark Mode         │
 ├────────────────────────────┼───────────────────────────┤
-│ screenshots/light.png      │ screenshots/dark.png      │
+│ (screenshots/light.png)    │ (screenshots/dark.png)    │
 └────────────────────────────┴───────────────────────────┘
 
 ┌─────────────────────────────┬──────────────────────────────┐
 │           Mobile            │           Filters            │
 ├─────────────────────────────┼──────────────────────────────┤
-│ screenshots/mobile.png      │ screenshots/filters.png      │
+│ (screenshots/mobile.png)    │ (screenshots/filters.png)    │
 └─────────────────────────────┴──────────────────────────────┘
 
 ---
