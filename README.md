@@ -25,6 +25,8 @@ A modern task management application built as a technical assessment for **Domow
 
 ### Bonus
 
+- User authentication with per-user task isolation
+- Route guards (unauthenticated users redirected to login)
 - Zoneless change detection (no Zone.js)
 - Unit tests with Vitest
 - Animations (fade/slide transitions on tasks and toasts)
@@ -91,26 +93,30 @@ NgRx would be overkill here. Signals are the right tool for this scope.
 
 ---
 
-## Project Structure
+  ## Project Structure
 
-src/app/
-├── core/
-│ ├── models/ # Interfaces and types
-│ ├── services/ # Business logic (TodoService, ThemeService, I18nService, etc.)
-│ └── i18n/ # Translation JSON files
-├── features/
-│ └── todo/
-│ ├── todo-page.\* # Smart component (main page)
-│ └── components/ # Presentational components
-│ ├── todo-form/
-│ ├── todo-item/
-│ ├── todo-list/
-│ └── todo-filters/
-└── shared/
-├── pipes/ # TranslatePipe
-├── animations/ # fadeSlideIn, fadeToast
-├── components/ # Header, ConfirmDialog
-└── toast/ # Toast notification system
+  src/app/
+  ├── core/
+  │   ├── models/          # Interfaces and types
+  │   ├── services/        # Business logic (TodoService, AuthService, ThemeService, etc.)
+  │   ├── guards/          # authGuard
+  │   └── i18n/            # Translation JSON files
+  ├── features/
+  │   ├── todo/
+  │   │   ├── todo-page.*          # Smart component (main page)
+  │   │   └── components/          # Presentational components
+  │   │       ├── todo-form/
+  │   │       ├── todo-item/
+  │   │       ├── todo-list/
+  │   │       └── todo-filters/
+  │   └── auth/
+  │       ├── login/
+  │       └── register/
+  └── shared/
+      ├── pipes/           # TranslatePipe
+      ├── animations/      # fadeSlideIn, fadeToast
+      ├── components/      # Header, ConfirmDialog
+      └── toast/           # Toast notification system
 
 ---
 
@@ -151,12 +157,3 @@ ng build
 
 ---
 ```
-
----
-
-Roadmap (if more time)
-
-- User authentication with route guards
-- Drag & drop to reorder tasks
-- Categories/tags for tasks
-- Export/import tasks (JSON)
