@@ -31,7 +31,7 @@
     "sort_by": "Ordenar por",
     "date": "Data",
     "priority": "Prioridade",
-    "due_date":"Data de vencimento"
+    "due_date": "Data de vencimento"
   },
   "priority": {
     "label": "Prioridade",
@@ -43,9 +43,22 @@
     "light": "Tema Claro",
     "dark": "Tema Escuro"
   },
+  "auth": {
+    "login": "Entrar",
+    "register": "Registar",
+    "logout": "Sair",
+    "email": "Email",
+    "password": "Palavra-passe",
+    "name": "Nome completo",
+    "no_account": "Não tem uma conta?",
+    "have_account": "Já tem uma conta?",
+    "invalid_credentials": "Email ou palavra-passe inválidos",
+    "email_taken": "Este email já está registado"
+  },
   "validation": {
     "required": "Este campo é obrigatório",
-    "minlength": "O comprimento mínimo é de {{min}} caracteres"
+    "minlength": "O comprimento mínimo é de {{min}} caracteres",
+    "email": "Insira um endereço de email válido"
   },
   "dialog": {
     "confirm": "Confirmar",

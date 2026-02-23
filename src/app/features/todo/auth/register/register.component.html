@@ -1,0 +1,79 @@
+<div class="h-screen flex items-center justify-center bg-surface-50 dark:bg-surface-900 px-4">
+  <div class="w-full max-w-sm">
+    <h1 class="text-2xl font-bold text-center text-surface-900 dark:text-surface-100 mb-6">
+      {{ 'auth.register' | translate}}
+    </h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-white dark:bg-surface-900 rounded-xl p-6 border border-surface-200 dark:border-surface-800 space-y-3">
+
+      @if (error()) {
+        <p class="text-sm text-red-500 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
+          {{ error()! | translate}}
+        </p>
+      }
+
+      <div>
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="{{ 'auth.name' | translate}}"
+          class="w-full px-4 py-2 rounded-lg bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
+              placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none"
+        />
+
+        @if (submitted() && form.controls.name.errors) {
+          <p class="mt-1 text-sm text-red-500">
+            @if (form.controls.name.errors['required']) { {{ 'validation.required' | translate}} }
+            @else if (form.controls.name.errors['minlength']) { {{ 'validation.minlength' | translate:{min:2} }}
+          }
+          </p>
+        }
+      </div>
+
+      <div>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="{{ 'auth.email' | translate}}"
+          class="w-full px-4 py-2 rounded-lg bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
+              placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none"
+        />
+
+        @if (submitted() && form.controls.email.errors) {
+          <p class="mt-1 text-sm text-red-500">
+            @if (form.controls.email.errors['required']) { {{ 'validation.required' | translate}} }
+            @else if (form.controls.email.errors['email']) { {{ 'validation.minlength' | translate}} }
+          </p>
+        }
+      </div>
+
+      <div>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="{{ 'auth.password' | translate}}"
+          class="w-full px-4 py-2 rounded-lg bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
+              placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none" />
+
+        @if (submitted() && form.controls.password.errors) {
+        <p class="mt-1 text-sm text-red-500">
+          @if (form.controls.password.errors['required']) { {{ 'validation.required' | translate}} }
+          @else if (form.controls.password.errors['minlength']) { {{ 'validation.minlength' | translate:{min:6} }}
+          }
+        </p>
+        }
+      </div>
+
+      <button type="submit"
+        class="w-full py-2 rounded-lg font-medium bg-primary-600 hover:bg-primary-500 text-white transition-colors duration-200">
+        {{ 'auth.register' | translate}}
+      </button>
+
+      <p class="text-center text-sm text-surface-500 dark:text-surface-400">
+        {{ 'auth.have_account' | translate}}
+        <a routerLink="/login" class="text-primary-600 hover:text-primary-500 transition-colors duration-200">{{ 'auth.login'
+          | translate}}</a>
+      </p>
+    </form>
+  </div>
+</div>

@@ -4,9 +4,13 @@
 </a>
 <div
   class="min-h-screen bg-surface-50 dark:bg-surface-900 text-surface-900 dark:text-surface-100 transition-colors duration-200">
-  <app-header />
-  <main id="main-content" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  @if (auth.isAuthenticated()) {
+    <app-header />
+    <main id="main-content" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <router-outlet />
+    </main>
+  } @else {
     <router-outlet />
-  </main>
+  }
   <app-toast />
 </div>

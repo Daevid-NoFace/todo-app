@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ThemeService } from '../../../core/services/theme.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -67,6 +68,31 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
               </svg>
             }
           </button>
+
+          @if (auth.isAuthenticated()) {
+            <span class="text-sm text-surface-600 dark:text-surface-400 hidden sm:inline">
+              {{ auth.currentUser()?.name }}
+            </span>
+            <button
+              (click)="auth.logout()"
+              class="p-2 rounded-lg text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors duration-200"
+              [attr.aria-label]="'auth.logout' | translate"
+            >
+              <svg
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
+          }
         </div>
       </div>
     </header>
@@ -75,6 +101,7 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 export class HeaderComponent {
   protected theme = inject(ThemeService);
   protected i18n = inject(I18nService);
+  protected auth = inject(AuthService);
 
   switchLanguage(): void {
     const next = this.i18n.currentLang() === 'en' ? 'pt' : 'en';

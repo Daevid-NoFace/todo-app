@@ -31,7 +31,7 @@
     "sort_by": "Sort by",
     "date": "Date",
     "priority": "Priority",
-    "due_date":"Due Date"
+    "due_date": "Due Date"
   },
   "priority": {
     "label": "Priority",
@@ -43,9 +43,22 @@
     "light": "Light Theme",
     "dark": "Dark Theme"
   },
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full name",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "invalid_credentials": "Invalid email or password",
+    "email_taken": "This email is already registered"
+  },
   "validation": {
     "required": "This field is required",
-    "minlength": "Minimum length is {{min}} characters"
+    "minlength": "Minimum length is {{min}} characters",
+    "email": "Enter a valid email address"
   },
   "dialog": {
     "confirm": "Confirm",

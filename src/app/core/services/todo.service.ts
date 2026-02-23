@@ -1,13 +1,25 @@
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { StorageService } from "./storage.service";
 import { Todo, TodoFilter, Priority } from "../models/todo.model";
+import { AuthService } from "./auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   private storage = inject(StorageService);
-  private readonly storageKey = 'todos';
+  private auth = inject(AuthService);
 
-  private _todos = signal<Todo[]>(this.storage.get<Todo[]>(this.storageKey) ?? []);
+  private get storageKey(): string {
+    return `todos_${this.auth.currentUser()?.id ?? 'guest'}`;
+  }
+
+  private _todos = signal<Todo[]>([]);
+
+  constructor() {
+    effect(() => {
+      const todos = this.storage.get<Todo[]>(this.storageKey) ?? [];
+      this._todos.set(todos);
+    })
+  }
 
   todos = this._todos.asReadonly();
 

@@ -2,10 +2,10 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  passwordHash: string;
 }
 
-export interface AuthResponse {
+export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
 }
