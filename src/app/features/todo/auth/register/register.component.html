@@ -42,7 +42,7 @@
         @if (submitted() && form.controls.email.errors) {
           <p class="mt-1 text-sm text-red-500">
             @if (form.controls.email.errors['required']) { {{ 'validation.required' | translate}} }
-            @else if (form.controls.email.errors['email']) { {{ 'validation.minlength' | translate}} }
+            @else if (form.controls.email.errors['email']) { {{ 'validation.email' | translate}} }
           </p>
         }
       </div>
@@ -58,7 +58,7 @@
         @if (submitted() && form.controls.password.errors) {
         <p class="mt-1 text-sm text-red-500">
           @if (form.controls.password.errors['required']) { {{ 'validation.required' | translate}} }
-          @else if (form.controls.password.errors['minlength']) { {{ 'validation.minlength' | translate:{min:6} }}
+          @else if (form.controls.password.errors['minlength']) { {{ 'validation.minlength' | translate:{min:8} }}
           }
         </p>
         }

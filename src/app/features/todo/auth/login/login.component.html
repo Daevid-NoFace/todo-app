@@ -32,7 +32,7 @@
         @if (submitted() && form.controls.password.errors) {
           <p class="mt-1 text-sm text-red-500">
             @if (form.controls.password.errors['required']) { {{ 'validation.required' | translate }} }
-            @else if (form.controls.password.errors['minlength']) { {{ 'validation.minlength' | translate:{ length: 6 } }} }
+            @else if (form.controls.password.errors['minlength']) { {{ 'validation.minlength' | translate:{ min: 8 } }} }
           </p>
         }
       </div>
