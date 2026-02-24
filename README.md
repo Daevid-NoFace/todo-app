@@ -92,13 +92,14 @@ NgRx would be overkill here. Signals are the right tool for this scope.
 | `TodoFiltersComponent` | Smart          | Directly manages filter state        |
 
 ---
-
   ## Project Structure
 
+  ```
   src/app/
   ├── core/
   │   ├── models/          # Interfaces and types
-  │   ├── services/        # Business logic (TodoService, AuthService, ThemeService, etc.)
+  │   ├── services/        # Business logic (TodoService, AuthService,
+  ThemeService, etc.)
   │   ├── guards/          # authGuard
   │   └── i18n/            # Translation JSON files
   ├── features/
@@ -117,7 +118,7 @@ NgRx would be overkill here. Signals are the right tool for this scope.
       ├── animations/      # fadeSlideIn, fadeToast
       ├── components/      # Header, ConfirmDialog
       └── toast/           # Toast notification system
-
+  ```
 ---
 
 Screenshots
