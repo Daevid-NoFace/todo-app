@@ -1,10 +1,9 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import { TodoService } from "../../core/services/todo.service";
 import { TodoFormComponent } from "./components/todo-form/todo-form.component";
 import { TodoListComponent } from "./components/todo-list/todo-list.component";
 import { Priority } from "../../core/models/todo.model";
 import { TranslatePipe } from "../../shared/pipes/translate.pipe";
-import { TodoFilter } from "../../core/models/todo.model";
 import { TodoFiltersComponent } from "./components/todo-filters/todo-filters.component";
 import { ToastService } from "../../core/services/toast.service";
 import { I18nService } from "../../core/services/i18n.service";
@@ -13,6 +12,7 @@ import { I18nService } from "../../core/services/i18n.service";
   selector: 'app-todo-page',
   imports: [TodoFormComponent, TodoListComponent, TranslatePipe, TodoFiltersComponent],
   templateUrl: './todo-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoPageComponent {
   protected todoService = inject(TodoService);

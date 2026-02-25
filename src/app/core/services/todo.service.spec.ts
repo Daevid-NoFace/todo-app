@@ -1,7 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { TodoService } from "./todo.service";
 import { StorageService } from "./storage.service";
-import { flatMap } from "rxjs";
 
 describe('TodoService', () => {
   let service: TodoService;

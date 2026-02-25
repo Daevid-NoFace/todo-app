@@ -1,4 +1,7 @@
 <div class="space-y-6">
+
+  <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">{{ 'app.subtitle' | translate }}</h2>
+
   <app-todo-form (todoCreated)="onTodoCreated($event)" />
 
   <app-todo-filters />

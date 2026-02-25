@@ -1,9 +1,10 @@
-import { Component, inject, input, output, signal, effect } from "@angular/core";
+import { Component, inject, input, output, signal, effect, ChangeDetectionStrategy } from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Priority } from "../../../../core/models/todo.model";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-todo-form',
   templateUrl: './todo-form.component.html',
   imports: [ReactiveFormsModule, TranslatePipe],

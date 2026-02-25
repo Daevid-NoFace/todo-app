@@ -1,6 +1,5 @@
 import { TestBed } from "@angular/core/testing";
 import { ThemeService } from "./theme.service";
-import { query } from "@angular/animations";
 
 beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {

@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from "@angular/core";
+import { Component, input, output, signal, ChangeDetectionStrategy } from "@angular/core";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
 import { Todo, Priority } from "../../../../core/models/todo.model";
 import { TodoFormComponent } from "../todo-form/todo-form.component";
@@ -8,6 +8,7 @@ import { ConfirmDialog } from "../../../../shared/components/confirm-dialog/conf
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   imports: [TodoFormComponent, TranslatePipe, ConfirmDialog],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoItemComponent {
   todo = input.required<Todo>();
