@@ -1,4 +1,3 @@
----
 # ToDo App — Angular 21 + TailwindCSS
 
 A modern task management application built as a technical assessment for **Domoweb / NHCLIMA**.
@@ -19,7 +18,7 @@ A modern task management application built as a technical assessment for **Domow
 - Sort by date, priority, or due date (ascending/descending)
 - Due dates with color-coded badges (overdue, upcoming, on time)
 - Dark / Light theme with system preference detection
-- Internationalization (English & Português EN-PT)
+- Internationalization (English & Português PT-PT)
 - Data persistence with localStorage
 - Fully responsive (mobile & desktop)
 
@@ -81,6 +80,12 @@ NgRx would be overkill here. Signals are the right tool for this scope.
 - **`@theme` directive** — Custom design tokens directly in CSS
 - **`@custom-variant`** — Dark mode variant without JavaScript
 
+### Why mock authentication instead of JWT?
+
+- **No backend required** — Fully client-side, deployable as static site
+- **Demonstrates Angular patterns** — Route guards, services, reactive state
+- **Per-user isolation** — Each user has separate todos via namespaced localStorage keys
+
 ### Architecture: Smart vs Presentational Components
 
 | Component              | Type           | Responsibility                       |
@@ -97,11 +102,9 @@ NgRx would be overkill here. Signals are the right tool for this scope.
   ```
   src/app/
   ├── core/
-  │   ├── models/          # Interfaces and types
-  │   ├── services/        # Business logic (TodoService, AuthService,
-  ThemeService, etc.)
-  │   ├── guards/          # authGuard
-  │   └── i18n/            # Translation JSON files
+  │   ├── models/          # Interfaces and types (Todo, User)
+  │   ├── services/        # TodoService, AuthService, ThemeService, I18nService, etc.
+  │   └── guards/          # authGuard, guestGuard
   ├── features/
   │   ├── todo/
   │   │   ├── todo-page.*          # Smart component (main page)
