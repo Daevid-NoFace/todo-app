@@ -5,6 +5,9 @@ export interface Todo {
   completed: boolean;
   priority: Priority;
   dueDate?: string;
+  projectId?: string;
+  subtasks: Subtask[];
+  completedAt?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -21,4 +24,12 @@ export interface TodoFilter {
   searchTerm: string;
   sortBy: SortField;
   sortOrder: SortOrder;
+}
+
+export interface Subtask {
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
