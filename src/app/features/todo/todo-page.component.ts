@@ -11,6 +11,11 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { RightPanelComponent } from '../../shared/right-panel/right-panel.component';
 import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
 import { sheetSlideUp } from '../../shared/animations/todo.animations';
+import { LucideAngularModule } from 'lucide-angular';
+import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
+
+type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
 
 @Component({
   selector: 'app-todo-page',
@@ -22,6 +27,7 @@ import { sheetSlideUp } from '../../shared/animations/todo.animations';
     SidebarComponent,
     RightPanelComponent,
     BottomNavComponent,
+    LucideAngularModule,
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.css',
@@ -30,11 +36,17 @@ import { sheetSlideUp } from '../../shared/animations/todo.animations';
 })
 export class TodoPageComponent {
   protected todoService = inject(TodoService);
-
-  private toast = inject(ToastService);
-  private i18n = inject(I18nService);
+  protected authService = inject(AuthService);
+  protected toastService = inject(ToastService);
+  protected i18nService = inject(I18nService);
+  protected themeService = inject(ThemeService);
 
   readonly showSheet = signal(false);
+  readonly activeMobileTab = signal<MobileTab>('home');
+
+  onTabChange(tab: MobileTab): void {
+    this.activeMobileTab.set(tab);
+  }
 
   openSheet(): void {
     this.showSheet.set(true);
@@ -51,7 +63,7 @@ export class TodoPageComponent {
     dueDate?: string;
   }): void {
     this.todoService.add(data);
-    this.toast.show(this.i18n.translate('todo.created'), 'success');
+    this.toastService.show(this.i18nService.translate('todo.created'), 'success');
     this.closeSheet();
   }
 
@@ -64,15 +76,20 @@ export class TodoPageComponent {
   }): void {
     const { id, ...updateData } = data;
     this.todoService.update(id, updateData);
-    this.toast.show(this.i18n.translate('todo.updated'), 'success');
+    this.toastService.show(this.i18nService.translate('todo.updated'), 'success');
   }
 
   onTodoDeleted(id: string): void {
     this.todoService.delete(id);
-    this.toast.show(this.i18n.translate('todo.deleted'), 'success');
+    this.toastService.show(this.i18nService.translate('todo.deleted'), 'success');
   }
 
   onTodoToggled(id: string): void {
     this.todoService.toggleComplete(id);
+  }
+
+  switchLanguage(): void {
+    const next = this.i18nService.currentLang() === 'en' ? 'pt' : 'en';
+    this.i18nService.switchLanguage(next);
   }
 }

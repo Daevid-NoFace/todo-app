@@ -5,52 +5,172 @@
   </aside>
 
   <!-- MAIN CONTENT -->
-  <main class="main-scrollable px-4 sm:px-6 py-6 pb-20 md:pb-6 space-y-6">
-    <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">
-      {{ 'app.subtitle' | translate }}
-    </h2>
-
-    <!-- Form inline: solo visible en tablet+ -->
-    <div class="hidden md:block">
-      <app-todo-form (todoCreated)="onTodoCreated($event)" />
-    </div>
-
-    <app-todo-filters />
-
-    <div
-      class="flex items-center justify-between text-sm pt-2 text-surface-500 dark:text-surface-400"
-    >
-      <span>
-        {{
-          todoService.activeCount() === 1
-            ? ('todo.item_left' | translate: { count: todoService.activeCount() })
-            : ('todo.items_left' | translate: { count: todoService.activeCount() })
-        }}
-      </span>
-      @if (todoService.completedCount() > 0) {
-        <button
-          (click)="todoService.clearCompleted()"
-          class="hover:text-red-500 transition-colors duration-200"
+  <main class="main-scrollable px-4 sm:px-6 py-6 pb-24 md:pb-6 space-y-6">
+    <!-- ── DESKTOP: contenido fijo ─────────────────── -->
+    <ng-container>
+      <div class="hidden md:block space-y-6">
+        <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">
+          {{ 'app.subtitle' | translate }}
+        </h2>
+        <app-todo-form (todoCreated)="onTodoCreated($event)" />
+        <app-todo-filters />
+        <div
+          class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400"
         >
-          {{ 'todo.clear_completed' | translate }}
-        </button>
-      }
-    </div>
+          <span>
+            {{
+              todoService.activeCount() === 1
+                ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+                : ('todo.items_left' | translate: { count: todoService.activeCount() })
+            }}
+          </span>
+          @if (todoService.completedCount() > 0) {
+            <button
+              (click)="todoService.clearCompleted()"
+              class="hover:text-red-500 transition-colors duration-200"
+            >
+              {{ 'todo.clear_completed' | translate }}
+            </button>
+          }
+        </div>
+        <app-todo-list
+          [todos]="todoService.filteredTodos()"
+          (toggled)="onTodoToggled($event)"
+          (deleted)="onTodoDeleted($event)"
+          (edited)="onTodoEdited($event)"
+        />
+      </div>
 
-    <div aria-live="polite" class="sr-only">
-      {{
-        todoService.activeCount() === 1
-          ? ('todo.item_left' | translate: { count: todoService.activeCount() })
-          : ('todo.items_left' | translate: { count: todoService.activeCount() })
-      }}
-    </div>
+      <!-- ── MOBILE: vistas por tab ──────────────────── -->
+      <div class="md:hidden">
+        @switch (activeMobileTab()) {
+          <!-- HOME -->
+          @case ('home') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100">
+              {{ 'app.subtitle' | translate }}
+            </h2>
+            <app-todo-filters />
+            <div
+              class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400"
+            >
+              <span>
+                {{
+                  todoService.activeCount() === 1
+                    ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+                    : ('todo.items_left' | translate: { count: todoService.activeCount() })
+                }}
+              </span>
+              @if (todoService.completedCount() > 0) {
+                <button
+                  (click)="todoService.clearCompleted()"
+                  class="hover:text-red-500 transition-colors duration-200"
+                >
+                  {{ 'todo.clear_completed' | translate }}
+                </button>
+              }
+            </div>
+            <app-todo-list
+              [todos]="todoService.filteredTodos()"
+              (toggled)="onTodoToggled($event)"
+              (deleted)="onTodoDeleted($event)"
+              (edited)="onTodoEdited($event)"
+            />
+          }
 
-    <app-todo-list
-      [todos]="todoService.filteredTodos()"
-      (toggled)="onTodoToggled($event)"
-      (deleted)="onTodoDeleted($event)"
-      (edited)="onTodoEdited($event)"
-    />
+          <!-- SEARCH -->
+          @case ('search') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Search</h2>
+            <div class="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-task">
+              <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
+                (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })"
+              />
+            </div>
+            <app-todo-list
+              [todos]="todoService.filteredTodos()"
+              (toggled)="onTodoToggled($event)"
+              (deleted)="onTodoDeleted($event)"
+              (edited)="onTodoEdited($event)"
+            />
+          }
+
+          <!-- CALENDAR -->
+          @case ('calendar') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Calendar</h2>
+            <app-right-panel class="block" />
+          }
+
+          <!-- PROFILE -->
+          @case ('profile') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-4">Profile</h2>
+
+            <!-- User card -->
+            <div class="glass rounded-2xl p-4 shadow-card flex items-center gap-4">
+              <div
+                class="w-14 h-14 rounded-full bg-primary-500/20 flex items-center justify-center shrink-0"
+              >
+                <i-lucide name="user" [size]="28" class="text-primary-500" />
+              </div>
+              <div>
+                <p class="font-semibold text-surface-900 dark:text-surface-100">
+                  {{ authService.currentUser()?.name }}
+                </p>
+                <p class="text-sm text-surface-500 dark:text-surface-400">
+                  {{ todoService.activeCount() }} tasks pending
+                </p>
+              </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
+              <!-- Theme -->
+              <button
+                (click)="themeService.toggle()"
+                class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200"
+              >
+                <div class="flex items-center gap-3">
+                  @if (themeService.darkMode()) {
+                    <i-lucide name="sun" [size]="18" class="text-accent-amber" />
+                  } @else {
+                    <i-lucide name="moon" [size]="18" class="text-primary-400" />
+                  }
+                  <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
+                    {{ themeService.darkMode() ? 'Light mode' : 'Dark mode' }}
+                  </span>
+                </div>
+                <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
+              </button>
+
+              <!-- Language -->
+              <button
+                (click)="switchLanguage()"
+                class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200"
+              >
+                <div class="flex items-center gap-3">
+                  <i-lucide name="list-todo" [size]="18" class="text-accent-blue" />
+                  <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
+                    Language: {{ i18nService.currentLang() === 'en' ? 'English' : 'Português' }}
+                  </span>
+                </div>
+                <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
+              </button>
+
+              <!-- Logout -->
+              <button
+                (click)="authService.logout()"
+                class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-red-500/5 transition-colors duration-200"
+              >
+                <i-lucide name="log-out" [size]="18" class="text-red-400" />
+                <span class="text-sm font-medium text-red-400">Logout</span>
+              </button>
+            </div>
+          }
+        }
+      </div>
+    </ng-container>
   </main>
 
   <!-- RIGHT PANEL: desktop only -->
@@ -59,26 +179,20 @@
   </aside>
 
   <!-- BOTTOM NAV: mobile only -->
-  <app-bottom-nav class="md:hidden" (fabClick)="openSheet()" />
+  <app-bottom-nav class="md:hidden" (fabClick)="openSheet()" (tabChange)="onTabChange($event)" />
 
   <!-- BOTTOM SHEET: mobile only -->
   @if (showSheet()) {
-    <!-- Backdrop -->
     <div
       class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
       (click)="closeSheet()"
     ></div>
-
-    <!-- Sheet -->
     <div
       @sheetSlideUp
       class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8"
     >
-      <!-- Handle -->
       <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-5"></div>
-
       <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">New task</h3>
-
       <app-todo-form (todoCreated)="onTodoCreated($event)" (cancelled)="closeSheet()" />
     </div>
   }
