@@ -2,7 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
-  importProvidersFrom
+  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -28,6 +28,8 @@ import {
   Flame,
   TrendingUp,
   ListTodo,
+  LogOut,
+  Heart,
 } from 'lucide-angular';
 
 import { routes } from './app.routes';
@@ -60,6 +62,8 @@ export const appConfig: ApplicationConfig = {
         Flame,
         TrendingUp,
         ListTodo,
+        LogOut,
+        Heart,
       }),
     ),
   ],

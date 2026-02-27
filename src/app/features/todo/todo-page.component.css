@@ -1,5 +1,5 @@
 .app-shell {
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 /* Tablet: 2 columns */
@@ -7,13 +7,13 @@
     .app-shell {
         display: grid;
         grid-template-columns: 240px 1fr;
-        grid-template-rows: 100vh;
+        grid-template-rows: 100dvh;
         overflow: hidden;
     }
 
     .main-scrollable {
         overflow-y: auto;
-        height: 100vh;
+        height: 100%;
     }
 }
 
