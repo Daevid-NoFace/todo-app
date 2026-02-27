@@ -218,4 +218,40 @@ export class TodoService {
     );
     this.persist();
   }
+
+  /** Last 7 days: completed that day + rate relative to the busiest day */
+  readonly completionByDay = computed(() => {
+    const todos = this.todos();
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const raw = Array.from({ length: 7}, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - (6 - i));
+      const dateStr = date.toISOString().split('T')[0];
+      const completed = todos.filter(t => t.completedAt?.startsWith(dateStr)).length;
+
+      return { label: dayLabels[date.getDay()], date: dateStr, completed };
+    });
+
+    const maxCompleted = Math.max(...raw.map(d => d.completed), 1); // Avoid division by zero
+    return raw.map(d => ({ ...d, rate: Math.round((d.completed / maxCompleted) * 100) }));
+  });
+
+  /** Consecutive days with at least 1 task completed (counting backwards from today) */
+  readonly streak = computed(() => {
+    const todos = this.todos();
+    let count = 0;
+    const d = new Date();
+
+    for (let i = 0; i < 30; i++) { // Check up to the last 30 days
+      const dateStr = d.toISOString().split('T')[0];
+
+      if (!todos.some(t => t.completedAt?.startsWith(dateStr))) break;
+
+      count++;
+      d.setDate(d.getDate() - 1);
+    }
+
+    return count;
+  });
 }
