@@ -1,30 +1,301 @@
-<div class="space-y-6">
+<div class="app-shell bg-mesh font-sans">
+  <!-- SIDEBAR: tablet + desktop -->
+  <aside class="hidden md:flex flex-col h-full overflow-y-auto">
+    <app-sidebar class="flex-1" />
+  </aside>
 
-  <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">{{ 'app.subtitle' | translate }}</h2>
+  <!-- MAIN CONTENT -->
+  <main class="main-scrollable px-4 sm:px-6 py-6 pb-24 md:pb-6 space-y-6">
+    <!-- ── DESKTOP: contenido fijo ─────────────────── -->
+    <ng-container>
+      <div class="hidden md:block space-y-6">
+        <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">
+          {{ 'app.subtitle' | translate }}
+        </h2>
+        <app-todo-form (todoCreated)="onTodoCreated($event)" />
+        <app-todo-filters />
+        <div
+          class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400"
+        >
+          <span>
+            {{
+              todoService.activeCount() === 1
+                ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+                : ('todo.items_left' | translate: { count: todoService.activeCount() })
+            }}
+          </span>
+          @if (todoService.completedCount() > 0) {
+            <button
+              (click)="todoService.clearCompleted()"
+              class="hover:text-red-500 transition-colors duration-200"
+            >
+              {{ 'todo.clear_completed' | translate }}
+            </button>
+          }
+        </div>
+        <app-todo-list
+          [todos]="todoService.filteredTodos()"
+          (toggled)="onTodoToggled($event)"
+          (deleted)="onTodoDeleted($event)"
+          (edited)="onTodoEdited($event)"
+        />
+      </div>
 
-  <app-todo-form (todoCreated)="onTodoCreated($event)" />
+      <!-- ── MOBILE: vistas por tab ──────────────────── -->
+      <div class="md:hidden">
+        @switch (activeMobileTab()) {
+          <!-- HOME -->
+          @case ('home') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100">
+              {{ 'app.subtitle' | translate }}
+            </h2>
+            <app-todo-filters />
+            <div
+              class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400"
+            >
+              <span>
+                {{
+                  todoService.activeCount() === 1
+                    ? ('todo.item_left' | translate: { count: todoService.activeCount() })
+                    : ('todo.items_left' | translate: { count: todoService.activeCount() })
+                }}
+              </span>
+              @if (todoService.completedCount() > 0) {
+                <button
+                  (click)="todoService.clearCompleted()"
+                  class="hover:text-red-500 transition-colors duration-200"
+                >
+                  {{ 'todo.clear_completed' | translate }}
+                </button>
+              }
+            </div>
+            <app-todo-list
+              [todos]="todoService.filteredTodos()"
+              (toggled)="onTodoToggled($event)"
+              (deleted)="onTodoDeleted($event)"
+              (edited)="onTodoEdited($event)"
+            />
+          }
 
-  <app-todo-filters />
+          <!-- SEARCH -->
+          @case ('search') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Search</h2>
+            <div class="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-task">
+              <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
+                (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })"
+              />
+            </div>
+            <app-todo-list
+              [todos]="todoService.filteredTodos()"
+              (toggled)="onTodoToggled($event)"
+              (deleted)="onTodoDeleted($event)"
+              (edited)="onTodoEdited($event)"
+            />
+          }
 
-  <div class="flex items-center justify-between text-sm pt-2 text-surface-500 dark:text-surface-400">
-    <span>
-      {{ todoService.activeCount() === 1
-      ? ('todo.item_left' | translate: { count: todoService.activeCount() })
-      : ('todo.items_left' | translate: { count: todoService.activeCount() }) }}
-    </span>
-    @if (todoService.completedCount() > 0) {
-    <button (click)="todoService.clearCompleted()" class="hover:text-red-500 transition-colors duration-200">
-      {{ 'todo.clear_completed' | translate }}
-    </button>
-    }
-  </div>
+          <!-- CALENDAR -->
+          @case ('calendar') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Calendar</h2>
+            <app-right-panel class="block" />
+          }
 
-  <div aria-live="polite" class="sr-only">
-    {{ todoService.activeCount() === 1
-    ? ('todo.item_left' | translate: { count: todoService.activeCount() })
-    : ('todo.items_left' | translate: { count: todoService.activeCount() }) }}
-  </div>
+          <!-- PROFILE -->
+          @case ('profile') {
+            <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-4">Profile</h2>
 
-  <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
-    (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+            <!-- Avatar + Name -->
+            <div class="glass rounded-2xl p-5 shadow-card flex flex-col items-center gap-4">
+              <!-- Avatar -->
+              <div class="relative">
+                <div
+                  class="w-20 h-20 rounded-full overflow-hidden bg-primary-500/20 flex items-center justify-center ring-4 ring-white/50 dark:ring-white/10"
+                >
+                  @if (authService.currentUser()?.avatar) {
+                    <img
+                      [src]="authService.currentUser()!.avatar"
+                      alt="Avatar"
+                      class="w-full h-full object-cover"
+                    />
+                  } @else {
+                    <i-lucide name="user" [size]="36" class="text-primary-500" />
+                  }
+                </div>
+                <!-- Upload button -->
+                <label
+                  class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-primary-500 flex items-center justify-center cursor-pointer shadow-md hover:bg-primary-600 transition-colors duration-200"
+                >
+                  <i-lucide name="plus" [size]="14" class="text-white" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    (change)="onAvatarChange($event)"
+                  />
+                </label>
+              </div>
+
+              <!-- Name -->
+              @if (editingName()) {
+                <div class="flex items-center gap-2 w-full max-w-xs">
+                  <input
+                    type="text"
+                    [value]="nameInput()"
+                    (input)="nameInput.set($any($event.target).value)"
+                    class="flex-1 px-3 py-2 rounded-xl text-sm text-center font-semibold bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500"
+                    (keydown.enter)="saveName()"
+                    (keydown.escape)="cancelEditName()"
+                  />
+                  <button
+                    (click)="saveName()"
+                    class="p-2 rounded-xl bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200"
+                  >
+                    <i-lucide name="check" [size]="14" />
+                  </button>
+                  <button
+                    (click)="cancelEditName()"
+                    class="p-2 rounded-xl hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200"
+                  >
+                    <i-lucide name="x" [size]="14" class="text-surface-400" />
+                  </button>
+                </div>
+              } @else {
+                <button (click)="startEditName()" class="flex items-center gap-2 group">
+                  <span class="font-semibold text-surface-900 dark:text-surface-100">
+                    {{ authService.currentUser()?.name }}
+                  </span>
+                  <i-lucide
+                    name="pencil"
+                    [size]="13"
+                    class="text-surface-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  />
+                </button>
+              }
+
+              <p class="text-sm text-surface-400 dark:text-surface-500 -mt-2">
+                {{ authService.currentUser()?.email }}
+              </p>
+            </div>
+
+            <!-- Change Password -->
+            <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
+              <div class="px-4 py-3 border-b border-border-glass dark:border-border-glass-dark">
+                <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-100">
+                  Change Password
+                </h3>
+              </div>
+
+              <div class="p-4 space-y-3">
+                <input
+                  type="password"
+                  placeholder="Current password"
+                  [value]="currentPassword()"
+                  (input)="currentPassword.set($any($event.target).value)"
+                  class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200"
+                />
+
+                <input
+                  type="password"
+                  placeholder="New password"
+                  [value]="newPassword()"
+                  (input)="newPassword.set($any($event.target).value)"
+                  class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200"
+                />
+
+                <input
+                  type="password"
+                  placeholder="Confirm new password"
+                  [value]="confirmPassword()"
+                  (input)="confirmPassword.set($any($event.target).value)"
+                  class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200"
+                />
+
+                @if (passwordError()) {
+                  <p class="text-xs text-red-500 px-1">{{ passwordError() }}</p>
+                }
+                @if (passwordSuccess()) {
+                  <p class="text-xs text-accent-green px-1">Password updated successfully</p>
+                }
+
+                <button
+                  (click)="savePassword()"
+                  class="w-full py-2.5 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200"
+                >
+                  Update Password
+                </button>
+              </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
+              <button
+                (click)="themeService.toggle()"
+                class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200"
+              >
+                <div class="flex items-center gap-3">
+                  @if (themeService.darkMode()) {
+                    <i-lucide name="sun" [size]="18" class="text-accent-amber" />
+                  } @else {
+                    <i-lucide name="moon" [size]="18" class="text-primary-400" />
+                  }
+                  <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
+                    {{ themeService.darkMode() ? 'Light mode' : 'Dark mode' }}
+                  </span>
+                </div>
+                <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
+              </button>
+
+              <button
+                (click)="switchLanguage()"
+                class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200"
+              >
+                <div class="flex items-center gap-3">
+                  <i-lucide name="list-todo" [size]="18" class="text-accent-blue" />
+                  <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
+                    Language: {{ i18nService.currentLang() === 'en' ? 'English' : 'Português' }}
+                  </span>
+                </div>
+                <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
+              </button>
+
+              <button
+                (click)="authService.logout()"
+                class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-red-500/5 transition-colors duration-200"
+              >
+                <i-lucide name="log-out" [size]="18" class="text-red-400" />
+                <span class="text-sm font-medium text-red-400">Logout</span>
+              </button>
+            </div>
+          }
+        }
+      </div>
+    </ng-container>
+  </main>
+
+  <!-- RIGHT PANEL: desktop only -->
+  <aside class="hidden lg:flex flex-col h-full overflow-hidden">
+    <app-right-panel class="flex-1" />
+  </aside>
+
+  <!-- BOTTOM NAV: mobile only -->
+  <app-bottom-nav class="md:hidden" (fabClick)="openSheet()" (tabChange)="onTabChange($event)" />
+
+  <!-- BOTTOM SHEET: mobile only -->
+  @if (showSheet()) {
+    <div
+      class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
+      (click)="closeSheet()"
+    ></div>
+    <div
+      @sheetSlideUp
+      class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8"
+    >
+      <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-5"></div>
+      <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">New task</h3>
+      <app-todo-form (todoCreated)="onTodoCreated($event)" (cancelled)="closeSheet()" />
+    </div>
+  }
 </div>

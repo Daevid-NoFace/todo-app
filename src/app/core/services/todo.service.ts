@@ -1,7 +1,7 @@
-import { computed, effect, inject, Injectable, signal } from "@angular/core";
-import { StorageService } from "./storage.service";
-import { Todo, TodoFilter, Priority } from "../models/todo.model";
-import { AuthService } from "./auth.service";
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { StorageService } from './storage.service';
+import { Todo, TodoFilter, Priority } from '../models/todo.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -18,7 +18,7 @@ export class TodoService {
     effect(() => {
       const todos = this.storage.get<Todo[]>(this.storageKey) ?? [];
       this._todos.set(todos);
-    })
+    });
   }
 
   todos = this._todos.asReadonly();
@@ -72,7 +72,14 @@ export class TodoService {
     this.storage.set(this.storageKey, this._todos());
   }
 
-  add(data: { title: string; description?: string; priority: Priority; dueDate?: string }): void {
+  add(data: {
+    title: string;
+    description?: string;
+    priority: Priority;
+    dueDate?: string;
+    projectId?: string;
+  }): void {
+    const now = new Date().toISOString();
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       title: data.title,
@@ -80,8 +87,10 @@ export class TodoService {
       completed: false,
       priority: data.priority,
       dueDate: data.dueDate,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      projectId: data.projectId,
+      subtasks: [],
+      createdAt: now,
+      updatedAt: now,
     };
     this._todos.update((todos) => [newTodo, ...todos]);
     this.persist();
@@ -102,11 +111,18 @@ export class TodoService {
   }
 
   toggleComplete(id: string): void {
-    this._todos.update(
-      (todos) =>
-        todos.map((t) =>
-          t.id === id ? { ...t, completed: !t.completed, updatedAt: new Date().toISOString() } : t,
-        ),
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              completed: !t.completed,
+              completedAt: !t.completed ? now : undefined,
+              updatedAt: now,
+            }
+          : t,
+      ),
     );
     this.persist();
   }
@@ -119,4 +135,123 @@ export class TodoService {
   updateFilter(changes: Partial<TodoFilter>): void {
     this._filter.update((f) => ({ ...f, ...changes }));
   }
+
+  addSubtask(todoId: string, title: string): void {
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === todoId
+          ? {
+              ...t,
+              subtasks: [
+                ...t.subtasks,
+                {
+                  id: crypto.randomUUID(),
+                  title,
+                  completed: false,
+                  createdAt: now,
+                  updatedAt: now,
+                },
+              ],
+              updatedAt: now,
+            }
+          : t,
+      ),
+    );
+    this.persist();
+  }
+
+  toggleSubtaskComplete(todoId: string, subtaskId: string): void {
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === todoId
+          ? {
+              ...t,
+              subtasks: t.subtasks.map((s) =>
+                s.id === subtaskId
+                  ? {
+                      ...s,
+                      completed: !s.completed,
+                      updatedAt: now,
+                    }
+                  : s,
+              ),
+              updatedAt: now,
+            }
+          : t,
+      ),
+    );
+    this.persist();
+  }
+
+  deleteSubtask(todoId: string, subtaskId: string): void {
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === todoId
+          ? {
+              ...t,
+              subtasks: t.subtasks.filter((s) => s.id !== subtaskId),
+              updatedAt: now,
+            }
+          : t,
+      ),
+    );
+    this.persist();
+  }
+
+  updateSubtask(todoId: string, subtaskId: string, title: string): void {
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === todoId
+          ? {
+              ...t,
+              subtasks: t.subtasks.map((s) =>
+                s.id === subtaskId ? { ...s, title, updatedAt: now } : s,
+              ),
+              updatedAt: now,
+            }
+          : t,
+      ),
+    );
+    this.persist();
+  }
+
+  /** Last 7 days: completed that day + rate relative to the busiest day */
+  readonly completionByDay = computed(() => {
+    const todos = this.todos();
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const raw = Array.from({ length: 7}, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - (6 - i));
+      const dateStr = date.toISOString().split('T')[0];
+      const completed = todos.filter(t => t.completedAt?.startsWith(dateStr)).length;
+
+      return { label: dayLabels[date.getDay()], date: dateStr, completed };
+    });
+
+    const maxCompleted = Math.max(...raw.map(d => d.completed), 1); // Avoid division by zero
+    return raw.map(d => ({ ...d, rate: Math.round((d.completed / maxCompleted) * 100) }));
+  });
+
+  /** Consecutive days with at least 1 task completed (counting backwards from today) */
+  readonly streak = computed(() => {
+    const todos = this.todos();
+    let count = 0;
+    const d = new Date();
+
+    for (let i = 0; i < 30; i++) { // Check up to the last 30 days
+      const dateStr = d.toISOString().split('T')[0];
+
+      if (!todos.some(t => t.completedAt?.startsWith(dateStr))) break;
+
+      count++;
+      d.setDate(d.getDate() - 1);
+    }
+
+    return count;
+  });
 }

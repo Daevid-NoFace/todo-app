@@ -63,5 +63,12 @@
   "dialog": {
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+    "sidebar": {
+    "tasks_active": "tasks active",
+    "all_tasks": "All Tasks",
+    "today": "Today",
+    "upcoming": "Upcoming",
+    "projects": "Projects"
   }
 }

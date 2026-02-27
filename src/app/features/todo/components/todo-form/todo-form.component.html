@@ -1,46 +1,67 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-surface-50 dark:bg-surface-900 rounded-xl p-4 sm:p-6 border border-surface-200 dark:border-surface-800 space-y-4">
-
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="glass rounded-2xl shadow-card p-4 sm:p-6 space-y-4"
+>
   <div>
-    <input formControlName="title" type="text" [placeholder]="'todo.placeholder' | translate" aria-describedby="title-error"
-      class="w-full px-4 py-3 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
-      focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
-      placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none" />
-
-      @if (submitted() && form.controls.title.errors) {
-        <p id="title-error" role="alert" class="mt-1 text-sm text-red-500">
-          @if (form.controls.title.errors['required']) {
-            {{ 'validation.required' | translate }}
-          } @else if (form.controls.title.errors['minlength']) {
-            {{ 'validation.minlength' | translate:{min: 3} }}
-          }
-        </p>
-      }
-  </div>
-
-  <div>
-    <textarea formControlName="description" rows="2" [placeholder]="'todo.description_placeholder' | translate"
-      class="w-full px-4 py-3 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
-      focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
-      placeholder-surface-400 dark:placeholder-surface-500 transition-all duration-200 outline-none"></textarea>
-  </div>
-
-  <div class="flex items-center gap-2">
-    <label for="dueDate" class="text-sm font-medium text-surface-700 dark:text-surface-300">
-      {{ 'todo.due_date' | translate }}
-    </label>
-    <input formControlName="dueDate" type="date" id="dueDate"
-          class="px-3 py-2 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 focus:border-primary-500
-          focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none"
+    <input
+      formControlName="title"
+      type="text"
+      [placeholder]="'todo.placeholder' | translate"
+      aria-describedby="title-error"
+      class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 transition-all duration-200 outline-none"
     />
+
+    @if (submitted() && form.controls.title.errors) {
+      <p id="title-error" role="alert" class="mt-1 text-sm text-red-500">
+        @if (form.controls.title.errors['required']) {
+          {{ 'validation.required' | translate }}
+        } @else if (form.controls.title.errors['minlength']) {
+          {{ 'validation.minlength' | translate: { min: 3 } }}
+        }
+      </p>
+    }
+  </div>
+
+  <div>
+    <textarea
+      formControlName="description"
+      rows="2"
+      [placeholder]="'todo.description_placeholder' | translate"
+      class="w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 transition-all duration-200 outline-none resize-none"
+    >
+    </textarea>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <div class="flex items-center gap-2">
+      <label for="dueDate" class="text-sm font-medium text-surface-700 dark:text-surface-300">
+        {{ 'todo.due_date' | translate }}
+      </label>
+      <input
+        formControlName="dueDate"
+        type="date"
+        id="dueDate"
+        class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none"
+      />
+    </div>
+    @if (submitted() && form.controls.dueDate.errors?.['required']) {
+      <p role="alert" class="text-sm text-red-500">
+        {{ 'validation.required' | translate }}
+      </p>
+    }
   </div>
 
   <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
     <div class="flex items-center gap-2">
-      <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">{{ 'priority.label' | translate }}</label>
-      <select formControlName="priority" id="priority"
-        class="px-3 py-2 rounded-lg bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700
-        focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:focus:border-primary-400
-        text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none">
+      <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">
+        {{ 'priority.label' | translate }}
+      </label>
+      <select
+        formControlName="priority"
+        id="priority"
+        class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none"
+      >
         <option value="low">{{ 'priority.low' | translate }}</option>
         <option value="medium">{{ 'priority.medium' | translate }}</option>
         <option value="high">{{ 'priority.high' | translate }}</option>
@@ -49,11 +70,18 @@
 
     <div class="flex gap-2">
       @if (editTodo()) {
-        <button type="button" (click)="cancelled.emit()" class="px-4 py-2 rounded-lg text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors duration-200">
+        <button
+          type="button"
+          (click)="cancelled.emit()"
+          class="px-4 py-2 rounded-xl text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-white/50 dark:hover:bg-white/10 transition-colors duration-200"
+        >
           {{ 'todo.cancel' | translate }}
         </button>
       }
-      <button type="submit" class="px-6 py-2 rounded-lg text-sm font-medium bg-primary-600 hover:bg-primary-500 text-white transition-colors duration-200">
+      <button
+        type="submit"
+        class="px-6 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200"
+      >
         @if (editTodo()) {
           {{ 'todo.update' | translate }}
         } @else {

@@ -1,0 +1,88 @@
+<nav
+  class="fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/80 dark:bg-[#0D0F1A]/80 backdrop-blur-xl border-t border-border-glass dark:border-border-glass-dark flex items-center justify-around px-2"
+>
+  <!-- Home -->
+  <button
+    (click)="setTab('home')"
+    class="flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-xl transition-colors duration-200 relative"
+  >
+    <i-lucide
+      name="home"
+      [size]="20"
+      [class]="
+        activeTab() === 'home' ? 'text-primary-500' : 'text-surface-400 dark:text-surface-500'
+      "
+    ></i-lucide>
+    @if (activeTab() === 'home') {
+      <span
+        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"
+      ></span>
+    }
+  </button>
+
+  <!-- Search -->
+  <button
+    (click)="setTab('search')"
+    class="flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-xl transition-colors duration-200 relative"
+  >
+    <i-lucide
+      name="search"
+      [size]="20"
+      [class]="
+        activeTab() === 'search' ? 'text-primary-500' : 'text-surface-400 dark:text-surface-500'
+      "
+    ></i-lucide>
+    @if (activeTab() === 'search') {
+      <span
+        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"
+      ></span>
+    }
+  </button>
+
+  <!-- FAB central -->
+  <button
+    (click)="fabClick.emit()"
+    class="relative flex items-center justify-center w-14 h-14 rounded-full -translate-y-4 bg-gradient-to-br from-primary-500 to-accent-pink shadow-fab transition-transform duration-200 active:scale-95"
+    aria-label="Add task"
+  >
+    <i-lucide name="plus" [size]="24" class="text-white"></i-lucide>
+  </button>
+
+  <!-- Calendar -->
+  <button
+    (click)="setTab('calendar')"
+    class="flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-xl transition-colors duration-200 relative"
+  >
+    <i-lucide
+      name="calendar-days"
+      [size]="20"
+      [class]="
+        activeTab() === 'calendar' ? 'text-primary-500' : 'text-surface-400 dark:text-surface-500'
+      "
+    ></i-lucide>
+    @if (activeTab() === 'calendar') {
+      <span
+        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"
+      ></span>
+    }
+  </button>
+
+  <!-- Profile -->
+  <button
+    (click)="setTab('profile')"
+    class="flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-xl transition-colors duration-200 relative"
+  >
+    <i-lucide
+      name="user"
+      [size]="20"
+      [class]="
+        activeTab() === 'profile' ? 'text-primary-500' : 'text-surface-400 dark:text-surface-500'
+      "
+    ></i-lucide>
+    @if (activeTab() === 'profile') {
+      <span
+        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"
+      ></span>
+    }
+  </button>
+</nav>

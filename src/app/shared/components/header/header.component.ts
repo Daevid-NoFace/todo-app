@@ -3,10 +3,11 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { AuthService } from '../../../core/services/auth.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
 })

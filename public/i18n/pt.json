@@ -31,7 +31,7 @@
     "sort_by": "Ordenar por",
     "date": "Data",
     "priority": "Prioridade",
-    "due_date": "Data de vencimento"
+    "due_date": "Vencimento"
   },
   "priority": {
     "label": "Prioridade",
@@ -63,5 +63,12 @@
   "dialog": {
     "confirm": "Confirmar",
     "cancel": "Cancelar"
+  },
+  "sidebar": {
+    "tasks_active": "tarefas ativas",
+    "all_tasks": "Todas as Tarefas",
+    "today": "Hoje",
+    "upcoming": "Próximas",
+    "projects": "Projetos"
   }
 }

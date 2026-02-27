@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { TodoService } from "../../../../core/services/todo.service";
 import { FilterStatus, SortField } from "../../../../core/models/todo.model";
 import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
+import { LucideAngularModule } from "lucide-angular";
 
 @Component({
   selector: 'app-todo-filters',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, LucideAngularModule],
   templateUrl: './todo-filters.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

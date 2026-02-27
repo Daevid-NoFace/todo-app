@@ -3,6 +3,7 @@ export interface User {
   email: string;
   name: string;
   passwordHash: string;
+  avatar?: string;
 }
 
 export interface AuthState {
