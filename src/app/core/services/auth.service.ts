@@ -72,4 +72,49 @@ export class AuthService {
     });
     this.router.navigate(['/login']);
   }
+
+  updateName(name: string): void {
+    const user = this.currentUser();
+    if (!user) {
+      return;
+    }
+
+    const updated = {...user, name};
+    const users = this.storageService.get<User[]>('users') ?? [];
+    this.storageService.set('users', users.map(u => u.id === user.id ? updated : u));
+    this.storageService.set('currentUser', updated);
+    this._state.update(state => ({...state, user: updated}));
+  }
+
+  updateAvatar(avatar: string): void {
+    const user = this.currentUser();
+    if (!user) {
+      return;
+    }
+
+    const updated = {...user, avatar};
+    const users = this.storageService.get<User[]>('users') ?? [];
+    this.storageService.set('users', users.map(u => u.id === user.id ? updated : u));
+    this.storageService.set('currentUser', updated);
+    this._state.update(state => ({...state, user: updated}));
+  }
+
+  updatePassword(currentPassword: string, newPassword: string): string | null {
+    const user = this.currentUser();
+    if (!user) {
+      return 'auth.invalid_credentials';
+    }
+
+    if (user.passwordHash !== btoa(currentPassword)) {
+      return 'auth.invalid_credentials';
+    }
+
+    const updated = {...user, passwordHash: btoa(newPassword)};
+    const users = this.storageService.get<User[]>('users') ?? [];
+    this.storageService.set('users', users.map(u => u.id === user.id ? updated : u));
+    this.storageService.set('currentUser', updated);
+    this._state.update(state => ({...state, user: updated}));
+
+    return null;
+  }
 }
