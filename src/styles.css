@@ -45,22 +45,20 @@
   --color-bg-dark: #0d0f1a;
 }
 
-.bg-mesh {
-  background-color: var(--color-bg-light);
-  background-image:
-    radial-gradient(at 15% 40%, hsla(280, 80%, 75%, 0.35) 0px, transparent 55%),
-    radial-gradient(at 85% 10%, hsla(340, 75%, 78%, 0.25) 0px, transparent 50%),
-    radial-gradient(at 55% 85%, hsla(220, 80%, 72%, 0.2) 0px, transparent 50%);
-  background-attachment: fixed;
-}
+  .bg-mesh {
+    background-color: var(--color-bg-light);
+    background-image:
+      radial-gradient(at 15% 40%, hsla(280, 80%, 75%, 0.35) 0px, transparent 55%),
+      radial-gradient(at 85% 10%, hsla(340, 75%, 78%, 0.25) 0px, transparent 50%),
+      radial-gradient(at 55% 85%, hsla(220, 80%, 72%, 0.2) 0px, transparent 50%);
+  }
 
-.dark .bg-mesh {
-  background-color: var(--color-bg-dark);
-  background-image:
-    radial-gradient(at 15% 40%, hsla(280, 60%, 25%, 0.45) 0px, transparent 55%),
-    radial-gradient(at 85% 10%, hsla(340, 55%, 22%, 0.35) 0px, transparent 50%);
-  background-attachment: fixed;
-}
+  .dark .bg-mesh {
+    background-color: var(--color-bg-dark);
+    background-image:
+      radial-gradient(at 15% 40%, hsla(280, 60%, 25%, 0.45) 0px, transparent 55%),
+      radial-gradient(at 85% 10%, hsla(340, 55%, 22%, 0.35) 0px, transparent 50%);
+  }
 
 /* ── Glass Utilities ── */
 @layer utilities {
@@ -101,3 +99,15 @@
 .shadow-fab {
   box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
 }
+
+  @layer base {
+    body {
+      background-color: var(--color-bg-light);
+      min-height: 100dvh;
+      overflow-x: hidden;  /* ← añadir */
+    }
+
+    .dark body {
+      background-color: var(--color-bg-dark);
+    }
+  }

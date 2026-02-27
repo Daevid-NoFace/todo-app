@@ -1,5 +1,6 @@
 .app-shell {
     min-height: 100dvh;
+    overflow-x: hidden;
 }
 
 /* Tablet: 2 columns */
