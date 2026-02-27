@@ -1,7 +1,15 @@
-import { Component, inject, input, output, signal, effect, ChangeDetectionStrategy } from "@angular/core";
-import {FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
-import { Priority } from "../../../../core/models/todo.model";
+import {
+  Component,
+  inject,
+  input,
+  output,
+  signal,
+  effect,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
+import { Priority } from '../../../../core/models/todo.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -9,23 +17,34 @@ import { Priority } from "../../../../core/models/todo.model";
   templateUrl: './todo-form.component.html',
   imports: [ReactiveFormsModule, TranslatePipe],
 })
-
 export class TodoFormComponent {
   private fb = inject(FormBuilder);
 
   submitted = signal(false);
 
-  editTodo = input<{ title: string; description?: string; priority: Priority, dueDate?: string } | null>(null);
+  editTodo = input<{
+    title: string;
+    description?: string;
+    priority: Priority;
+    dueDate?: string;
+  } | null>(null);
 
-  todoCreated = output<{ title: string; description?: string; priority: Priority, dueDate?: string }>();
+  todoCreated = output<{
+    title: string;
+    description?: string;
+    priority: Priority;
+    dueDate?: string;
+  }>();
 
   cancelled = output<void>();
+
+  private today = new Date().toISOString().split('T')[0];
 
   form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: [''],
     priority: ['medium' as Priority],
-    dueDate: [''],
+    dueDate: [this.today, Validators.required],
   });
 
   constructor() {
@@ -44,7 +63,7 @@ export class TodoFormComponent {
   }
 
   onSubmit(): void {
-    this.submitted.set(true)
+    this.submitted.set(true);
 
     if (this.form.invalid) {
       return;
@@ -58,7 +77,7 @@ export class TodoFormComponent {
     });
 
     if (!this.editTodo()) {
-      this.form.reset({ title: '', description: '', priority: 'medium', dueDate: '' });
+      this.form.reset({ title: '', description: '', priority: 'medium', dueDate: this.today });
       this.submitted.set(false);
     }
   }
