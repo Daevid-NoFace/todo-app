@@ -5,7 +5,7 @@
   class="space-y-3"
 >
   @for (todo of todos(); track todo.id) {
-    <li>
+    <li [@fadeSlideIn]>
       <app-todo-item
         [todo]="todo"
         (toggled)="toggled.emit($event)"
