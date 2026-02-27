@@ -200,4 +200,22 @@ export class TodoService {
     );
     this.persist();
   }
+
+  updateSubtask(todoId: string, subtaskId: string, title: string): void {
+    const now = new Date().toISOString();
+    this._todos.update((todos) =>
+      todos.map((t) =>
+        t.id === todoId
+          ? {
+              ...t,
+              subtasks: t.subtasks.map((s) =>
+                s.id === subtaskId ? { ...s, title, updatedAt: now } : s,
+              ),
+              updatedAt: now,
+            }
+          : t,
+      ),
+    );
+    this.persist();
+  }
 }
