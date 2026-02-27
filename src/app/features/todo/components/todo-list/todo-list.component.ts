@@ -1,15 +1,15 @@
-import { Component, input, output, ChangeDetectionStrategy } from "@angular/core";
-import { Todo, Priority } from "../../../../core/models/todo.model";
-import { TodoItemComponent } from "../todo-item/todo-item.component";
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { Todo, Priority } from '../../../../core/models/todo.model';
+import { TodoItemComponent } from '../todo-item/todo-item.component';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
-import { fadeSlideIn } from '../../../../shared/animations/todo.animations';
+import { fadeSlideIn, listStagger } from '../../../../shared/animations/todo.animations';
 
 @Component({
   selector: 'app-todo-list',
   imports: [TodoItemComponent, TranslatePipe],
   templateUrl: './todo-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeSlideIn],
+  animations: [fadeSlideIn, listStagger],
 })
 export class TodoListComponent {
   todos = input<Todo[]>([]);

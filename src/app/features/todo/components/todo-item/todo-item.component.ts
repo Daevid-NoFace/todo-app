@@ -15,6 +15,7 @@ import { TodoService } from '../../../../core/services/todo.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { checkBounce } from '../../../../shared/animations/todo.animations';
 
 @Component({
   selector: 'app-todo-item',
@@ -32,6 +33,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
         animate('300ms ease-out', style({ opacity: 0, height: 0 })),
       ]),
     ]),
+    checkBounce,
   ],
 })
 export class TodoItemComponent {
