@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
@@ -10,6 +10,7 @@ import { I18nService } from '../../core/services/i18n.service';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { RightPanelComponent } from '../../shared/right-panel/right-panel.component';
 import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
+import { sheetSlideUp } from '../../shared/animations/todo.animations';
 
 @Component({
   selector: 'app-todo-page',
@@ -25,12 +26,23 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [sheetSlideUp]
 })
 export class TodoPageComponent {
   protected todoService = inject(TodoService);
 
   private toast = inject(ToastService);
   private i18n = inject(I18nService);
+
+  readonly showSheet = signal(false);
+
+  openSheet(): void {
+    this.showSheet.set(true);
+  }
+
+  closeSheet(): void {
+    this.showSheet.set(false);
+  }
 
   onTodoCreated(data: {
     title: string;
@@ -40,6 +52,7 @@ export class TodoPageComponent {
   }): void {
     this.todoService.add(data);
     this.toast.show(this.i18n.translate('todo.created'), 'success');
+    this.closeSheet();
   }
 
   onTodoEdited(data: {
