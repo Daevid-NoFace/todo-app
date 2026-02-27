@@ -1,9 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
+
+type NavTab = 'home' | 'search' | 'calendar' | 'profile';
 
 @Component({
   selector: 'app-bottom-nav',
-  imports: [],
+  imports: [LucideAngularModule],
   templateUrl: './bottom-nav.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BottomNavComponent {}
+export class BottomNavComponent {
+
+  readonly activeTab = signal<NavTab>('home');
+  readonly fabClick = output<void>();
+
+  setTab(tab: NavTab): void {
+    this.activeTab.set(tab);
+  }
+}
