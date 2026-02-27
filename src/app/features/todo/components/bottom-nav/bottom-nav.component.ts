@@ -13,8 +13,10 @@ export class BottomNavComponent {
 
   readonly activeTab = signal<NavTab>('home');
   readonly fabClick = output<void>();
+  readonly tabChange = output<NavTab>();
 
   setTab(tab: NavTab): void {
     this.activeTab.set(tab);
+    this.tabChange.emit(tab);
   }
 }
