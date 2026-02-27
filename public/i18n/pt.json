@@ -31,7 +31,7 @@
     "sort_by": "Ordenar por",
     "date": "Data",
     "priority": "Prioridade",
-    "due_date": "Data de vencimento"
+    "due_date": "Vencimento"
   },
   "priority": {
     "label": "Prioridade",

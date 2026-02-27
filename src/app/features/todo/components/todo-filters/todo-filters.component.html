@@ -4,7 +4,7 @@
     @for (status of filterOptions; track status) {
       <button
         (click)="setStatusFilter(status)"
-        class="flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
+        class="flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
         [class.bg-white]="todoService.filter().status === status"
         [class.dark:bg-white/15]="todoService.filter().status === status"
         [class.text-primary-600]="todoService.filter().status === status"
@@ -25,7 +25,7 @@
   <select
     (change)="onSortByChange($event)"
     [value]="todoService.filter().sortBy"
-    class="text-xs font-medium bg-transparent outline-none cursor-pointer text-surface-500 dark:text-surface-400 pr-1"
+    class="text-xs font-medium bg-transparent outline-none cursor-pointer text-surface-500 dark:text-surface-400 shrink-0 appearance-none"
   >
     <option value="createdAt">{{ 'filter.date' | translate }}</option>
     <option value="priority">{{ 'filter.priority' | translate }}</option>
