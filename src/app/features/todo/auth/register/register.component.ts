@@ -1,13 +1,14 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { RouterLink } from "@angular/router";
-import { AuthService } from "../../../../core/services/auth.service";
-import { TranslatePipe } from "../../../../shared/pipes/translate.pipe";
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
+import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [RouterLink, ReactiveFormsModule, TranslatePipe],
+  imports: [RouterLink, ReactiveFormsModule, TranslatePipe, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
@@ -25,9 +26,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     this.submitted.set(true);
-
     if (this.form.invalid) return;
-
     const { name, email, password } = this.form.getRawValue();
     const errorKey = this.authService.register(name, email, password);
     this.error.set(errorKey);

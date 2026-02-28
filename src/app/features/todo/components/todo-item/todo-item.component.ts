@@ -50,6 +50,7 @@ export class TodoItemComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }>();
 
   isEditing = signal(false);
@@ -88,6 +89,7 @@ export class TodoItemComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }): void {
     this.edited.emit({ id: this.todo().id, ...data });
     this.isEditing.set(false);

@@ -1,6 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  output,
+  inject,
+  signal,
+  effect,
+} from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { LucideAngularModule } from 'lucide-angular';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 interface CalendarCell {
   dayNum: number;
@@ -13,15 +22,26 @@ interface CalendarCell {
 
 @Component({
   selector: 'app-right-panel',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, TranslatePipe],
   templateUrl: './right-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RightPanelComponent {
-  private todoService = inject(TodoService);
+  protected todoService = inject(TodoService);
+
+  readonly dateSelected = output<string | null>();
 
   // --- Calendar ---
   readonly viewMonth = signal(new Date());
+  readonly selectedDate = signal<string | null>(null);
+
+  constructor() {
+    effect(() => {
+      if (this.todoService.filter().view !== 'date') {
+        this.selectedDate.set(null);
+      }
+    });
+  }
 
   readonly viewMonthLabel = computed(() =>
     this.viewMonth().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
@@ -44,6 +64,7 @@ export class RightPanelComponent {
     const month = vm.getMonth();
     const todayStr = this.toDateStr(new Date());
     const datesWithTasks = this.datesWithTasks();
+    const selected = this.selectedDate();
     const cells: CalendarCell[] = [];
 
     // Monday-based offset: Sun(0)->6, Mon(1)->0, ..., Sat(6)->5
@@ -59,7 +80,7 @@ export class RightPanelComponent {
         dateStr,
         isOtherMonth: true,
         isToday: false,
-        isSelected: false,
+        isSelected: dateStr === selected,
         hasTasks: datesWithTasks.has(dateStr),
       });
     }
@@ -74,7 +95,7 @@ export class RightPanelComponent {
         dateStr,
         isOtherMonth: false,
         isToday: dateStr === todayStr,
-        isSelected: false,
+        isSelected: dateStr === selected,
         hasTasks: datesWithTasks.has(dateStr),
       });
     }
@@ -90,13 +111,27 @@ export class RightPanelComponent {
         dateStr,
         isOtherMonth: true,
         isToday: false,
-        isSelected: false,
+        isSelected: dateStr === selected,
         hasTasks: datesWithTasks.has(dateStr),
       });
     }
 
     return cells;
   });
+
+  selectDate(dateStr: string): void {
+    const current = this.selectedDate();
+
+    if (current === dateStr) {
+      this.selectedDate.set(null);
+      this.todoService.updateFilter({ view: 'all', dateFilter: undefined });
+      this.dateSelected.emit(null);
+    } else {
+      this.selectedDate.set(dateStr);
+      this.todoService.updateFilter({ view: 'date', dateFilter: dateStr });
+      this.dateSelected.emit(dateStr);
+    }
+  }
 
   prevMonth(): void {
     const d = new Date(this.viewMonth());

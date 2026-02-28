@@ -21,7 +21,14 @@
     "created": "Task created successfully",
     "updated": "Task updated successfully",
     "deleted": "Task deleted successfully",
-    "due_date": "Due Date"
+    "due_date": "Due Date",
+    "project": "Project",
+    "no_project": "None",
+    "all_projects": "All Projects",
+    "new_task": "New task",
+    "no_tasks_day": "No tasks for this day",
+    "subtask_placeholder": "Subtask name...",
+    "add_subtask": "Add subtask"
   },
   "filter": {
     "all": "All",
@@ -53,7 +60,14 @@
     "no_account": "Don't have an account?",
     "have_account": "Already have an account?",
     "invalid_credentials": "Invalid email or password",
-    "email_taken": "This email is already registered"
+    "email_taken": "This email is already registered",
+    "welcome_back_title": "Welcome back.",
+    "welcome_title": "Welcome.",
+    "login_tagline": "Your tasks are waiting for you.",
+    "register_tagline": "Start organizing your day.",
+    "feature_1": "Organize with projects and priorities",
+    "feature_2": "Track progress with weekly insights",
+    "feature_3": "Plan ahead with calendar and due dates"
   },
   "validation": {
     "required": "This field is required",
@@ -64,11 +78,44 @@
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
-    "sidebar": {
+  "sidebar": {
     "tasks_active": "tasks active",
     "all_tasks": "All Tasks",
     "today": "Today",
     "upcoming": "Upcoming",
     "projects": "Projects"
+  },
+  "nav": {
+    "search": "Search",
+    "calendar": "Calendar",
+    "profile": "Profile"
+  },
+  "profile": {
+    "change_password": "Change Password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_password": "Confirm new password",
+    "password_updated": "Password updated successfully",
+    "update_password": "Update Password",
+    "light_mode": "Light mode",
+    "dark_mode": "Dark mode",
+    "language": "Language"
+  },
+  "right_panel": {
+    "weekly_activity": "Weekly activity",
+    "stats": "Stats",
+    "day_streak": "day streak",
+    "today": "today",
+    "this_week": "This week",
+    "prev_month": "Previous month",
+    "next_month": "Next month"
+  },
+  "project": {
+    "name_placeholder": "Project name",
+    "create": "Create",
+    "save": "Save",
+    "new": "New project",
+    "edit": "Edit project",
+    "delete_confirm": "Delete project and keep its tasks?"
   }
 }

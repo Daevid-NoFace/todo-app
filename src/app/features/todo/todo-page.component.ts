@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
@@ -15,6 +15,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { FormsModule } from '@angular/forms';
+import { ProjectService } from '../../core/services/project.service';
+import { Project } from '../../core/models/project.model';
 
 type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
 
@@ -42,9 +44,82 @@ export class TodoPageComponent {
   protected toastService = inject(ToastService);
   protected i18nService = inject(I18nService);
   protected themeService = inject(ThemeService);
+  protected projectService = inject(ProjectService);
 
   readonly showSheet = signal(false);
   readonly activeMobileTab = signal<MobileTab>('home');
+  readonly showDateSheet = signal(false);
+
+  // Project signals
+  readonly showProjectSheet = signal(false);
+  readonly editingMobileProject = signal<Project | null>(null);
+  readonly mobileProjectName = signal('');
+  readonly mobileProjectColor = signal('#7C3AED');
+  readonly mobileProjectIcon = signal('home');
+
+  readonly projectColors = [
+    '#7C3AED',
+    '#2563EB',
+    '#059669',
+    '#F59E0B',
+    '#EF4444',
+    '#EC4899',
+    '#8B5CF6',
+  ];
+
+  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
+
+  // --- Project mobile management ---
+  openNewProjectSheet(): void {
+    this.editingMobileProject.set(null);
+    this.mobileProjectName.set('');
+    this.mobileProjectColor.set('#7C3AED');
+    this.mobileProjectIcon.set('home');
+    this.showProjectSheet.set(true);
+  }
+
+  openEditProjectSheet(project: Project, event: Event): void {
+    event.stopPropagation();
+    this.editingMobileProject.set(project);
+    this.mobileProjectName.set(project.name);
+    this.mobileProjectColor.set(project.color);
+    this.mobileProjectIcon.set(project.icon);
+    this.showProjectSheet.set(true);
+  }
+
+  saveMobileProject(): void {
+    const name = this.mobileProjectName().trim();
+    if (!name) return;
+    const editing = this.editingMobileProject();
+    if (editing) {
+      this.projectService.update(editing.id, {
+        name,
+        color: this.mobileProjectColor(),
+        icon: this.mobileProjectIcon(),
+      });
+    } else {
+      this.projectService.addProject({
+        name,
+        color: this.mobileProjectColor(),
+        icon: this.mobileProjectIcon(),
+      });
+    }
+    this.showProjectSheet.set(false);
+  }
+
+  deleteMobileProject(id: string): void {
+    this.projectService.delete(id);
+    if (this.todoService.filter().projectId === id) {
+      this.todoService.updateFilter({ view: 'all', projectId: undefined });
+    }
+    this.showProjectSheet.set(false);
+  }
+
+  // --- Navigation ---
+  readonly preselectedProjectId = computed(() => {
+    const f = this.todoService.filter();
+    return f.view === 'project' ? (f.projectId ?? null) : null;
+  });
 
   onTabChange(tab: MobileTab): void {
     this.activeMobileTab.set(tab);
@@ -58,11 +133,33 @@ export class TodoPageComponent {
     this.showSheet.set(false);
   }
 
+  readonly selectedDateLabel = computed(() => {
+    const date = this.todoService.filter().dateFilter;
+
+    if (!date) return '';
+
+    return new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+    });
+  });
+
+  onDateSelected(date: string | null): void {
+    this.showDateSheet.set(date !== null);
+  }
+
+  closeDateSheet(): void {
+    this.showDateSheet.set(false);
+    this.todoService.updateFilter({ view: 'all', dateFilter: undefined });
+  }
+
   onTodoCreated(data: {
     title: string;
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }): void {
     this.todoService.add(data);
     this.toastService.show(this.i18nService.translate('todo.created'), 'success');
@@ -75,6 +172,7 @@ export class TodoPageComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }): void {
     const { id, ...updateData } = data;
     this.todoService.update(id, updateData);

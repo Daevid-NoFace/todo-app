@@ -45,20 +45,21 @@
   --color-bg-dark: #0d0f1a;
 }
 
-  .bg-mesh {
-    background-color: var(--color-bg-light);
-    background-image:
-      radial-gradient(at 15% 40%, hsla(280, 80%, 75%, 0.35) 0px, transparent 55%),
-      radial-gradient(at 85% 10%, hsla(340, 75%, 78%, 0.25) 0px, transparent 50%),
-      radial-gradient(at 55% 85%, hsla(220, 80%, 72%, 0.2) 0px, transparent 50%);
-  }
+.bg-mesh {
+  background-color: var(--color-bg-light);
+  background-image:
+    radial-gradient(at 15% 40%, hsla(280, 80%, 75%, 0.35) 0px, transparent 55%),
+    radial-gradient(at 85% 10%, hsla(340, 55%, 22%, 0.35) 0px, transparent 50%),
+    radial-gradient(at 60% 90%, hsla(220, 60%, 20%, 0.3) 0px, transparent 50%);
+}
 
-  .dark .bg-mesh {
-    background-color: var(--color-bg-dark);
-    background-image:
-      radial-gradient(at 15% 40%, hsla(280, 60%, 25%, 0.45) 0px, transparent 55%),
-      radial-gradient(at 85% 10%, hsla(340, 55%, 22%, 0.35) 0px, transparent 50%);
-  }
+.dark .bg-mesh {
+  background-color: var(--color-bg-dark);
+  background-image:
+    radial-gradient(at 15% 40%, hsla(280, 60%, 25%, 0.45) 0px, transparent 55%),
+    radial-gradient(at 85% 10%, hsla(340, 55%, 22%, 0.35) 0px, transparent 50%),
+    radial-gradient(at 60% 90%, hsla(220, 60%, 20%, 0.3) 0px, transparent 50%);
+}
 
 /* ── Glass Utilities ── */
 @layer utilities {
@@ -72,6 +73,7 @@
   .dark .glass {
     background: var(--color-surface-glass-dark);
     border-color: var(--color-border-glass-dark);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .glass-sidebar {
@@ -100,14 +102,40 @@
   box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
 }
 
-  @layer base {
-    body {
-      background-color: var(--color-bg-light);
-      min-height: 100dvh;
-      overflow-x: hidden;  /* ← añadir */
-    }
+.dark .shadow-task {
+  box-shadow: 0 4px 24px rgba(124, 58, 237, 0.22);
+}
+.dark .shadow-card {
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.3);
+}
+.dark .shadow-fab {
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.6);
+}
 
-    .dark body {
-      background-color: var(--color-bg-dark);
-    }
+@layer base {
+  body {
+    background-color: var(--color-bg-light);
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
+
+  .dark body {
+    background-color: var(--color-bg-dark);
+  }
+}
+
+/* ── Page transitions ── */
+@keyframes routeFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+router-outlet + * {
+  animation: routeFadeIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
