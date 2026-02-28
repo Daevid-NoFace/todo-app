@@ -60,7 +60,11 @@
     "no_account": "Não tem uma conta?",
     "have_account": "Já tem uma conta?",
     "invalid_credentials": "Email ou palavra-passe inválidos",
-    "email_taken": "Este email já está registado"
+    "email_taken": "Este email já está registado",
+    "welcome_back_title": "Bem-vindo de volta.",
+    "welcome_title": "Bem-vindo.",
+    "login_tagline": "As suas tarefas estão à sua espera.",
+    "register_tagline": "Comece a organizar o seu dia."
   },
   "validation": {
     "required": "Este campo é obrigatório",

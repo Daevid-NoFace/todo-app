@@ -60,7 +60,11 @@
     "no_account": "Don't have an account?",
     "have_account": "Already have an account?",
     "invalid_credentials": "Invalid email or password",
-    "email_taken": "This email is already registered"
+    "email_taken": "This email is already registered",
+    "welcome_back_title": "Welcome back.",
+    "welcome_title": "Welcome.",
+    "login_tagline": "Your tasks are waiting for you.",
+    "register_tagline": "Start organizing your day."
   },
   "validation": {
     "required": "This field is required",
