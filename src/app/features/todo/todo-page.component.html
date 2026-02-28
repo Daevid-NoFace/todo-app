@@ -9,7 +9,7 @@
     <!-- ── DESKTOP: contenido fijo ─────────────────── -->
     <ng-container>
       <div class="hidden md:block space-y-6">
-        <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">
+        <h2 class="text-lg text-center font-bold text-surface-800 dark:text-surface-100">
           {{ 'app.subtitle' | translate }}
         </h2>
         <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)" />
@@ -37,7 +37,7 @@
         @switch (activeMobileTab()) {
         <!-- HOME -->
         @case ('home') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100">
+        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100">
           {{ 'app.subtitle' | translate }}
         </h2>
 
@@ -68,7 +68,8 @@
           <div class="shrink-0 flex items-center rounded-full transition-all duration-300 ease-in-out"
             [class.bg-black/5]="!isActive" [class.dark:bg-white/10]="!isActive"
             [style.background-color]="isActive ? project.color : null" [style.padding]="'6px'">
-            <button (click)="todoService.updateFilter({ view: 'project', projectId: project.id, dateFilter: undefined })"
+            <button
+              (click)="todoService.updateFilter({ view: 'project', projectId: project.id, dateFilter: undefined })"
               class="flex items-center">
               <span class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center"
                 [style.background-color]="project.color">
@@ -120,7 +121,7 @@
 
         <!-- SEARCH -->
         @case ('search') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.search' | translate }}</h2>
+        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.search' | translate }}</h2>
         <div class="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-task">
           <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
           <input type="text" [placeholder]="'filter.search' | translate"
@@ -133,14 +134,14 @@
 
         <!-- CALENDAR -->
         @case ('calendar') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.calendar' | translate
+        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.calendar' | translate
           }}</h2>
         <app-right-panel class="block" (dateSelected)="onDateSelected($event)" />
         }
 
         <!-- PROFILE -->
         @case ('profile') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-4">{{ 'nav.profile' | translate
+        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100 mb-4">{{ 'nav.profile' | translate
           }}</h2>
 
         <!-- Avatar + Name -->
