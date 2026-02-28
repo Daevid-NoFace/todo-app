@@ -64,7 +64,10 @@
     "welcome_back_title": "Welcome back.",
     "welcome_title": "Welcome.",
     "login_tagline": "Your tasks are waiting for you.",
-    "register_tagline": "Start organizing your day."
+    "register_tagline": "Start organizing your day.",
+    "feature_1": "Organize with projects and priorities",
+    "feature_2": "Track progress with weekly insights",
+    "feature_3": "Plan ahead with calendar and due dates"
   },
   "validation": {
     "required": "This field is required",

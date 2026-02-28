@@ -1,7 +1,7 @@
 <div class="min-h-dvh md:h-full flex flex-col md:flex-row">
 
   <!-- BRANDING: top on mobile, left column on desktop -->
-  <div class="flex-1 flex flex-col justify-end pb-8 px-6 pt-16 md:flex-1 md:justify-center md:pb-0 md:pt-0 md:px-16">
+  <div class="flex-1 flex flex-col justify-end pb-8 px-6 pt-6 md:flex-1 md:justify-center md:pb-0 md:pt-0 md:px-16">
 
     <!-- Logo mark -->
     <div class="flex items-center gap-2.5 mb-8 md:mb-12">
@@ -20,6 +20,28 @@
     <p class="text-surface-500 dark:text-surface-400 md:text-lg">
       {{ 'auth.login_tagline' | translate }}
     </p>
+
+    <!-- Feature highlights (desktop only) -->
+    <ul class="hidden md:flex flex-col gap-3 mt-8">
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="check" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_1' | translate }}
+      </li>
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="trending-up" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_2' | translate }}
+      </li>
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="calendar-days" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_3' | translate }}
+      </li>
+    </ul>
 
     <!-- Link (desktop only) -->
     <p class="hidden md:block text-sm text-surface-500 dark:text-surface-400 mt-10">

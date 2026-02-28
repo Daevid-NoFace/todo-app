@@ -21,6 +21,28 @@
       {{ 'auth.register_tagline' | translate }}
     </p>
 
+    <!-- Feature highlights (desktop only) -->
+    <ul class="hidden md:flex flex-col gap-3 mt-8">
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="check" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_1' | translate }}
+      </li>
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="trending-up" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_2' | translate }}
+      </li>
+      <li class="flex items-center gap-3 text-sm text-surface-600 dark:text-surface-300">
+        <span class="w-6 h-6 rounded-full bg-primary-500/15 flex items-center justify-center shrink-0">
+          <i-lucide name="calendar-days" [size]="12" class="text-primary-500" />
+        </span>
+        {{ 'auth.feature_3' | translate }}
+      </li>
+    </ul>
+
     <p class="hidden md:block text-sm text-surface-500 dark:text-surface-400 mt-10">
       {{ 'auth.have_account' | translate }}
       <a routerLink="/login"

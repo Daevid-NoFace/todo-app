@@ -64,7 +64,10 @@
     "welcome_back_title": "Bem-vindo de volta.",
     "welcome_title": "Bem-vindo.",
     "login_tagline": "As suas tarefas estão à sua espera.",
-    "register_tagline": "Comece a organizar o seu dia."
+    "register_tagline": "Comece a organizar o seu dia.",
+    "feature_1": "Organize com projetos e prioridades",
+    "feature_2": "Acompanhe o progresso com estatísticas semanais",
+    "feature_3": "Planeie com calendário e datas de vencimento"
   },
   "validation": {
     "required": "Este campo é obrigatório",

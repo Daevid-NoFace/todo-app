@@ -8,6 +8,25 @@
   @if (auth.isAuthenticated()) {
   <app-header class="md:hidden" />
   }
+
+  <!-- Theme + language controls (auth pages only) -->
+  @if (!auth.isAuthenticated()) {
+  <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+    <button (click)="themeService.toggle()"
+      class="w-9 h-9 rounded-full glass shadow-task flex items-center justify-center hover:scale-110 transition-transform duration-200">
+      @if (themeService.darkMode()) {
+      <i-lucide name="sun" [size]="16" class="text-accent-amber" />
+      } @else {
+      <i-lucide name="moon" [size]="16" class="text-primary-400" />
+      }
+    </button>
+    <button (click)="switchLanguage()"
+      class="h-9 px-3 rounded-full glass shadow-task text-xs font-semibold text-surface-700 dark:text-surface-300 hover:scale-110 transition-transform duration-200">
+      {{ i18nService.currentLang() === 'en' ? 'PT' : 'EN' }}
+    </button>
+  </div>
+  }
+
   <main id="main-content" class="h-full">
     <router-outlet />
   </main>
