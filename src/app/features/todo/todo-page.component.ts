@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
@@ -45,6 +45,7 @@ export class TodoPageComponent {
 
   readonly showSheet = signal(false);
   readonly activeMobileTab = signal<MobileTab>('home');
+  readonly showDateSheet = signal(false);
 
   onTabChange(tab: MobileTab): void {
     this.activeMobileTab.set(tab);
@@ -56,6 +57,27 @@ export class TodoPageComponent {
 
   closeSheet(): void {
     this.showSheet.set(false);
+  }
+
+  readonly selectedDateLabel = computed(() => {
+    const date = this.todoService.filter().dateFilter;
+
+    if (!date) return '';
+
+    return new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+    });
+  });
+
+  onDateSelected(date: string | null): void {
+    this.showDateSheet.set(date !== null);
+  }
+
+  closeDateSheet(): void {
+    this.showDateSheet.set(false);
+    this.todoService.updateFilter({ view: 'all', dateFilter: undefined });
   }
 
   onTodoCreated(data: {

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  output,
+  inject,
+  signal,
+  effect,
+} from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -20,9 +28,19 @@ interface CalendarCell {
 export class RightPanelComponent {
   protected todoService = inject(TodoService);
 
+  readonly dateSelected = output<string | null>();
+
   // --- Calendar ---
   readonly viewMonth = signal(new Date());
   readonly selectedDate = signal<string | null>(null);
+
+  constructor() {
+    effect(() => {
+      if (this.todoService.filter().view !== 'date') {
+        this.selectedDate.set(null);
+      }
+    });
+  }
 
   readonly viewMonthLabel = computed(() =>
     this.viewMonth().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
@@ -106,9 +124,11 @@ export class RightPanelComponent {
     if (current === dateStr) {
       this.selectedDate.set(null);
       this.todoService.updateFilter({ view: 'all', dateFilter: undefined });
+      this.dateSelected.emit(null);
     } else {
       this.selectedDate.set(dateStr);
       this.todoService.updateFilter({ view: 'date', dateFilter: dateStr });
+      this.dateSelected.emit(dateStr);
     }
   }
 
