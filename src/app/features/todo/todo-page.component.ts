@@ -47,6 +47,11 @@ export class TodoPageComponent {
   readonly activeMobileTab = signal<MobileTab>('home');
   readonly showDateSheet = signal(false);
 
+  readonly preselectedProjectId = computed(() => {
+    const f = this.todoService.filter();
+    return f.view === 'project' ? (f.projectId ?? null) : null;
+  });
+
   onTabChange(tab: MobileTab): void {
     this.activeMobileTab.set(tab);
   }
@@ -85,6 +90,7 @@ export class TodoPageComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }): void {
     this.todoService.add(data);
     this.toastService.show(this.i18nService.translate('todo.created'), 'success');
@@ -97,6 +103,7 @@ export class TodoPageComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }): void {
     const { id, ...updateData } = data;
     this.todoService.update(id, updateData);

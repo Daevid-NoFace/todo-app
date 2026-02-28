@@ -10,6 +10,7 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { Priority } from '../../../../core/models/todo.model';
+import { ProjectService } from '../../../../core/services/project.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +20,7 @@ import { Priority } from '../../../../core/models/todo.model';
 })
 export class TodoFormComponent {
   private fb = inject(FormBuilder);
+  protected projectService = inject(ProjectService);
 
   submitted = signal(false);
 
@@ -27,13 +29,17 @@ export class TodoFormComponent {
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   } | null>(null);
+
+  preselectedProjectId = input<string | null>(null);
 
   todoCreated = output<{
     title: string;
     description?: string;
     priority: Priority;
     dueDate?: string;
+    projectId?: string;
   }>();
 
   cancelled = output<void>();
@@ -45,6 +51,7 @@ export class TodoFormComponent {
     description: [''],
     priority: ['medium' as Priority],
     dueDate: [this.today, Validators.required],
+    projectId: [''],
   });
 
   constructor() {
@@ -57,7 +64,15 @@ export class TodoFormComponent {
           description: todo.description ?? '',
           priority: todo.priority,
           dueDate: todo.dueDate ?? '',
+          projectId: todo.projectId ?? '',
         });
+      }
+    });
+
+    effect(() => {
+      const pre = this.preselectedProjectId();
+      if (!this.editTodo()) {
+        this.form.patchValue({ projectId: pre ?? '' });
       }
     });
   }
@@ -74,10 +89,17 @@ export class TodoFormComponent {
       description: this.form.value.description || undefined,
       priority: this.form.value.priority!,
       dueDate: this.form.value.dueDate || undefined,
+      projectId: this.form.value.projectId || undefined,
     });
 
     if (!this.editTodo()) {
-      this.form.reset({ title: '', description: '', priority: 'medium', dueDate: this.today });
+      this.form.reset({
+        title: '',
+        description: '',
+        priority: 'medium',
+        dueDate: this.today,
+        projectId: this.preselectedProjectId() ?? '',
+      });
       this.submitted.set(false);
     }
   }

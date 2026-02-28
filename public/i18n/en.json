@@ -21,7 +21,9 @@
     "created": "Task created successfully",
     "updated": "Task updated successfully",
     "deleted": "Task deleted successfully",
-    "due_date": "Due Date"
+    "due_date": "Due Date",
+    "project": "Project",
+    "no_project": "None"
   },
   "filter": {
     "all": "All",
@@ -64,7 +66,7 @@
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
-    "sidebar": {
+  "sidebar": {
     "tasks_active": "tasks active",
     "all_tasks": "All Tasks",
     "today": "Today",

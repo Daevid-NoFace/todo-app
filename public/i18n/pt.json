@@ -21,7 +21,9 @@
     "created": "Tarefa criada com sucesso",
     "updated": "Tarefa atualizada com sucesso",
     "deleted": "Tarefa excluída com sucesso",
-    "due_date": "Data de vencimento"
+    "due_date": "Data de vencimento",
+    "project": "Projeto",
+    "no_project": "Nenhum"
   },
   "filter": {
     "all": "Todas",

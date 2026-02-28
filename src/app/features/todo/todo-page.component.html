@@ -12,7 +12,7 @@
         <h2 class="text-xl text-center font-bold text-surface-800 dark:text-surface-100">
           {{ 'app.subtitle' | translate }}
         </h2>
-        <app-todo-form (todoCreated)="onTodoCreated($event)" />
+        <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)" />
         <app-todo-filters />
         <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
           <span>
@@ -222,7 +222,8 @@
     class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8">
     <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-5"></div>
     <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">New task</h3>
-    <app-todo-form (todoCreated)="onTodoCreated($event)" (cancelled)="closeSheet()" />
+    <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)"
+      (cancelled)="closeSheet()" />
   </div>
   }
 

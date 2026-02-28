@@ -104,7 +104,7 @@
     body {
       background-color: var(--color-bg-light);
       min-height: 100dvh;
-      overflow-x: hidden;  /* ← añadir */
+      overflow-x: hidden;
     }
 
     .dark body {
