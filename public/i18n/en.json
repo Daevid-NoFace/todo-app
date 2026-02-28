@@ -102,5 +102,13 @@
     "this_week": "This week",
     "prev_month": "Previous month",
     "next_month": "Next month"
+  },
+  "project": {
+    "name_placeholder": "Project name",
+    "create": "Create",
+    "save": "Save",
+    "new": "New project",
+    "edit": "Edit project",
+    "delete_confirm": "Delete project and keep its tasks?"
   }
 }

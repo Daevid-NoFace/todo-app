@@ -33,6 +33,12 @@ import {
   LogOut,
   Heart,
   X,
+  Flag,
+  Bookmark,
+  Tag,
+  Clock,
+  Calendar,
+  AlertTriangle,
 } from 'lucide-angular';
 
 import { routes } from './app.routes';
@@ -70,6 +76,12 @@ export const appConfig: ApplicationConfig = {
         LogOut,
         Heart,
         X,
+        Flag,
+        Bookmark,
+        Tag,
+        Clock,
+        Calendar,
+        AlertTriangle,
       }),
     ),
   ],

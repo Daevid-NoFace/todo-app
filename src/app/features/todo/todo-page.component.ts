@@ -16,6 +16,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../core/services/project.service';
+import { Project } from '../../core/models/project.model';
 
 type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
 
@@ -49,6 +50,72 @@ export class TodoPageComponent {
   readonly activeMobileTab = signal<MobileTab>('home');
   readonly showDateSheet = signal(false);
 
+  // Project signals
+  readonly showProjectSheet = signal(false);
+  readonly editingMobileProject = signal<Project | null>(null);
+  readonly mobileProjectName = signal('');
+  readonly mobileProjectColor = signal('#7C3AED');
+  readonly mobileProjectIcon = signal('home');
+
+  readonly projectColors = [
+    '#7C3AED',
+    '#2563EB',
+    '#059669',
+    '#F59E0B',
+    '#EF4444',
+    '#EC4899',
+    '#8B5CF6',
+  ];
+
+  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
+
+  // --- Project mobile management ---
+  openNewProjectSheet(): void {
+    this.editingMobileProject.set(null);
+    this.mobileProjectName.set('');
+    this.mobileProjectColor.set('#7C3AED');
+    this.mobileProjectIcon.set('home');
+    this.showProjectSheet.set(true);
+  }
+
+  openEditProjectSheet(project: Project, event: Event): void {
+    event.stopPropagation();
+    this.editingMobileProject.set(project);
+    this.mobileProjectName.set(project.name);
+    this.mobileProjectColor.set(project.color);
+    this.mobileProjectIcon.set(project.icon);
+    this.showProjectSheet.set(true);
+  }
+
+  saveMobileProject(): void {
+    const name = this.mobileProjectName().trim();
+    if (!name) return;
+    const editing = this.editingMobileProject();
+    if (editing) {
+      this.projectService.update(editing.id, {
+        name,
+        color: this.mobileProjectColor(),
+        icon: this.mobileProjectIcon(),
+      });
+    } else {
+      this.projectService.addProject({
+        name,
+        color: this.mobileProjectColor(),
+        icon: this.mobileProjectIcon(),
+      });
+    }
+    this.showProjectSheet.set(false);
+  }
+
+  deleteMobileProject(id: string): void {
+    this.projectService.delete(id);
+    if (this.todoService.filter().projectId === id) {
+      this.todoService.updateFilter({ view: 'all', projectId: undefined });
+    }
+    this.showProjectSheet.set(false);
+  }
+
+  // --- Navigation ---
   readonly preselectedProjectId = computed(() => {
     const f = this.todoService.filter();
     return f.view === 'project' ? (f.projectId ?? null) : null;

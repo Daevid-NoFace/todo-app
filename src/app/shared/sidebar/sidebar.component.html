@@ -51,26 +51,96 @@
     <span class="text-xs font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">
       {{ 'sidebar.projects' | translate }}
     </span>
-    <button class="p-1 rounded-lg hover:bg-surface-200 dark:hover:bg-white/10 transition-colors duration-200">
-      <i-lucide name="plus" class="w-4 h-4 text-surface-400"></i-lucide>
+    <button (click)="openNewProjectForm()"
+      class="p-1 rounded-lg hover:bg-surface-200 dark:hover:bg-white/10 transition-colors duration-200"
+      [class.bg-primary-500/20]="showProjectForm() && !editingProject()"
+      [class.text-primary-500]="showProjectForm() && !editingProject()">
+      <i-lucide name="plus" class="w-4 h-4"></i-lucide>
     </button>
   </div>
 
   <!-- PROJECTS LIST -->
   <div class="space-y-0.5">
     @for (project of projectService.projects(); track project.id) {
-    <button (click)="selectProject(project.id)"
-      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10"
-      [class.bg-white/70]="todoService.filter().projectId === project.id"
-      [class.dark:bg-white/15]="todoService.filter().projectId === project.id">
-      <i-lucide [name]="project.icon" class="w-4 h-4" [style.color]="project.color"></i-lucide>
-      <span class="flex-1 text-left truncate">{{ project.name }}</span>
-      <span class="text-xs text-surface-400 font-mono">{{
-        projectTaskCounts().get(project.id) ?? 0
-        }}</span>
-    </button>
+    <div class="group/project flex items-center gap-1">
+      <button (click)="selectProject(project.id)" class="flex-1 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+  duration-200 hover:bg-white/50 dark:hover:bg-white/10"
+        [class.bg-white/70]="todoService.filter().view === 'project' && todoService.filter().projectId === project.id"
+        [class.dark:bg-white/15]="todoService.filter().view === 'project' && todoService.filter().projectId === project.id">
+        <i-lucide [name]="project.icon" class="w-4 h-4 shrink-0" [style.color]="project.color"></i-lucide>
+        <span class="flex-1 text-left truncate">{{ project.name }}</span>
+        <span class="text-xs text-surface-400 font-mono">{{ projectTaskCounts().get(project.id) ?? 0
+          }}</span>
+      </button>
+      <button (click)="openEditProjectForm(project, $event)" class="shrink-0 p-1.5 rounded-lg opacity-0 group-hover/project:opacity-100 transition-all
+  duration-200 hover:bg-white/50 dark:hover:bg-white/10">
+        <i-lucide name="pencil" class="w-3 h-3 text-surface-400"></i-lucide>
+      </button>
+    </div>
     }
   </div>
+
+  <!-- INLINE PROJECT FORM -->
+  @if (showProjectForm()) {
+  <div
+    class="mx-1 mt-1 p-3 rounded-xl bg-white/60 dark:bg-white/5 border border-border-glass dark:border-border-glass-dark space-y-3">
+
+    <!-- Title -->
+    <p class="text-xs font-semibold text-surface-600 dark:text-surface-300">
+      {{ editingProject() ? ('project.edit' | translate) : ('project.new' | translate) }}
+    </p>
+
+    <!-- Name input -->
+    <input type="text" [placeholder]="'project.name_placeholder' | translate" [value]="projectFormName()"
+      (input)="projectFormName.set($any($event.target).value)" (keydown.enter)="saveProject()"
+      (keydown.escape)="cancelProjectForm()"
+      class="w-full px-3 py-2 rounded-lg text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60
+      dark:border-white/10 outline-none focus:border-primary-500 text-surface-900 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500" />
+
+    <!-- Color swatches -->
+    <div class="flex gap-1.5 flex-wrap justify-between">
+      @for (color of projectColors; track color) {
+      <button type="button" (click)="projectFormColor.set(color)"
+        class="w-5 h-5 rounded-full transition-all duration-200 ring-offset-1" [style.background-color]="color"
+        [class.ring-2]="projectFormColor() === color" [class.ring-white]="projectFormColor() === color">
+      </button>
+      }
+    </div>
+
+    <!-- Icon selector -->
+    <div class="flex gap-1.5 justify-between">
+      @for (icon of projectIcons; track icon) {
+      <button type="button" (click)="projectFormIcon.set(icon)"
+        class="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200"
+        [class.bg-primary-500]="projectFormIcon() === icon" [class.bg-surface-100]="projectFormIcon() !== icon"
+        [class.dark:bg-white/10]="projectFormIcon() !== icon">
+        <i-lucide [name]="icon" class="w-3.5 h-3.5" [class.text-white]="projectFormIcon() === icon"
+          [class.text-surface-500]="projectFormIcon() !== icon">
+        </i-lucide>
+      </button>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-2">
+      <button (click)="saveProject()"
+        class="flex-1 py-1.5 rounded-lg text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white transition-colors duration-200">
+        {{ editingProject() ? ('project.save' | translate ) : ('project.create' | translate)}}
+      </button>
+
+      @if (editingProject()) {
+      <button (click)="deleteProject(editingProject()!.id, $event)"
+        class="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors duration-200">
+        <i-lucide name="trash-2" class="w-4 h-4 text-red-400"></i-lucide>
+      </button>
+      }
+      <button (click)="cancelProjectForm()"
+        class="p-1.5 rounded-lg hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
+        <i-lucide name="x" class="w-4 h-4 text-surface-400"></i-lucide>
+      </button>
+    </div>
+  </div>
+  }
 
   <!-- SPACER -->
   <div class="flex-1"></div>

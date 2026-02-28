@@ -65,21 +65,38 @@
 
           @for (project of projectService.projects(); track project.id) {
           @let isActive = activeProjectId === project.id;
-          <button (click)="todoService.updateFilter({ view: 'project', projectId: project.id, dateFilter: undefined })"
-            class="shrink-0 flex items-center rounded-full transition-all duration-300 ease-in-out"
+          <div class="shrink-0 flex items-center rounded-full transition-all duration-300 ease-in-out"
             [class.bg-black/5]="!isActive" [class.dark:bg-white/10]="!isActive"
-            [style.background-color]="isActive ? project.color : null" [style.padding]="isActive ? '6px 12px' : '6px'">
-            <span class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center"
-              [style.background-color]="project.color">
-              <i-lucide [name]="project.icon" [size]="10" class="text-white shrink-0" />
-            </span>
-            <span class="text-xs font-semibold text-white whitespace-nowrap overflow-hidden transition-all duration-300
-                      ease-in-out" [style.max-width]="isActive ? '120px' : '0px'"
-              [style.opacity]="isActive ? '1' : '0'" [style.margin-left]="isActive ? '6px' : '0px'">
-              {{ project.name }}
+            [style.background-color]="isActive ? project.color : null" [style.padding]="'6px'">
+            <button (click)="todoService.updateFilter({ view: 'project', projectId: project.id, dateFilter: undefined })"
+              class="flex items-center">
+              <span class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center"
+                [style.background-color]="project.color">
+                <i-lucide [name]="project.icon" [size]="10" class="text-white shrink-0" />
+              </span>
+              <span
+                class="text-xs font-semibold text-white whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out"
+                [style.max-width]="isActive ? '120px' : '0px'" [style.opacity]="isActive ? '1' : '0'"
+                [style.margin-left]="isActive ? '6px' : '0px'">
+                {{ project.name }}
+              </span>
+            </button>
+            @if (isActive) {
+            <button (click)="openEditProjectSheet(project, $event)"
+              class="shrink-0 ml-1 opacity-70 hover:opacity-100 transition-opacity">
+              <i-lucide name="pencil" [size]="9" class="text-white" />
+            </button>
+            }
+          </div>
+          }
+          <button (click)="openNewProjectSheet()"
+            class="shrink-0 flex items-center rounded-full bg-black/5 dark:bg-white/10 transition-all duration-200"
+            style="padding: 6px;">
+            <span
+              class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center bg-surface-400/30 dark:bg-white/20">
+              <i-lucide name="plus" [size]="10" class="text-surface-600 dark:text-surface-300 shrink-0" />
             </span>
           </button>
-          }
         </div>
 
         <app-todo-filters />
@@ -299,6 +316,67 @@
       <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
         (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
       }
+    </div>
+  </div>
+  }
+
+  <!-- PROJECT SHEET: mobile only -->
+  @if (showProjectSheet()) {
+  <div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden" (click)="showProjectSheet.set(false)"></div>
+  <div @sheetSlideUp
+    class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8 max-h-[75dvh] flex flex-col">
+    <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-4 shrink-0"></div>
+    <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">
+      {{ editingMobileProject() ? ('project.edit' | translate ) : ('project.new' | translate) }}
+    </h3>
+
+    <div class="space-y-4">
+      <!-- Name -->
+      <input type="text" [placeholder]="'project.name_placeholder' | translate" [value]="mobileProjectName()"
+        (input)="mobileProjectName.set($any($event.target).value)" (keydown.enter)="saveMobileProject()"
+        class="w-full px-4 py-3 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500 text-surface-900 dark:text-surface-100 placeholder-surface-400" />
+
+      <!-- Colors -->
+      <div class="flex gap-2 flex-wrap justify-between">
+        @for (color of projectColors; track color) {
+        <button (click)="mobileProjectColor.set(color)"
+          class="w-8 h-8 rounded-full transition-all duration-200 ring-offset-2" [style.background-color]="color"
+          [class.ring-2]="mobileProjectColor() === color" [class.ring-white]="mobileProjectColor() === color">
+        </button>
+        }
+      </div>
+
+      <!-- Icons -->
+      <div class="flex gap-2 flex-wrap justify-between">
+        @for (icon of projectIcons; track icon) {
+        <button (click)="mobileProjectIcon.set(icon)"
+          class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
+          [class.bg-primary-500]="mobileProjectIcon() === icon" [class.bg-surface-100]="mobileProjectIcon() !== icon"
+          [class.dark:bg-white/10]="mobileProjectIcon() !== icon">
+          <i-lucide [name]="icon" [size]="18" [class.text-white]="mobileProjectIcon() === icon"
+            [class.text-surface-500]="mobileProjectIcon() !== icon">
+          </i-lucide>
+        </button>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-2 pt-1">
+        <button (click)="saveMobileProject()"
+          class="flex-1 py-3 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200">
+          {{ editingMobileProject() ? ('project.save' | translate) : ('project.create' | translate) }}
+        </button>
+        @if (editingMobileProject()) {
+        <button (click)="deleteMobileProject(editingMobileProject()!.id)"
+          class="px-4 py-3 rounded-xl hover:bg-red-500/10 transition-colors duration-200">
+          <i-lucide name="trash-2" [size]="18" class="text-red-400" />
+        </button>
+        }
+        <button (click)="showProjectSheet.set(false)"
+          class="px-4 py-3 rounded-xl hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
+          <i-lucide name="x" [size]="18" class="text-surface-400" />
+        </button>
+      </div>
     </div>
   </div>
   }
