@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { ProjectService } from '../../core/services/project.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -19,9 +19,6 @@ export class SidebarComponent {
   protected projectService = inject(ProjectService);
   protected themeService = inject(ThemeService);
   protected i18nService = inject(I18nService);
-
-  protected activeView = signal<string>('all');
-  protected activeProjectId = signal<string | null>(null);
 
   protected todayCount = computed(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -46,14 +43,12 @@ export class SidebarComponent {
     return counts;
   });
 
-  selectView(view: string): void {
-    this.activeView.set(view);
-    this.activeProjectId.set(null);
+  selectView(view: 'all' | 'today' | 'upcoming'): void {
+    this.todoService.updateFilter({ view, projectId: undefined, dateFilter: undefined });
   }
 
   selectProject(projectId: string): void {
-    this.activeProjectId.set(projectId);
-    this.activeView.set('project');
+    this.todoService.updateFilter({ view: 'project', projectId, dateFilter: undefined });
   }
 
   switchLanguage(): void {

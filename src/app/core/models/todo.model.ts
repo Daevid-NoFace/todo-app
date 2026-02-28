@@ -15,6 +15,7 @@ export interface Todo {
 export type Priority = 'low' | 'medium' | 'high';
 
 export type FilterStatus = 'all' | 'active' | 'completed';
+export type ViewFilter = 'all' | 'today' | 'upcoming' | 'project' | 'date';
 
 export type SortField = 'createdAt' | 'priority' | 'dueDate';
 export type SortOrder = 'asc' | 'desc';
@@ -24,6 +25,9 @@ export interface TodoFilter {
   searchTerm: string;
   sortBy: SortField;
   sortOrder: SortOrder;
+  view: ViewFilter;
+  projectId?: string;
+  dateFilter?: string;
 }
 
 export interface Subtask {

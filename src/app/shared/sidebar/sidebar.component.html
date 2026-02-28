@@ -15,34 +15,28 @@
 
   <!-- NAVIGATION -->
   <div class="space-y-0.5">
-    <button
-      (click)="selectView('all')"
+    <button (click)="selectView('all')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-      [class.bg-white/70]="activeView() === 'all'"
-      [class.dark:bg-white/15]="activeView() === 'all'"
-    >
+      [class.bg-white/70]="todoService.filter().view === 'all'"
+      [class.dark:bg-white/15]="todoService.filter().view === 'all'">
       <i-lucide name="list-todo" class="w-4 h-4 text-surface-500"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.all_tasks' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ todoService.activeCount() }}</span>
     </button>
 
-    <button
-      (click)="selectView('today')"
+    <button (click)="selectView('today')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-      [class.bg-white/70]="activeView() === 'today'"
-      [class.dark:bg-white/15]="activeView() === 'today'"
-    >
+      [class.bg-white/70]="todoService.filter().view === 'today'"
+      [class.dark:bg-white/15]="todoService.filter().view === 'today'">
       <i-lucide name="star" class="w-4 h-4 text-accent-amber"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.today' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ todayCount() }}</span>
     </button>
 
-    <button
-      (click)="selectView('upcoming')"
+    <button (click)="selectView('upcoming')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-      [class.bg-white/70]="activeView() === 'upcoming'"
-      [class.dark:bg-white/15]="activeView() === 'upcoming'"
-    >
+      [class.bg-white/70]="todoService.filter().view === 'upcoming'"
+      [class.dark:bg-white/15]="todoService.filter().view === 'upcoming'">
       <i-lucide name="calendar-days" class="w-4 h-4 text-accent-blue"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.upcoming' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ upcomingCount() }}</span>
@@ -54,14 +48,10 @@
 
   <!-- PROJECTS HEADER -->
   <div class="flex items-center justify-between px-3 mb-1">
-    <span
-      class="text-xs font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500"
-    >
+    <span class="text-xs font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">
       {{ 'sidebar.projects' | translate }}
     </span>
-    <button
-      class="p-1 rounded-lg hover:bg-surface-200 dark:hover:bg-white/10 transition-colors duration-200"
-    >
+    <button class="p-1 rounded-lg hover:bg-surface-200 dark:hover:bg-white/10 transition-colors duration-200">
       <i-lucide name="plus" class="w-4 h-4 text-surface-400"></i-lucide>
     </button>
   </div>
@@ -69,18 +59,16 @@
   <!-- PROJECTS LIST -->
   <div class="space-y-0.5">
     @for (project of projectService.projects(); track project.id) {
-      <button
-        (click)="selectProject(project.id)"
-        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10"
-        [class.bg-white/70]="activeProjectId() === project.id"
-        [class.dark:bg-white/15]="activeProjectId() === project.id"
-      >
-        <i-lucide [name]="project.icon" class="w-4 h-4" [style.color]="project.color"></i-lucide>
-        <span class="flex-1 text-left truncate">{{ project.name }}</span>
-        <span class="text-xs text-surface-400 font-mono">{{
-          projectTaskCounts().get(project.id) ?? 0
+    <button (click)="selectProject(project.id)"
+      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10"
+      [class.bg-white/70]="todoService.filter().projectId === project.id"
+      [class.dark:bg-white/15]="todoService.filter().projectId === project.id">
+      <i-lucide [name]="project.icon" class="w-4 h-4" [style.color]="project.color"></i-lucide>
+      <span class="flex-1 text-left truncate">{{ project.name }}</span>
+      <span class="text-xs text-surface-400 font-mono">{{
+        projectTaskCounts().get(project.id) ?? 0
         }}</span>
-      </button>
+    </button>
     }
   </div>
 
@@ -88,31 +76,23 @@
   <div class="flex-1"></div>
 
   <!-- FOOTER: THEME + LANGUAGE -->
-  <div
-    class="border-t border-border-glass dark:border-border-glass-dark pt-3 flex items-center gap-2"
-  >
-    <button
-      (click)="themeService.toggle()"
-      class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10 flex-1"
-    >
+  <div class="border-t border-border-glass dark:border-border-glass-dark pt-3 flex items-center gap-2">
+    <button (click)="themeService.toggle()"
+      class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10 flex-1">
       @if (themeService.darkMode()) {
-        <i-lucide name="sun" class="w-4 h-4 text-accent-amber"></i-lucide>
+      <i-lucide name="sun" class="w-4 h-4 text-accent-amber"></i-lucide>
       } @else {
-        <i-lucide name="moon" class="w-4 h-4 text-primary-400"></i-lucide>
+      <i-lucide name="moon" class="w-4 h-4 text-primary-400"></i-lucide>
       }
     </button>
 
-    <button
-      (click)="switchLanguage()"
-      class="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10"
-    >
+    <button (click)="switchLanguage()"
+      class="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
       {{ i18nService.currentLang() === 'en' ? 'PT' : 'EN' }}
     </button>
 
-    <button
-      (click)="authService.logout()"
-      class="px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10"
-    >
+    <button (click)="authService.logout()"
+      class="px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
       <i-lucide name="log-out" class="w-4 h-4 text-surface-400"></i-lucide>
     </button>
   </div>

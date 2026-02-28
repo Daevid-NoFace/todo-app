@@ -31,6 +31,7 @@ export class TodoService {
     searchTerm: '',
     sortBy: 'createdAt',
     sortOrder: 'desc',
+    view: 'all',
   });
 
   filter = this._filter.asReadonly();
@@ -38,8 +39,23 @@ export class TodoService {
   filteredTodos = computed(() => {
     const todos = this._todos();
     const f = this._filter();
+    const today = new Date().toISOString().split('T')[0];
 
     return todos
+      .filter((t) => {
+        switch (f.view) {
+          case 'today':
+            return t.dueDate === today;
+          case 'upcoming':
+            return !!t.dueDate && t.dueDate > today;
+          case 'project':
+            return f.projectId ? t.projectId === f.projectId : true;
+          case 'date':
+            return f.dateFilter ? t.dueDate === f.dateFilter : true;
+          default:
+            return true;
+        }
+      })
       .filter((t) => {
         if (f.status === 'active') return !t.completed;
         if (f.status === 'completed') return t.completed;
@@ -224,17 +240,17 @@ export class TodoService {
     const todos = this.todos();
     const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    const raw = Array.from({ length: 7}, (_, i) => {
+    const raw = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - (6 - i));
       const dateStr = date.toISOString().split('T')[0];
-      const completed = todos.filter(t => t.completedAt?.startsWith(dateStr)).length;
+      const completed = todos.filter((t) => t.completedAt?.startsWith(dateStr)).length;
 
       return { label: dayLabels[date.getDay()], date: dateStr, completed };
     });
 
-    const maxCompleted = Math.max(...raw.map(d => d.completed), 1); // Avoid division by zero
-    return raw.map(d => ({ ...d, rate: Math.round((d.completed / maxCompleted) * 100) }));
+    const maxCompleted = Math.max(...raw.map((d) => d.completed), 1); // Avoid division by zero
+    return raw.map((d) => ({ ...d, rate: Math.round((d.completed / maxCompleted) * 100) }));
   });
 
   /** Consecutive days with at least 1 task completed (counting backwards from today) */
@@ -243,10 +259,11 @@ export class TodoService {
     let count = 0;
     const d = new Date();
 
-    for (let i = 0; i < 30; i++) { // Check up to the last 30 days
+    for (let i = 0; i < 30; i++) {
+      // Check up to the last 30 days
       const dateStr = d.toISOString().split('T')[0];
 
-      if (!todos.some(t => t.completedAt?.startsWith(dateStr))) break;
+      if (!todos.some((t) => t.completedAt?.startsWith(dateStr))) break;
 
       count++;
       d.setDate(d.getDate() - 1);
