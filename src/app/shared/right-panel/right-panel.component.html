@@ -5,7 +5,7 @@
     <div class="flex items-center justify-between mb-4">
       <button (click)="prevMonth()"
         class="w-8 h-8 items-center justify-center rounded-full hover:bg-primary-500/10 transition-colors duration-200"
-        aria-label="Previus month">
+        [attr.aria-label]="'right_panel.prev_month' | translate">
         <lucide-icon name="chevron-left" [size]="16" class="text-surface-500 dark:text-surface-400" />
       </button>
 
@@ -15,7 +15,7 @@
 
       <button (click)="nextMonth()"
         class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary-500/10 transition-colors duration-150"
-        aria-label="Next month">
+        [attr.aria-label]="'right_panel.next_month' | translate">
         <lucide-icon name="chevron-right" [size]="16" class="text-surface-500 dark:text-surface-400" />
       </button>
     </div>
@@ -53,7 +53,7 @@
   <!-- Weekly chart -->
   <div class="glass rounded-2xl p-4 shadow-card">
     <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-100 mb-3">
-      Weekly activity
+      {{ 'right_panel.weekly_activity' | translate }}
     </h3>
 
     <div class="space-y-2">
@@ -76,7 +76,8 @@
 
   <!-- Stats Cards -->
   <div class="space-y-3">
-    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-100 mb-3">Stats</h3>
+    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-100 mb-3">{{ 'right_panel.stats' | translate }}
+    </h3>
 
     <!-- Streak + Today row -->
     <div class="grid grid-cols-2 gap-3">
@@ -87,7 +88,8 @@
         <div class="text-2xl font-mono font-bold text-surface-800 dark:text-surface-100">
           {{ streak() }}
         </div>
-        <div class="text-xs text-surface-400 dark:text-surface-500 mt-0.5">day streak</div>
+        <div class="text-xs text-surface-400 dark:text-surface-500 mt-0.5">{{ 'right_panel.day_streak' | translate }}
+        </div>
       </div>
 
       <div class="glass rounded-2xl p-3 shadow-task text-center">
@@ -97,7 +99,7 @@
         <div class="text-2xl font-mono font-bold text-surface-800 dark:text-surface-100">
           {{ todayCompleted() }}<span class="text-sm text-surface-400">/{{ todayTotal() }}</span>
         </div>
-        <div class="text-xs text-surface-400 dark:text-surface-500 mt-0.5">today</div>
+        <div class="text-xs text-surface-400 dark:text-surface-500 mt-0.5">{{ 'right_panel.today' | translate }}</div>
       </div>
     </div>
 
@@ -105,7 +107,8 @@
     <div class="glass rounded-2xl p-4 shadow-task">
       <div class="flex items-center justify-between mb-2">
         <span class="text-xs text-surface-500 dark:text-surface-400">
-          <i-lucide name="trending-up" [size]="20" class="text-green-500"></i-lucide>This week</span>
+          <i-lucide name="trending-up" [size]="20" class="text-green-500"></i-lucide>{{ 'right_panel.this_week' |
+          translate }}</span>
         <span class="text-sm font-mono font-bold text-surface-800 dark:text-surface-100">
           {{ weeklyRate() }}%
         </span>

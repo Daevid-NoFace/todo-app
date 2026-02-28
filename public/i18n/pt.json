@@ -24,7 +24,11 @@
     "due_date": "Data de vencimento",
     "project": "Projeto",
     "no_project": "Nenhum",
-    "all_projects": "Todos os Projetos"
+    "all_projects": "Todos os Projetos",
+    "new_task": "Nova tarefa",
+    "no_tasks_day": "Nenhuma tarefa para este dia",
+    "subtask_placeholder": "Nome da subtarefa...",
+    "add_subtask": "Adicionar subtarefa"
   },
   "filter": {
     "all": "Todas",
@@ -73,5 +77,30 @@
     "today": "Hoje",
     "upcoming": "Próximas",
     "projects": "Projetos"
+  },
+  "nav": {
+    "search": "Pesquisar",
+    "calendar": "Calendário",
+    "profile": "Perfil"
+  },
+  "profile": {
+    "change_password": "Alterar Palavra-passe",
+    "current_password": "Palavra-passe atual",
+    "new_password": "Nova palavra-passe",
+    "confirm_password": "Confirmar nova palavra-passe",
+    "password_updated": "Palavra-passe atualizada com sucesso",
+    "update_password": "Atualizar Palavra-passe",
+    "light_mode": "Modo claro",
+    "dark_mode": "Modo escuro",
+    "language": "Idioma"
+  },
+  "right_panel": {
+    "weekly_activity": "Atividade semanal",
+    "stats": "Estatísticas",
+    "day_streak": "dias seguidos",
+    "today": "hoje",
+    "this_week": "Esta semana",
+    "prev_month": "Mês anterior",
+    "next_month": "Próximo mês"
   }
 }

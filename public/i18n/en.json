@@ -24,7 +24,11 @@
     "due_date": "Due Date",
     "project": "Project",
     "no_project": "None",
-    "all_projects": "All Projects"
+    "all_projects": "All Projects",
+    "new_task": "New task",
+    "no_tasks_day": "No tasks for this day",
+    "subtask_placeholder": "Subtask name...",
+    "add_subtask": "Add subtask"
   },
   "filter": {
     "all": "All",
@@ -73,5 +77,30 @@
     "today": "Today",
     "upcoming": "Upcoming",
     "projects": "Projects"
+  },
+  "nav": {
+    "search": "Search",
+    "calendar": "Calendar",
+    "profile": "Profile"
+  },
+  "profile": {
+    "change_password": "Change Password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_password": "Confirm new password",
+    "password_updated": "Password updated successfully",
+    "update_password": "Update Password",
+    "light_mode": "Light mode",
+    "dark_mode": "Dark mode",
+    "language": "Language"
+  },
+  "right_panel": {
+    "weekly_activity": "Weekly activity",
+    "stats": "Stats",
+    "day_streak": "day streak",
+    "today": "today",
+    "this_week": "This week",
+    "prev_month": "Previous month",
+    "next_month": "Next month"
   }
 }

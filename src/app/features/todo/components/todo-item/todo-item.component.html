@@ -1,252 +1,183 @@
 @if (isEditing()) {
-  <app-todo-form
-    [editTodo]="todo()"
-    (todoCreated)="onEdit($event)"
-    (cancelled)="isEditing.set(false)"
-  />
+<app-todo-form [editTodo]="todo()" (todoCreated)="onEdit($event)" (cancelled)="isEditing.set(false)" />
 } @else {
-  <div
-    class="group relative glass shadow-task rounded-xl border-l-4 transition-all"
-    [style.border-left-color]="borderColor()"
-    [class.opacity-60]="todo().completed"
-  >
-    <div class="p-4">
-      <!-- MAIN ROW -->
+<div class="group relative glass shadow-task rounded-xl border-l-4 transition-all"
+  [style.border-left-color]="borderColor()" [class.opacity-60]="todo().completed">
+  <div class="p-4">
+    <!-- MAIN ROW -->
 
-      <div class="flex items-start gap-3">
-        <!-- Checkbox -->
-        <button
-          (click)="toggled.emit(todo().id)"
-          class="mt-0.5 w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-all duration-200"
-          [class]="
+    <div class="flex items-start gap-3">
+      <!-- Checkbox -->
+      <button (click)="toggled.emit(todo().id)"
+        class="mt-0.5 w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-all duration-200"
+        [class]="
             todo().completed
               ? 'bg-primary-500 border-primary-500'
               : 'border-surface-300 dark:border-surface-600 hover:border-primary-500'
-          "
-        >
-          @if (todo().completed) {
-            <i-lucide @checkBounce name="check" class="w-3 h-3 text-white"></i-lucide>
+          ">
+        @if (todo().completed) {
+        <i-lucide @checkBounce name="check" class="w-3 h-3 text-white"></i-lucide>
+        }
+      </button>
+
+      <!-- Content -->
+      <div class="flex-1 min-w-0">
+        <p class="font-medium text-surface-900 dark:text-surface-100" [class.line-through]="todo().completed"
+          [class.text-surface-400]="todo().completed">
+          {{ todo().title }}
+        </p>
+
+        @if (todo().description) {
+        <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
+          {{ todo().description }}
+        </p>
+        }
+
+        <!-- META ROW -->
+        <div class="flex items-center flex-wrap gap-2 mt-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+            [class]="priorityBadgeClass()">
+            {{ 'priority.' + todo().priority | translate }}
+          </span>
+
+          @if (todo().dueDate) {
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+            [class]="dueDateClass()">
+            <i-lucide name="calendar-days" class="w-3 h-3"></i-lucide>
+            {{ formatDueDate() }}
+          </span>
           }
-        </button>
 
-        <!-- Content -->
-        <div class="flex-1 min-w-0">
-          <p
-            class="font-medium text-surface-900 dark:text-surface-100"
-            [class.line-through]="todo().completed"
-            [class.text-surface-400]="todo().completed"
-          >
-            {{ todo().title }}
-          </p>
-
-          @if (todo().description) {
-            <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-              {{ todo().description }}
-            </p>
-          }
-
-          <!-- META ROW -->
-          <div class="flex items-center flex-wrap gap-2 mt-2">
-            <span
-              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-              [class]="priorityBadgeClass()"
-            >
-              {{ 'priority.' + todo().priority | translate }}
+          @if (project()) {
+          <span
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-white/50 dark:bg-white/10">
+            <span class="w-2 h-2 rounded-full shrink-0" [style.background-color]="project()!.color">
             </span>
+            {{ project()!.name }}
+          </span>
+          }
 
-            @if (todo().dueDate) {
-              <span
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                [class]="dueDateClass()"
-              >
-                <i-lucide name="calendar-days" class="w-3 h-3"></i-lucide>
-                {{ formatDueDate() }}
-              </span>
-            }
-
-            @if (project()) {
-              <span
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-white/50 dark:bg-white/10"
-              >
-                <span
-                  class="w-2 h-2 rounded-full shrink-0"
-                  [style.background-color]="project()!.color"
-                >
-                </span>
-                {{ project()!.name }}
-              </span>
-            }
-
-            @if (todo().subtasks.length > 0) {
-              <span class="text-xs text-surface-400 font-mono ml-auto">
-                {{ completedSubtasksCount() }} / {{ todo().subtasks.length }}
-              </span>
-            }
-          </div>
-
-          <!-- PROGRESS BAR -->
           @if (todo().subtasks.length > 0) {
-            <div class="h-1 rounded-full bg-surface-200 dark:bg-white/10 mt-3">
-              <div
-                class="h-full rounded-full transition-all duration-500"
-                [style.width.%]="subtaskProgress()"
-                [style.background-color]="borderColor()"
-              ></div>
-            </div>
+          <span class="text-xs text-surface-400 font-mono ml-auto">
+            {{ completedSubtasksCount() }} / {{ todo().subtasks.length }}
+          </span>
           }
         </div>
 
-        <!-- ACTIONS -->
-        <div class="flex items-center gap-1">
-          @if (todo().subtasks.length > 0) {
-            <button
-              (click)="isExpanded.set(!isExpanded())"
-              class="p-1.5 rounded-lg text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200"
-            >
-              <i-lucide
-                [name]="isExpanded() ? 'chevron-down' : 'chevron-right'"
-                class="h-4 w-4"
-              ></i-lucide>
-            </button>
-          }
+        <!-- PROGRESS BAR -->
+        @if (todo().subtasks.length > 0) {
+        <div class="h-1 rounded-full bg-surface-200 dark:bg-white/10 mt-3">
+          <div class="h-full rounded-full transition-all duration-500" [style.width.%]="subtaskProgress()"
+            [style.background-color]="borderColor()"></div>
+        </div>
+        }
+      </div>
 
-          <div
-            class="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200"
-          >
-            <button
-              (click)="isEditing.set(true)"
-              class="p-1.5 rounded-lg text-surface-400 hover:text-primary-500 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200"
-            >
-              <i-lucide name="pencil" class="h-4 w-4"></i-lucide>
-            </button>
-            <button
-              (click)="showDeleteConfirm.set(true)"
-              class="p-1.5 rounded-lg text-surface-400 hover:text-primary-500 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200"
-            >
-              <i-lucide name="trash-2" class="h-4 w-4"></i-lucide>
-            </button>
-          </div>
+      <!-- ACTIONS -->
+      <div class="flex items-center gap-1">
+        @if (todo().subtasks.length > 0) {
+        <button (click)="isExpanded.set(!isExpanded())"
+          class="p-1.5 rounded-lg text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
+          <i-lucide [name]="isExpanded() ? 'chevron-down' : 'chevron-right'" class="h-4 w-4"></i-lucide>
+        </button>
+        }
+
+        <div class="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
+          <button (click)="isEditing.set(true)"
+            class="p-1.5 rounded-lg text-surface-400 hover:text-primary-500 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
+            <i-lucide name="pencil" class="h-4 w-4"></i-lucide>
+          </button>
+          <button (click)="showDeleteConfirm.set(true)"
+            class="p-1.5 rounded-lg text-surface-400 hover:text-primary-500 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
+            <i-lucide name="trash-2" class="h-4 w-4"></i-lucide>
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- SUBTASKS SECTION (animated) -->
-    @if (isExpanded() && todo().subtasks.length > 0) {
-      <div
-        @expandCollapse
-        class="px-4 pb-3 border-t border-border-glass dark:border-border-glass-dark"
-      >
-        <ul class="mt-3 space-y-2">
-          @for (subtask of todo().subtasks; track subtask.id) {
-            <li class="flex items-center gap-2 group/subtask">
-              <button
-                (click)="todoService.toggleSubtaskComplete(todo().id, subtask.id)"
-                class="w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center transition-all duration-200"
-                [class]="
+  <!-- SUBTASKS SECTION (animated) -->
+  @if (isExpanded() && todo().subtasks.length > 0) {
+  <div @expandCollapse class="px-4 pb-3 border-t border-border-glass dark:border-border-glass-dark">
+    <ul class="mt-3 space-y-2">
+      @for (subtask of todo().subtasks; track subtask.id) {
+      <li class="flex items-center gap-2 group/subtask">
+        <button (click)="todoService.toggleSubtaskComplete(todo().id, subtask.id)"
+          class="w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center transition-all duration-200"
+          [class]="
                   subtask.completed
                     ? 'bg-primary-500 border-primary-500'
                     : 'border-surface-300 dark:border-surface-600 hover:border-primary-500'
-                "
-              >
-                @if (subtask.completed) {
-                  <i-lucide name="check" class="w-2.5 h-2.5 text-white"></i-lucide>
-                }
-              </button>
-
-              @if (editingSubtaskId() === subtask.id) {
-                <div class="flex items-center gap-2 flex-1">
-                  <input
-                    #editSubtaskInput
-                    type="text"
-                    [value]="subtask.title"
-                    class="flex-1 text-sm bg-transparent border-b border-dashed border-surface-300 dark:border-white/20 outline-none py-0.5 placeholder-surface-400"
-                    (keydown)="onSubtaskEditKeydown($event, subtask.id, editSubtaskInput)"
-                    (blur)="onEditSubtaskBlur(subtask.id, editSubtaskInput)"
-                    autofocus
-                  />
-                  <button
-                    (click)="onSubtaskEditConfirm(subtask.id, editSubtaskInput)"
-                    class="p-1 rounded bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200 shrink-0"
-                  >
-                    <i-lucide name="check" class="w-3 h-3"></i-lucide>
-                  </button>
-                  <button
-                    (click)="editingSubtaskId.set(null)"
-                    class="p-1 rounded text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200 shrink-0"
-                  >
-                    <i-lucide name="x" class="w-3 h-3"></i-lucide>
-                  </button>
-                </div>
-              } @else {
-                <span
-                  class="text-sm flex-1 min-w-0"
-                  [class.line-through]="subtask.completed"
-                  [class.text-surface-400]="subtask.completed"
-                >
-                  {{ subtask.title }}
-                </span>
-                <button
-                  (click)="onSubtaskEditStart(subtask.id)"
-                  class="p-1.5 rounded text-surface-300 hover:text-primary-500 transition-colors duration-200 sm:opacity-0 sm:group-hover/subtask:opacity-100"
-                >
-                  <i-lucide name="pencil" class="h-3 w-3"></i-lucide>
-                </button>
-                <button
-                  (click)="todoService.deleteSubtask(todo().id, subtask.id)"
-                  class="p-1.5 rounded text-surface-300 hover:text-red-400 transition-colors duration-200 sm:opacity-0 sm:group-hover/subtask:opacity-100"
-                >
-                  <i-lucide name="trash-2" class="h-3 w-3"></i-lucide>
-                </button>
-              }
-            </li>
+                ">
+          @if (subtask.completed) {
+          <i-lucide name="check" class="w-2.5 h-2.5 text-white"></i-lucide>
           }
-        </ul>
-      </div>
-    }
+        </button>
 
-    <!-- ADD SUBTASK -->
-    <div class="px-4 pb-3">
-      @if (showAddSubtask()) {
-        <div class="flex items-center gap-2 mt-2">
-          <input
-            #subtaskInput
-            type="text"
-            class="flex-1 text-sm bg-transparent border-b border-dashed border-surface-300 dark:border-white/20 outline-none py-1 placeholder-surface-400"
-            placeholder="Subtask name..."
-            (keydown)="onSubtaskKeydown($event, subtaskInput)"
-            (blur)="onAddSubtaskBlur()"
-            autofocus
-          />
-          <button
-            (click)="onSubtaskConfirm(subtaskInput)"
-            class="p-1.5 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200 shrink-0"
-          >
-            <i-lucide name="check" class="w-3.5 h-3.5"></i-lucide>
+        @if (editingSubtaskId() === subtask.id) {
+        <div class="flex items-center gap-2 flex-1">
+          <input #editSubtaskInput type="text" [value]="subtask.title"
+            class="flex-1 text-sm bg-transparent border-b border-dashed border-surface-300 dark:border-white/20 outline-none py-0.5 placeholder-surface-400"
+            (keydown)="onSubtaskEditKeydown($event, subtask.id, editSubtaskInput)"
+            (blur)="onEditSubtaskBlur(subtask.id, editSubtaskInput)" autofocus />
+          <button (click)="onSubtaskEditConfirm(subtask.id, editSubtaskInput)"
+            class="p-1 rounded bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200 shrink-0">
+            <i-lucide name="check" class="w-3 h-3"></i-lucide>
           </button>
-          <button
-            (click)="showAddSubtask.set(false)"
-            class="p-1.5 rounded-lg text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200 shrink-0"
-          >
-            <i-lucide name="x" class="w-3.5 h-3.5"></i-lucide>
+          <button (click)="editingSubtaskId.set(null)"
+            class="p-1 rounded text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200 shrink-0">
+            <i-lucide name="x" class="w-3 h-3"></i-lucide>
           </button>
         </div>
-      } @else {
-        <button
-          (click)="onShowAddSubtask()"
-          class="flex items-center gap-1.5 text-xs text-surface-400 hover:text-primary-500 transition-colors duration-200 mt-1"
-        >
-          <i-lucide name="plus" class="w-3.5 h-3.5"></i-lucide>
-          Add subtask
+        } @else {
+        <span class="text-sm flex-1 min-w-0" [class.line-through]="subtask.completed"
+          [class.text-surface-400]="subtask.completed">
+          {{ subtask.title }}
+        </span>
+        <button (click)="onSubtaskEditStart(subtask.id)"
+          class="p-1.5 rounded text-surface-300 hover:text-primary-500 transition-colors duration-200 sm:opacity-0 sm:group-hover/subtask:opacity-100">
+          <i-lucide name="pencil" class="h-3 w-3"></i-lucide>
         </button>
+        <button (click)="todoService.deleteSubtask(todo().id, subtask.id)"
+          class="p-1.5 rounded text-surface-300 hover:text-red-400 transition-colors duration-200 sm:opacity-0 sm:group-hover/subtask:opacity-100">
+          <i-lucide name="trash-2" class="h-3 w-3"></i-lucide>
+        </button>
+        }
+      </li>
       }
-    </div>
+    </ul>
   </div>
+  }
+
+  <!-- ADD SUBTASK -->
+  <div class="px-4 pb-3">
+    @if (showAddSubtask()) {
+    <div class="flex items-center gap-2 mt-2">
+      <input #subtaskInput type="text"
+        class="flex-1 text-sm bg-transparent border-b border-dashed border-surface-300 dark:border-white/20 outline-none py-1 placeholder-surface-400"
+        [placeholder]="'todo.subtask_placeholder' | translate" (keydown)="onSubtaskKeydown($event, subtaskInput)"
+        (blur)="onAddSubtaskBlur()" autofocus />
+      <button (click)="onSubtaskConfirm(subtaskInput)"
+        class="p-1.5 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200 shrink-0">
+        <i-lucide name="check" class="w-3.5 h-3.5"></i-lucide>
+      </button>
+      <button (click)="showAddSubtask.set(false)"
+        class="p-1.5 rounded-lg text-surface-400 hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200 shrink-0">
+        <i-lucide name="x" class="w-3.5 h-3.5"></i-lucide>
+      </button>
+    </div>
+    } @else {
+    <button (click)="onShowAddSubtask()"
+      class="flex items-center gap-1.5 text-xs text-surface-400 hover:text-primary-500 transition-colors duration-200 mt-1">
+      <i-lucide name="plus" class="w-3.5 h-3.5"></i-lucide>
+      {{ 'todo.add_subtask' | translate }}
+    </button>
+    }
+  </div>
+</div>
 }
 
 @if (showDeleteConfirm()) {
-  <app-confirm-dialog
-    [message]="'todo.confirm_delete' | translate"
-    (confirmed)="onDelete()"
-    (cancelled)="showDeleteConfirm.set(false)"
-  />
+<app-confirm-dialog [message]="'todo.confirm_delete' | translate" (confirmed)="onDelete()"
+  (cancelled)="showDeleteConfirm.set(false)" />
 }

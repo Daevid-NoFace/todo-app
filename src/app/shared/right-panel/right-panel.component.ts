@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { LucideAngularModule } from 'lucide-angular';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 interface CalendarCell {
   dayNum: number;
@@ -21,7 +22,7 @@ interface CalendarCell {
 
 @Component({
   selector: 'app-right-panel',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, TranslatePipe],
   templateUrl: './right-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

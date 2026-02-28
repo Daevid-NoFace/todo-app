@@ -103,10 +103,10 @@
 
         <!-- SEARCH -->
         @case ('search') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Search</h2>
+        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.search' | translate }}</h2>
         <div class="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-task">
           <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
-          <input type="text" placeholder="Search tasks..."
+          <input type="text" [placeholder]="'filter.search' | translate"
             class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
             (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })" />
         </div>
@@ -116,13 +116,15 @@
 
         <!-- CALENDAR -->
         @case ('calendar') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">Calendar</h2>
+        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-2">{{ 'nav.calendar' | translate
+          }}</h2>
         <app-right-panel class="block" (dateSelected)="onDateSelected($event)" />
         }
 
         <!-- PROFILE -->
         @case ('profile') {
-        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-4">Profile</h2>
+        <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100 mb-4">{{ 'nav.profile' | translate
+          }}</h2>
 
         <!-- Avatar + Name -->
         <div class="glass rounded-2xl p-5 shadow-card flex flex-col items-center gap-4">
@@ -178,20 +180,20 @@
         <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
           <div class="px-4 py-3 border-b border-border-glass dark:border-border-glass-dark">
             <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-100">
-              Change Password
+              {{ 'profile.change_password' | translate }}
             </h3>
           </div>
 
           <div class="p-4 space-y-3">
-            <input type="password" placeholder="Current password" [value]="currentPassword()"
+            <input type="password" [placeholder]="'profile.current_password' | translate" [value]="currentPassword()"
               (input)="currentPassword.set($any($event.target).value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
-            <input type="password" placeholder="New password" [value]="newPassword()"
+            <input type="password" [placeholder]="'profile.new_password' | translate" [value]="newPassword()"
               (input)="newPassword.set($any($event.target).value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
-            <input type="password" placeholder="Confirm new password" [value]="confirmPassword()"
+            <input type="password" [placeholder]="'profile.confirm_password' | translate" [value]="confirmPassword()"
               (input)="confirmPassword.set($any($event.target).value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
@@ -199,12 +201,12 @@
             <p class="text-xs text-red-500 px-1">{{ passwordError() }}</p>
             }
             @if (passwordSuccess()) {
-            <p class="text-xs text-accent-green px-1">Password updated successfully</p>
+            <p class="text-xs text-accent-green px-1">{{ 'profile.password_updated' | translate }}</p>
             }
 
             <button (click)="savePassword()"
               class="w-full py-2.5 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200">
-              Update Password
+              {{ 'profile.update_password' | translate }}
             </button>
           </div>
         </div>
@@ -220,7 +222,7 @@
               <i-lucide name="moon" [size]="18" class="text-primary-400" />
               }
               <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
-                {{ themeService.darkMode() ? 'Light mode' : 'Dark mode' }}
+                {{ themeService.darkMode() ? ('profile.light_mode' | translate) : ('profile.dark_mode' | translate) }}
               </span>
             </div>
             <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
@@ -231,7 +233,7 @@
             <div class="flex items-center gap-3">
               <i-lucide name="list-todo" [size]="18" class="text-accent-blue" />
               <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
-                Language: {{ i18nService.currentLang() === 'en' ? 'English' : 'Português' }}
+                {{ 'profile.language' | translate }}: {{ i18nService.currentLang() === 'en' ? 'English' : 'Português' }}
               </span>
             </div>
             <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
@@ -240,7 +242,7 @@
           <button (click)="authService.logout()"
             class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-red-500/5 transition-colors duration-200">
             <i-lucide name="log-out" [size]="18" class="text-red-400" />
-            <span class="text-sm font-medium text-red-400">Logout</span>
+            <span class="text-sm font-medium text-red-400">{{ 'auth.logout' | translate }}</span>
           </button>
         </div>
         }
@@ -263,7 +265,8 @@
   <div @sheetSlideUp
     class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8">
     <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-5"></div>
-    <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">New task</h3>
+    <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">{{ 'todo.new_task' | translate }}
+    </h3>
     <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)"
       (cancelled)="closeSheet()" />
   </div>
@@ -290,7 +293,7 @@
     <div class="overflow-y-auto flex-1">
       @if (todoService.filteredTodos().length === 0) {
       <p class="text-sm text-center text-surface-400 dark:text-surface-500 py-8">
-        No tasks for this day
+        {{ 'todo.no_tasks_day' | translate }}
       </p>
       } @else {
       <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
