@@ -23,7 +23,8 @@
     "deleted": "Tarefa excluída com sucesso",
     "due_date": "Data de vencimento",
     "project": "Projeto",
-    "no_project": "Nenhum"
+    "no_project": "Nenhum",
+    "all_projects": "Todos os Projetos"
   },
   "filter": {
     "all": "Todas",

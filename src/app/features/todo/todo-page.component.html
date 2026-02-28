@@ -40,6 +40,48 @@
         <h2 class="text-xl font-bold text-surface-800 dark:text-surface-100">
           {{ 'app.subtitle' | translate }}
         </h2>
+
+        <!-- PROJECT FILTER CHIPS -->
+        @let activeProjectId = todoService.filter().view === 'project' ? todoService.filter().projectId : null;
+        @let allActive = todoService.filter().view !== 'project';
+
+        <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 mt-3">
+
+          <!-- ALL chip -->
+          <button (click)="todoService.updateFilter({ view: 'all', projectId: undefined, dateFilter: undefined })"
+            class="shrink-0 flex items-center rounded-full transition-all duration-300 ease-in-out"
+            [class.bg-primary-500]="allActive" [class.bg-black/5]="!allActive" [class.dark:bg-white/10]="!allActive"
+            [style.padding]="allActive ? '6px 12px' : '6px'">
+            <span class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center" [class.bg-white/30]="allActive"
+              [class.bg-primary-400/60]="!allActive">
+              <i-lucide name="list-todo" [size]="10" class="text-white shrink-0" />
+            </span>
+            <span class="text-xs font-semibold text-white whitespace-nowrap overflow-hidden transition-all duration-300
+                      ease-in-out" [style.max-width]="allActive ? '120px' : '0px'"
+              [style.opacity]="allActive ? '1' : '0'" [style.margin-left]="allActive ? '6px' : '0px'">
+              {{ 'todo.all_projects' | translate }}
+            </span>
+          </button>
+
+          @for (project of projectService.projects(); track project.id) {
+          @let isActive = activeProjectId === project.id;
+          <button (click)="todoService.updateFilter({ view: 'project', projectId: project.id, dateFilter: undefined })"
+            class="shrink-0 flex items-center rounded-full transition-all duration-300 ease-in-out"
+            [class.bg-black/5]="!isActive" [class.dark:bg-white/10]="!isActive"
+            [style.background-color]="isActive ? project.color : null" [style.padding]="isActive ? '6px 12px' : '6px'">
+            <span class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center"
+              [style.background-color]="project.color">
+              <i-lucide [name]="project.icon" [size]="10" class="text-white shrink-0" />
+            </span>
+            <span class="text-xs font-semibold text-white whitespace-nowrap overflow-hidden transition-all duration-300
+                      ease-in-out" [style.max-width]="isActive ? '120px' : '0px'"
+              [style.opacity]="isActive ? '1' : '0'" [style.margin-left]="isActive ? '6px' : '0px'">
+              {{ project.name }}
+            </span>
+          </button>
+          }
+        </div>
+
         <app-todo-filters />
         <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
           <span>

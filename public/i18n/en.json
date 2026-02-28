@@ -23,7 +23,8 @@
     "deleted": "Task deleted successfully",
     "due_date": "Due Date",
     "project": "Project",
-    "no_project": "None"
+    "no_project": "None",
+    "all_projects": "All Projects"
   },
   "filter": {
     "all": "All",

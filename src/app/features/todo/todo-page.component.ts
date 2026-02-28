@@ -15,6 +15,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { FormsModule } from '@angular/forms';
+import { ProjectService } from '../../core/services/project.service';
 
 type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
 
@@ -42,6 +43,7 @@ export class TodoPageComponent {
   protected toastService = inject(ToastService);
   protected i18nService = inject(I18nService);
   protected themeService = inject(ThemeService);
+  protected projectService = inject(ProjectService);
 
   readonly showSheet = signal(false);
   readonly activeMobileTab = signal<MobileTab>('home');
