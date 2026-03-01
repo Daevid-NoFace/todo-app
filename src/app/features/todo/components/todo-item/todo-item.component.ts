@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
+  DestroyRef,
 } from '@angular/core';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { Todo, Priority } from '../../../../core/models/todo.model';
@@ -26,6 +27,23 @@ import { checkBounce, expandCollapse } from '../../../../shared/animations/todo.
 export class TodoItemComponent {
   protected todoService = inject(TodoService);
   protected projectService = inject(ProjectService);
+  private destroyRef = inject(DestroyRef);
+  private readonly pendingTimers = new Set<ReturnType<typeof setTimeout>>();
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      this.pendingTimers.forEach(clearTimeout);
+      this.pendingTimers.clear();
+    });
+  }
+
+  private safeTimeOut(fn: () => void, delay: number): void {
+    const id = setTimeout(() => {
+      this.pendingTimers.delete(id);
+      fn();
+    }, delay);
+    this.pendingTimers.add(id);
+  }
 
   todo = input.required<Todo>();
 
@@ -113,11 +131,11 @@ export class TodoItemComponent {
   }
 
   onAddSubtaskBlur(): void {
-    setTimeout(() => this.showAddSubtask.set(false), 150);
+    this.safeTimeOut(() => this.showAddSubtask.set(false), 150);
   }
 
   onEditSubtaskBlur(subtaskId: string, inputEl: HTMLInputElement): void {
-    setTimeout(() => {
+    this.safeTimeOut(() => {
       if (inputEl.value.trim()) {
         this.todoService.updateSubtask(this.todo().id, subtaskId, inputEl.value.trim());
       }
