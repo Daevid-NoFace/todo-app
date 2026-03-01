@@ -17,8 +17,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
-
-type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
+import { MobileNavService, MobileTab } from '../../core/services/mobile-nav.service';
 
 @Component({
   selector: 'app-todo-page',
@@ -45,9 +44,9 @@ export class TodoPageComponent {
   protected i18nService = inject(I18nService);
   protected themeService = inject(ThemeService);
   protected projectService = inject(ProjectService);
+  protected mobileNav = inject(MobileNavService);
 
   readonly showSheet = signal(false);
-  readonly activeMobileTab = signal<MobileTab>('home');
   readonly showDateSheet = signal(false);
 
   // Project signals
@@ -122,7 +121,10 @@ export class TodoPageComponent {
   });
 
   onTabChange(tab: MobileTab): void {
-    this.activeMobileTab.set(tab);
+    this.mobileNav.activeTab.set(tab);
+    if (tab !== 'search') {
+      this.todoService.updateFilter({ searchTerm: '' });
+    }
   }
 
   openSheet(): void {

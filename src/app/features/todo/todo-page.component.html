@@ -34,7 +34,7 @@
 
       <!-- ── MOBILE: vistas por tab ──────────────────── -->
       <div class="md:hidden">
-        @switch (activeMobileTab()) {
+        @switch (mobileNav.activeTab()) {
         <!-- HOME -->
         @case ('home') {
         <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100">
@@ -100,8 +100,9 @@
           </button>
         </div>
 
+        <!-- Filters -->
         <app-todo-filters />
-        <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
+        <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400 p-1.5">
           <span>
             {{
             todoService.activeCount() === 1
@@ -128,8 +129,11 @@
             class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
             (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })" />
         </div>
-        <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
-          (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        <div class="py-3">
+          <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
+            (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        </div>
+
         }
 
         <!-- CALENDAR -->
