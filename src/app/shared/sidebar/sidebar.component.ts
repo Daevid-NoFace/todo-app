@@ -7,6 +7,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { Project } from '../../core/models/project.model';
+import { PROJECT_COLORS, PROJECT_DEFAULT_COLOR, PROJECT_DEFAULT_ICON, PROJECT_ICONS } from '../../core/constants/project.constants';
 
 @Component({
   selector: 'app-sidebar',
@@ -49,26 +50,18 @@ export class SidebarComponent {
   readonly showProjectForm = signal(false);
   readonly editingProject = signal<Project | null>(null);
   readonly projectFormName = signal('');
-  readonly projectFormColor = signal('#7C3AED');
-  readonly projectFormIcon = signal('home');
+  readonly projectFormColor = signal(PROJECT_DEFAULT_COLOR);
+  readonly projectFormIcon = signal(PROJECT_DEFAULT_ICON);
 
-  readonly projectColors = [
-    '#7C3AED',
-    '#2563EB',
-    '#059669',
-    '#F59E0B',
-    '#EF4444',
-    '#EC4899',
-    '#8B5CF6',
-  ];
+  readonly projectColors = PROJECT_COLORS;
 
-  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
+  readonly projectIcons = PROJECT_ICONS;
 
   openNewProjectForm(): void {
     this.editingProject.set(null);
     this.projectFormName.set('');
-    this.projectFormColor.set('#7C3AED');
-    this.projectFormIcon.set('home');
+    this.projectFormColor.set(PROJECT_DEFAULT_COLOR);
+    this.projectFormIcon.set(PROJECT_DEFAULT_ICON);
     this.showProjectForm.set(!this.showProjectForm());
   }
 

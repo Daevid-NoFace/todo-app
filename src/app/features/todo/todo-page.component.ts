@@ -18,6 +18,12 @@ import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
 import { MobileNavService, MobileTab } from '../../core/services/mobile-nav.service';
+import {
+  PROJECT_COLORS,
+  PROJECT_ICONS,
+  PROJECT_DEFAULT_COLOR,
+  PROJECT_DEFAULT_ICON,
+} from '../../core/constants/project.constants';
 
 @Component({
   selector: 'app-todo-page',
@@ -53,27 +59,19 @@ export class TodoPageComponent {
   readonly showProjectSheet = signal(false);
   readonly editingMobileProject = signal<Project | null>(null);
   readonly mobileProjectName = signal('');
-  readonly mobileProjectColor = signal('#7C3AED');
-  readonly mobileProjectIcon = signal('home');
+  readonly mobileProjectColor = signal(PROJECT_DEFAULT_COLOR);
+  readonly mobileProjectIcon = signal(PROJECT_DEFAULT_ICON);
 
-  readonly projectColors = [
-    '#7C3AED',
-    '#2563EB',
-    '#059669',
-    '#F59E0B',
-    '#EF4444',
-    '#EC4899',
-    '#8B5CF6',
-  ];
+  readonly projectColors = PROJECT_COLORS;
 
-  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
+  readonly projectIcons = PROJECT_ICONS;
 
   // --- Project mobile management ---
   openNewProjectSheet(): void {
     this.editingMobileProject.set(null);
     this.mobileProjectName.set('');
-    this.mobileProjectColor.set('#7C3AED');
-    this.mobileProjectIcon.set('home');
+    this.mobileProjectColor.set(PROJECT_DEFAULT_COLOR);
+    this.mobileProjectIcon.set(PROJECT_DEFAULT_ICON);
     this.showProjectSheet.set(true);
   }
 
