@@ -127,7 +127,7 @@
           <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
           <input type="text" [placeholder]="'filter.search' | translate"
             class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
-            (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })" />
+            #searchRef (input)="todoService.updateFilter({ searchTerm: searchRef.value })" />
         </div>
         <div class="py-3">
           <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
@@ -171,7 +171,7 @@
           <!-- Name -->
           @if (editingName()) {
           <div class="flex items-center gap-2 w-full max-w-xs">
-            <input type="text" [value]="nameInput()" (input)="nameInput.set($any($event.target).value)"
+            <input type="text" [value]="nameInput()" #nameInputRef (input)="nameInput.set(nameInputRef.value)"
               class="flex-1 px-3 py-2 rounded-xl text-sm text-center font-semibold bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500"
               (keydown.enter)="saveName()" (keydown.escape)="cancelEditName()" />
             <button (click)="saveName()"
@@ -208,15 +208,15 @@
 
           <div class="p-4 space-y-3">
             <input type="password" [placeholder]="'profile.current_password' | translate" [value]="currentPassword()"
-              (input)="currentPassword.set($any($event.target).value)"
+              #currentPasswordRef (input)="currentPassword.set(currentPasswordRef.value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
             <input type="password" [placeholder]="'profile.new_password' | translate" [value]="newPassword()"
-              (input)="newPassword.set($any($event.target).value)"
+              #newPasswordRef (input)="newPassword.set(newPasswordRef.value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
             <input type="password" [placeholder]="'profile.confirm_password' | translate" [value]="confirmPassword()"
-              (input)="confirmPassword.set($any($event.target).value)"
+              #confirmPasswordRef (input)="confirmPassword.set(confirmPasswordRef.value)"
               class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
 
             @if (passwordError()) {
@@ -338,7 +338,8 @@
     <div class="space-y-4">
       <!-- Name -->
       <input type="text" [placeholder]="'project.name_placeholder' | translate" [value]="mobileProjectName()"
-        (input)="mobileProjectName.set($any($event.target).value)" (keydown.enter)="saveMobileProject()"
+        #mobileProjectNameRef (input)="mobileProjectName.set(mobileProjectNameRef.value)"
+        (keydown.enter)="saveMobileProject()"
         class="w-full px-4 py-3 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500 text-surface-900 dark:text-surface-100 placeholder-surface-400" />
 
       <!-- Colors -->
