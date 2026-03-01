@@ -40,3 +40,14 @@ export const checkBounce = trigger('checkBounce', [
     ),
   ]),
 ]);
+
+export const expandCollapse = trigger('expandCollapse', [
+  transition(':enter', [
+    style({ opacity: 0, height: 0, overflow: 'hidden' }),
+    animate('300ms ease-out', style({ opacity: 1, height: '*' })),
+  ]),
+  transition(':leave', [
+    style({ opacity: 1, height: '*', overflow: 'hidden' }),
+    animate('300ms ease-out', style({ opacity: 0, height: 0 })),
+  ]),
+]);

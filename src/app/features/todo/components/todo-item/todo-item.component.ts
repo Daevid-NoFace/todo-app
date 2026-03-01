@@ -14,27 +14,14 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { TodoService } from '../../../../core/services/todo.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { LucideAngularModule } from 'lucide-angular';
-import { animate, style, transition, trigger } from '@angular/animations';
-import { checkBounce } from '../../../../shared/animations/todo.animations';
+import { checkBounce, expandCollapse } from '../../../../shared/animations/todo.animations';
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   imports: [TodoFormComponent, TranslatePipe, ConfirmDialog, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('expandCollapse', [
-      transition(':enter', [
-        style({ opacity: 0, height: 0, overflow: 'hidden' }),
-        animate('300ms ease-out', style({ opacity: 1, height: '*' })),
-      ]),
-      transition(':leave', [
-        style({ opacity: 1, height: '*', overflow: 'hidden' }),
-        animate('300ms ease-out', style({ opacity: 0, height: 0 })),
-      ]),
-    ]),
-    checkBounce,
-  ],
+  animations: [expandCollapse, checkBounce],
 })
 export class TodoItemComponent {
   protected todoService = inject(TodoService);
