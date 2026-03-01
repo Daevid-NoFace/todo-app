@@ -13,11 +13,11 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
 import { sheetSlideUp } from '../../shared/animations/todo.animations';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
 import { MobileNavService, MobileTab } from '../../core/services/mobile-nav.service';
 import { ProjectFormComponent } from '../../shared/components/project-form/project-form.component';
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-todo-page',
@@ -31,6 +31,7 @@ import { ProjectFormComponent } from '../../shared/components/project-form/proje
     BottomNavComponent,
     LucideAngularModule,
     ProjectFormComponent,
+    ThemeToggleComponent,
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.css',
@@ -42,7 +43,6 @@ export class TodoPageComponent {
   protected authService = inject(AuthService);
   protected toastService = inject(ToastService);
   protected i18nService = inject(I18nService);
-  protected themeService = inject(ThemeService);
   protected projectService = inject(ProjectService);
   protected mobileNav = inject(MobileNavService);
 

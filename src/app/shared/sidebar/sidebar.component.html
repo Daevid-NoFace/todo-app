@@ -94,14 +94,7 @@
 
   <!-- FOOTER: THEME + LANGUAGE -->
   <div class="border-t border-border-glass dark:border-border-glass-dark pt-3 flex items-center gap-2">
-    <button (click)="themeService.toggle()"
-      class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10 flex-1">
-      @if (themeService.darkMode()) {
-      <i-lucide name="sun" class="w-4 h-4 text-accent-amber"></i-lucide>
-      } @else {
-      <i-lucide name="moon" class="w-4 h-4 text-primary-400"></i-lucide>
-      }
-    </button>
+    <app-theme-toggle variant="icon-label"></app-theme-toggle>
 
     <button (click)="switchLanguage()"
       class="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">

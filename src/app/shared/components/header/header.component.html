@@ -15,17 +15,7 @@
     <!-- Right actions -->
     <div class="flex items-center gap-1">
       <!-- Theme toggle -->
-      <button (click)="theme.toggle()"
-        class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200"
-        [attr.aria-label]="
-          theme.darkMode() ? ('theme.light' | translate) : ('theme.dark' | translate)
-        ">
-        @if (theme.darkMode()) {
-        <i-lucide name="sun" [size]="18" class="text-accent-amber" />
-        } @else {
-        <i-lucide name="moon" [size]="18" class="text-primary-400" />
-        }
-      </button>
+      <app-theme-toggle variant="icon-only"></app-theme-toggle>
 
       <!-- Language toggle -->
       <button (click)="switchLanguage()"

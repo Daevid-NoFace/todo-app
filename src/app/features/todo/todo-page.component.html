@@ -235,20 +235,7 @@
 
         <!-- Settings -->
         <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
-          <button (click)="themeService.toggle()"
-            class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200">
-            <div class="flex items-center gap-3">
-              @if (themeService.darkMode()) {
-              <i-lucide name="sun" [size]="18" class="text-accent-amber" />
-              } @else {
-              <i-lucide name="moon" [size]="18" class="text-primary-400" />
-              }
-              <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
-                {{ themeService.darkMode() ? ('profile.light_mode' | translate) : ('profile.dark_mode' | translate) }}
-              </span>
-            </div>
-            <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
-          </button>
+          <app-theme-toggle variant="row"></app-theme-toggle>
 
           <button (click)="switchLanguage()"
             class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200">
