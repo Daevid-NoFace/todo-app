@@ -209,15 +209,14 @@
           <div class="p-4 space-y-3">
             <input type="password" [placeholder]="'profile.current_password' | translate" [value]="currentPassword()"
               #currentPasswordRef (input)="currentPassword.set(currentPasswordRef.value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              class="input-field px-4 py-2.5" />
 
             <input type="password" [placeholder]="'profile.new_password' | translate" [value]="newPassword()"
-              #newPasswordRef (input)="newPassword.set(newPasswordRef.value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              #newPasswordRef (input)="newPassword.set(newPasswordRef.value)" class="input-field px-4 py-2.5" />
 
             <input type="password" [placeholder]="'profile.confirm_password' | translate" [value]="confirmPassword()"
               #confirmPasswordRef (input)="confirmPassword.set(confirmPasswordRef.value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              class="input-field px-4 py-2.5" />
 
             @if (passwordError()) {
             <p class="text-xs text-red-500 px-1">{{ passwordError() }}</p>
