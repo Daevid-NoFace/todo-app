@@ -14,16 +14,10 @@ import { sheetSlideUp } from '../../shared/animations/todo.animations';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
-import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
 import { MobileNavService, MobileTab } from '../../core/services/mobile-nav.service';
-import {
-  PROJECT_COLORS,
-  PROJECT_ICONS,
-  PROJECT_DEFAULT_COLOR,
-  PROJECT_DEFAULT_ICON,
-} from '../../core/constants/project.constants';
+import { ProjectFormComponent } from '../../shared/components/project-form/project-form.component';
 
 @Component({
   selector: 'app-todo-page',
@@ -36,7 +30,7 @@ import {
     RightPanelComponent,
     BottomNavComponent,
     LucideAngularModule,
-    FormsModule,
+    ProjectFormComponent,
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.css',
@@ -58,53 +52,30 @@ export class TodoPageComponent {
   // Project signals
   readonly showProjectSheet = signal(false);
   readonly editingMobileProject = signal<Project | null>(null);
-  readonly mobileProjectName = signal('');
-  readonly mobileProjectColor = signal(PROJECT_DEFAULT_COLOR);
-  readonly mobileProjectIcon = signal(PROJECT_DEFAULT_ICON);
-
-  readonly projectColors = PROJECT_COLORS;
-
-  readonly projectIcons = PROJECT_ICONS;
 
   // --- Project mobile management ---
   openNewProjectSheet(): void {
     this.editingMobileProject.set(null);
-    this.mobileProjectName.set('');
-    this.mobileProjectColor.set(PROJECT_DEFAULT_COLOR);
-    this.mobileProjectIcon.set(PROJECT_DEFAULT_ICON);
     this.showProjectSheet.set(true);
   }
 
   openEditProjectSheet(project: Project, event: Event): void {
     event.stopPropagation();
     this.editingMobileProject.set(project);
-    this.mobileProjectName.set(project.name);
-    this.mobileProjectColor.set(project.color);
-    this.mobileProjectIcon.set(project.icon);
     this.showProjectSheet.set(true);
   }
 
-  saveMobileProject(): void {
-    const name = this.mobileProjectName().trim();
-    if (!name) return;
+  onMobileProjectSaved(value: { name: string; color: string; icon: string }): void {
     const editing = this.editingMobileProject();
     if (editing) {
-      this.projectService.update(editing.id, {
-        name,
-        color: this.mobileProjectColor(),
-        icon: this.mobileProjectIcon(),
-      });
+      this.projectService.update(editing.id, value);
     } else {
-      this.projectService.addProject({
-        name,
-        color: this.mobileProjectColor(),
-        icon: this.mobileProjectIcon(),
-      });
+      this.projectService.addProject(value);
     }
     this.showProjectSheet.set(false);
   }
 
-  deleteMobileProject(id: string): void {
+  onMobileProjectDeleted(id: string): void {
     this.projectService.delete(id);
     if (this.todoService.filter().projectId === id) {
       this.todoService.updateFilter({ view: 'all', projectId: undefined });

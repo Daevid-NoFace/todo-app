@@ -7,11 +7,17 @@ import { AuthService } from '../../core/services/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { Project } from '../../core/models/project.model';
-import { PROJECT_COLORS, PROJECT_DEFAULT_COLOR, PROJECT_DEFAULT_ICON, PROJECT_ICONS } from '../../core/constants/project.constants';
+import {
+  PROJECT_COLORS,
+  PROJECT_DEFAULT_COLOR,
+  PROJECT_DEFAULT_ICON,
+  PROJECT_ICONS,
+} from '../../core/constants/project.constants';
+import { ProjectFormComponent } from '../components/project-form/project-form.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule, TranslatePipe],
+  imports: [LucideAngularModule, TranslatePipe, ProjectFormComponent],
   templateUrl: './sidebar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,9 +55,6 @@ export class SidebarComponent {
   // --- Project form ---
   readonly showProjectForm = signal(false);
   readonly editingProject = signal<Project | null>(null);
-  readonly projectFormName = signal('');
-  readonly projectFormColor = signal(PROJECT_DEFAULT_COLOR);
-  readonly projectFormIcon = signal(PROJECT_DEFAULT_ICON);
 
   readonly projectColors = PROJECT_COLORS;
 
@@ -59,54 +62,33 @@ export class SidebarComponent {
 
   openNewProjectForm(): void {
     this.editingProject.set(null);
-    this.projectFormName.set('');
-    this.projectFormColor.set(PROJECT_DEFAULT_COLOR);
-    this.projectFormIcon.set(PROJECT_DEFAULT_ICON);
     this.showProjectForm.set(!this.showProjectForm());
   }
 
   openEditProjectForm(project: Project, event: Event): void {
     event.stopPropagation();
     this.editingProject.set(project);
-    this.projectFormName.set(project.name);
-    this.projectFormColor.set(project.color);
-    this.projectFormIcon.set(project.icon);
     this.showProjectForm.set(true);
   }
 
-  saveProject(): void {
-    const name = this.projectFormName().trim();
-    if (!name) return;
-
+  onProjectSaved(value: { name: string; color: string; icon: string }): void {
     const editing = this.editingProject();
     if (editing) {
-      this.projectService.update(editing.id, {
-        name,
-        color: this.projectFormColor(),
-        icon: this.projectFormIcon(),
-      });
+      this.projectService.update(editing.id, value);
     } else {
-      this.projectService.addProject({
-        name,
-        color: this.projectFormColor(),
-        icon: this.projectFormIcon(),
-      });
+      this.projectService.addProject(value);
     }
     this.showProjectForm.set(false);
+    this.editingProject.set(null);
   }
 
-  cancelProjectForm(): void {
-    this.showProjectForm.set(false);
-  }
-
-  deleteProject(id: string, event: Event): void {
-    event.stopPropagation();
+  onProjectDeleted(id: string): void {
     this.projectService.delete(id);
-
     if (this.todoService.filter().projectId === id) {
       this.todoService.updateFilter({ view: 'all', projectId: undefined, dateFilter: undefined });
     }
     this.showProjectForm.set(false);
+    this.editingProject.set(null);
   }
 
   // --- Navigation ---
