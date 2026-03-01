@@ -235,18 +235,18 @@ export class TodoPageComponent {
     this.passwordSuccess.set(false);
 
     if (this.newPassword() !== this.confirmPassword()) {
-      this.passwordError.set('Passwords do not match');
+      this.passwordError.set(this.i18nService.translate('profile.error_passwords_mismatch'));
       return;
     }
     if (this.newPassword().length < 6) {
-      this.passwordError.set('Password must be at least 6 characters');
+      this.passwordError.set(this.i18nService.translate('profile.error_password_too_short'));
       return;
     }
 
     const error = this.authService.updatePassword(this.currentPassword(), this.newPassword());
 
     if (error) {
-      this.passwordError.set('Current password is incorrect');
+      this.passwordError.set(this.i18nService.translate('profile.error_current_password_wrong'));
     } else {
       this.passwordSuccess.set(true);
       this.currentPassword.set('');
