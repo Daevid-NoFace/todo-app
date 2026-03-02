@@ -5,20 +5,23 @@
   </aside>
 
   <!-- MAIN CONTENT -->
-  <main class="main-scrollable px-4 sm:px-6 py-6 pb-24 md:pb-6 space-y-6">
+  <main class="main-scrollable px-4 sm:px-6 overflow-y-auto md:overflow-hidden py-6 pb-24 md:py-0 md:pb-0
+  space-y-6 md:space-y-0">
     <!-- ── DESKTOP: contenido fijo ─────────────────── -->
     <ng-container>
-      <div class="hidden md:block space-y-6">
-        <div class="text-center space-y-1">
-          <h2 class="text-3xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
-            {{ greeting() }},
-            <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
-              {{ authService.currentUser()?.name }}
-            </span>
-          </h2>
-          <p class="text-sm text-surface-500 dark:text-surface-400">
-            {{ 'app.subtitle' | translate }}
-          </p>
+      <div class="hidden md:flex md:flex-col md:flex-1 md:min-h-0 py-6 space-y-4">
+        <div class="shrink-0 space-y-4 px-2">
+          <div class="text-center space-y-1">
+            <h2 class="text-3xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
+              {{ greeting() }},
+              <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
+                {{ authService.currentUser()?.name }}
+              </span>
+            </h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">
+              {{ 'app.subtitle' | translate }}
+            </p>
+          </div>
         </div>
         <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)" />
         <app-todo-filters />
@@ -36,8 +39,10 @@
           </button>
           }
         </div>
-        <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
-          (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        <div class="flex-1 min-h-0 overflow-y-auto scroll-fade px-2 pb-8">
+          <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
+            (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        </div>
       </div>
 
       <!-- ── MOBILE: vistas por tab ──────────────────── -->

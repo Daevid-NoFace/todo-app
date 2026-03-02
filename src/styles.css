@@ -166,3 +166,20 @@ router-outlet + * {
     @apply hover:bg-red-500/10 rounded-xl transition-colors duration-200;
   }
 }
+
+.scroll-fade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 2rem,
+    black calc(100% - 2rem),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 2rem,
+    black calc(100% - 2rem),
+    transparent 100%
+  );
+}
