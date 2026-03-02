@@ -41,7 +41,11 @@ export class TodoService {
   filteredTodos = computed(() => {
     const todos = this._todos();
     const f = this._filter();
-    const today = new Date().toISOString().split('T')[0];
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}-${String(d.getDate()).padStart(2, '0')}`;
 
     return todos
       .filter((t) => {

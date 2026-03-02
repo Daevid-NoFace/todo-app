@@ -170,7 +170,10 @@ export class RightPanelComponent {
 
   readonly todayCompleted = computed(() => {
     const todayStr = this.toDateStr(new Date());
-    return this.todoService.todos().filter((t) => t.completedAt?.startsWith(todayStr)).length;
+    return this.todoService.todos().filter((t) => {
+      if (!t.completedAt) return false;
+      return this.toDateStr(new Date(t.completedAt)) === todayStr;
+    }).length;
   });
 
   readonly todayTotal = computed(() => {
