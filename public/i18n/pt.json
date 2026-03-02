@@ -100,6 +100,7 @@
     "light_mode": "Modo claro",
     "dark_mode": "Modo escuro",
     "language": "Idioma",
+    "lang_name": "Português",
     "error_passwords_mismatch": "As palavras-passe não coincidem",
     "error_password_too_short": "A palavra-passe deve ter pelo menos 6 caracteres",
     "error_current_password_wrong": "A palavra-passe atual está incorreta"

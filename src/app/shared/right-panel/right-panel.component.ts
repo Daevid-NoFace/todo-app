@@ -10,6 +10,7 @@ import {
 import { TodoService } from '../../core/services/todo.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { I18nService } from '../../core/services/i18n.service';
 
 interface CalendarCell {
   dayNum: number;
@@ -28,6 +29,7 @@ interface CalendarCell {
 })
 export class RightPanelComponent {
   protected todoService = inject(TodoService);
+  protected i18nService = inject(I18nService);
 
   readonly dateSelected = output<string | null>();
 
@@ -43,11 +45,20 @@ export class RightPanelComponent {
     });
   }
 
-  readonly viewMonthLabel = computed(() =>
-    this.viewMonth().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-  );
+  readonly viewMonthLabel = computed(() => {
+    const locale = this.i18nService.currentLang() === 'en' ? 'en-US' : 'pt-PT';
+    const label = this.viewMonth().toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  });
 
-  readonly weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  readonly weekDays = computed(() => {
+    const locale = this.i18nService.currentLang() === 'en' ? 'en-US' : 'pt-PT';
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(2025, 5, 2 + i);
+      const s = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d).slice(0, 3);
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    });
+  });
 
   private readonly datesWithTasks = computed(() => {
     const set = new Set<string>();

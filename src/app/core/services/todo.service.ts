@@ -2,11 +2,13 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { StorageService } from './storage.service';
 import { Todo, TodoFilter, Priority } from '../models/todo.model';
 import { AuthService } from './auth.service';
+import { I18nService } from './i18n.service';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   private storage = inject(StorageService);
   private auth = inject(AuthService);
+  private i18nService = inject(I18nService);
 
   private get storageKey(): string {
     return `todos_${this.auth.currentUser()?.id ?? 'guest'}`;
@@ -238,18 +240,19 @@ export class TodoService {
   /** Last 7 days: completed that day + rate relative to the busiest day */
   readonly completionByDay = computed(() => {
     const todos = this.todos();
-    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const locale = this.i18nService.currentLang() === 'en' ? 'en-US' : 'pt-PT';
 
     const raw = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - (6 - i));
       const dateStr = date.toISOString().split('T')[0];
       const completed = todos.filter((t) => t.completedAt?.startsWith(dateStr)).length;
-
-      return { label: dayLabels[date.getDay()], date: dateStr, completed };
+      const s = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date).slice(0, 3);
+      const label = s.charAt(0).toUpperCase() + s.slice(1);
+      return { label, date: dateStr, completed };
     });
 
-    const maxCompleted = Math.max(...raw.map((d) => d.completed), 1); // Avoid division by zero
+    const maxCompleted = Math.max(...raw.map((d) => d.completed), 1);
     return raw.map((d) => ({ ...d, rate: Math.round((d.completed / maxCompleted) * 100) }));
   });
 

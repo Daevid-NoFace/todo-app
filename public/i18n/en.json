@@ -100,6 +100,7 @@
     "light_mode": "Light mode",
     "dark_mode": "Dark mode",
     "language": "Language",
+    "lang_name": "English",
     "error_passwords_mismatch": "Passwords do not match",
     "error_password_too_short": "Password must be at least 6 characters",
     "error_current_password_wrong": "Current password is incorrect"
