@@ -4,8 +4,8 @@
     "subtitle": "Organize as suas tarefas de forma eficiente"
   },
   "todo": {
-    "add": "Adicionar Tarefa",
-    "edit": "Editar Tarefa",
+    "add": "Adicionar",
+    "edit": "Editar",
     "save": "Salvar",
     "cancel": "Cancelar",
     "delete": "Excluir",
@@ -21,7 +21,7 @@
     "created": "Tarefa criada com sucesso",
     "updated": "Tarefa atualizada com sucesso",
     "deleted": "Tarefa excluída com sucesso",
-    "due_date": "Data de vencimento",
+    "due_date": "Vencimento",
     "project": "Projeto",
     "no_project": "Nenhum",
     "all_projects": "Todos os Projetos",
