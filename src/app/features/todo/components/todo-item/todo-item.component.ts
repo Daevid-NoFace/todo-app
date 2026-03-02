@@ -28,6 +28,13 @@ export class TodoItemComponent {
   protected todoService = inject(TodoService);
   protected projectService = inject(ProjectService);
   private destroyRef = inject(DestroyRef);
+
+  // Timer leak prevention pattern.
+  // Blur handlers use a 150ms delay so that click events on action buttons can fire
+  // before the inputs are hidden (blur fires before click in the browser event order).
+  // If the component is destroyed while a timer is still pending (e.g. fast mobile
+  // navigation), Angular would emit a "signal set on destroyed view" warning.
+  // DestroyRef ensures every pending timer is cancelled when the component is removed.
   private readonly pendingTimers = new Set<ReturnType<typeof setTimeout>>();
 
   constructor() {
@@ -37,6 +44,8 @@ export class TodoItemComponent {
     });
   }
 
+  // Registers the timer ID in the Set so it can be cancelled on destroy.
+  // Removes itself from the Set once it fires (self-cleaning).
   private safeTimeOut(fn: () => void, delay: number): void {
     const id = setTimeout(() => {
       this.pendingTimers.delete(id);
@@ -163,6 +172,8 @@ export class TodoItemComponent {
   dueDateClass(): string {
     const due = new Date(this.todo().dueDate!);
     const today = new Date();
+    // Normalise both dates to midnight to compare calendar days, not timestamps.
+    // Without this, a task due today would appear overdue if checked later in the day.
     today.setHours(0, 0, 0, 0);
     due.setHours(0, 0, 0, 0);
 
@@ -176,6 +187,9 @@ export class TodoItemComponent {
   }
 
   formatDueDate(): string {
+    // Appending T00:00:00 forces local-timezone parsing.
+    // new Date('YYYY-MM-DD') without a time part is parsed as UTC midnight,
+    // which in UTC+ timezones would display the previous calendar day.
     const due = new Date(this.todo().dueDate! + 'T00:00:00');
     return due.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
   }

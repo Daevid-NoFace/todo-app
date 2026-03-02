@@ -51,6 +51,10 @@ export class RightPanelComponent {
     return label.charAt(0).toUpperCase() + label.slice(1);
   });
 
+  // Uses June 2, 2025 (a known Monday) as a reference date to generate Mon→Sun
+  // abbreviated labels via Intl.DateTimeFormat for the active locale.
+  // Reading `currentLang()` inside the computed registers it as a reactive dependency:
+  // when the language changes, the calendar headers update automatically.
   readonly weekDays = computed(() => {
     const locale = this.i18nService.currentLang() === 'en' ? 'en-US' : 'pt-PT';
     return Array.from({ length: 7 }, (_, i) => {
@@ -69,6 +73,11 @@ export class RightPanelComponent {
     return set;
   });
 
+  /**
+   * Generates the 42 cells (6 rows × 7 columns) of the monthly calendar grid.
+   * Always 42 cells so the grid height stays stable across months.
+   * Week starts on Monday (European convention).
+   */
   readonly calendarDays = computed((): CalendarCell[] => {
     const vm = this.viewMonth();
     const year = vm.getFullYear();
@@ -78,7 +87,10 @@ export class RightPanelComponent {
     const selected = this.selectedDate();
     const cells: CalendarCell[] = [];
 
-    // Monday-based offset: Sun(0)->6, Mon(1)->0, ..., Sat(6)->5
+    // Monday-first offset formula.
+    // getDay() returns 0=Sun, 1=Mon, ..., 6=Sat.
+    // We want Mon=0, Tue=1, ..., Sun=6, so: (dow + 6) % 7
+    // Examples: Sun(0) → 6, Mon(1) → 0, Sat(6) → 5
     const firstDow = new Date(year, month, 1).getDay();
     const startOffset = (firstDow + 6) % 7;
 
@@ -111,7 +123,7 @@ export class RightPanelComponent {
       });
     }
 
-    // Next month fill to complete 6 rows
+    // Fill trailing cells from the next month to always complete 6 rows.
     const remaining = 42 - cells.length;
 
     for (let day = 1; day <= remaining; day++) {
@@ -168,6 +180,10 @@ export class RightPanelComponent {
   // --- Stats ---
   readonly streak = computed(() => this.todoService.streak());
 
+  // `completedAt` is a UTC ISO string (e.g. "2026-03-01T22:30:00.000Z").
+  // We must convert it to a local Date before comparing, because in UTC+ timezones
+  // the UTC timestamp may fall on the previous calendar day.
+  // toDateStr() extracts the correct local date from any Date object.
   readonly todayCompleted = computed(() => {
     const todayStr = this.toDateStr(new Date());
     return this.todoService.todos().filter((t) => {
