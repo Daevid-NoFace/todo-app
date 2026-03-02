@@ -100,17 +100,19 @@
   <div class="flex-1"></div>
 
   <!-- FOOTER: THEME + LANGUAGE -->
-  <div class="border-t border-border-glass dark:border-border-glass-dark pt-3 flex items-center gap-2">
+  <div class="border-t border-border-glass dark:border-border-glass-dark pt-3 flex items-center gap-2 justify-between">
     <app-theme-toggle variant="icon-label"></app-theme-toggle>
 
-    <button (click)="switchLanguage()"
-      class="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
-      {{ i18nService.currentLang() === 'en' ? 'PT' : 'EN' }}
-    </button>
+    <div class="flex items-end">
+      <button (click)="switchLanguage()"
+        class="px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
+        {{ i18nService.currentLang() === 'en' ? 'PT' : 'EN' }}
+      </button>
 
-    <button (click)="authService.logout()"
-      class="px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
-      <i-lucide name="log-out" class="w-4 h-4 text-surface-400"></i-lucide>
-    </button>
+      <button (click)="authService.logout()"
+        class="px-3 py-2 rounded-xl text-sm transition-all duration-200 hover:bg-white/50 dark:hover:bg-white/10">
+        <i-lucide name="log-out" class="w-4 h-4 text-surface-400"></i-lucide>
+      </button>
+    </div>
   </div>
 </nav>

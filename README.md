@@ -6,12 +6,15 @@ A modern, full-featured task management application built as a technical assessm
 
 ![Light Mode](screenshots/light.png)
 ![Dark Mode](screenshots/dark.png)
+![Mobile Light Mode](screenshots/mobile-light.png)
+![Mobile Dark Mode](screenshots/mobile-dark.png)
 
 ---
 
 ## Features
 
 ### Task Management
+
 - Full CRUD — create, edit, delete, and toggle tasks
 - Subtasks with inline add/edit, progress bar, and individual completion
 - Priority levels (Low / Medium / High) with color-coded badges
@@ -19,17 +22,20 @@ A modern, full-featured task management application built as a technical assessm
 - Assign tasks to projects
 
 ### Organisation & Filtering
+
 - Filter by view: All, Today, Upcoming, by Project, or by calendar date
 - Filter by status: All / Active / Completed
 - Full-text search across title and description
 - Sort by creation date, priority, or due date (ascending/descending)
 
 ### Projects
+
 - Create, edit, and delete projects with a custom name, color, and icon
 - Project task counters in the sidebar
 - Project filter chips in the mobile Home tab
 
 ### Interface
+
 - Responsive 3-column layout: Sidebar + Main + Right Panel (desktop), 2-column (tablet), single-column with Bottom Nav (mobile)
 - Glassmorphism design with mesh gradient background
 - Personalized time-based greeting (Good morning / afternoon / evening)
@@ -38,28 +44,33 @@ A modern, full-featured task management application built as a technical assessm
 - Fade mask on the scrollable task list
 
 ### Right Panel (desktop / Calendar tab on mobile)
+
 - Mini calendar (Monday-first, dot indicators for days with tasks, date filter on click)
 - Weekly activity bar chart with relative rates and locale-aware day labels
 - Stats cards: daily streak 🔥, today's completed/total, weekly completion rate
 
 ### Mobile
+
 - Bottom navigation with 5 tabs: Home, Search, FAB (+), Calendar, Profile
 - Bottom Sheet for creating tasks (spring animation)
 - Profile tab: avatar upload, inline name editing, password change, theme and language settings
 
 ### i18n
+
 - English and Portuguese (PT-PT)
 - Runtime language switching — no rebuild required
 - Locale-aware calendar: month names and day abbreviations via `Intl.DateTimeFormat`
 - All UI strings, validation messages, and placeholders translated
 
 ### Data & Auth
+
 - Mock authentication with per-user task isolation (namespaced localStorage keys)
 - Route guards (`authGuard`, `guestGuard`) redirect unauthenticated users
 - Persistent data via localStorage — tasks survive page reloads
 - Avatar stored as base64 via FileReader
 
 ### Quality
+
 - Zoneless change detection (`provideZonelessChangeDetection`) — no Zone.js
 - `ChangeDetectionStrategy.OnPush` on every component
 - Timer leak prevention with `DestroyRef` + `Set<ReturnType<typeof setTimeout>>`
@@ -72,15 +83,15 @@ A modern, full-featured task management application built as a technical assessm
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|---|---|---|
-| Angular | 21 | Frontend framework |
-| TypeScript | Strict mode | Type safety |
-| TailwindCSS | v4 | Utility-first CSS with `@theme` design tokens |
-| Angular Signals | Built-in | Reactive state — no NgRx, no RxJS |
-| Angular Animations | Built-in | Declarative enter/leave transitions |
-| Lucide Angular | Latest | Icon library (tree-shaken via `.pick({})`) |
-| Vitest | Built-in | Unit testing |
+| Technology         | Version     | Purpose                                       |
+| ------------------ | ----------- | --------------------------------------------- |
+| Angular            | 21          | Frontend framework                            |
+| TypeScript         | Strict mode | Type safety                                   |
+| TailwindCSS        | v4          | Utility-first CSS with `@theme` design tokens |
+| Angular Signals    | Built-in    | Reactive state — no NgRx, no RxJS             |
+| Angular Animations | Built-in    | Declarative enter/leave transitions           |
+| Lucide Angular     | Latest      | Icon library (tree-shaken via `.pick({})`)    |
+| Vitest             | Built-in    | Unit testing                                  |
 
 ---
 
@@ -119,17 +130,17 @@ AppComponent
 
 ### Smart vs Presentational components
 
-| Component | Type | Responsibility |
-|---|---|---|
-| `TodoPageComponent` | Smart | Orchestrates all state, injects services |
-| `SidebarComponent` | Smart | Reads filter/project signals, manages project form |
-| `TodoFiltersComponent` | Smart | Directly updates `TodoService` filter |
-| `RightPanelComponent` | Smart | Calendar state, reads todoService signals |
-| `TodoFormComponent` | Presentational | Receives inputs, emits outputs |
-| `TodoItemComponent` | Presentational | Displays a single todo, emits events |
-| `TodoListComponent` | Presentational | Renders the list with stagger animation |
-| `ProjectFormComponent` | Presentational | Reusable project form (sidebar & sheet variant) |
-| `ThemeToggleComponent` | Presentational | Reusable theme button (3 visual variants) |
+| Component              | Type           | Responsibility                                     |
+| ---------------------- | -------------- | -------------------------------------------------- |
+| `TodoPageComponent`    | Smart          | Orchestrates all state, injects services           |
+| `SidebarComponent`     | Smart          | Reads filter/project signals, manages project form |
+| `TodoFiltersComponent` | Smart          | Directly updates `TodoService` filter              |
+| `RightPanelComponent`  | Smart          | Calendar state, reads todoService signals          |
+| `TodoFormComponent`    | Presentational | Receives inputs, emits outputs                     |
+| `TodoItemComponent`    | Presentational | Displays a single todo, emits events               |
+| `TodoListComponent`    | Presentational | Renders the list with stagger animation            |
+| `ProjectFormComponent` | Presentational | Reusable project form (sidebar & sheet variant)    |
+| `ThemeToggleComponent` | Presentational | Reusable theme button (3 visual variants)          |
 
 ---
 
@@ -288,6 +299,6 @@ The app deploys automatically to GitHub Pages on every push to the `development`
 
 The app uses mock authentication. You can register any email/password, or use:
 
-| Email | Password |
-|---|---|
+| Email           | Password  |
+| --------------- | --------- |
 | `demo@demo.com` | `demo123` |
