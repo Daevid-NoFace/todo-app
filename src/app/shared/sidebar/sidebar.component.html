@@ -19,7 +19,9 @@
     <button (click)="selectView('all')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
       [class.bg-white/70]="todoService.filter().view === 'all'"
-      [class.dark:bg-white/15]="todoService.filter().view === 'all'">
+      [class.dark:bg-white/15]="todoService.filter().view === 'all'"
+      [class.hover:bg-white/50]="todoService.filter().view !== 'all'"
+      [class.dark:hover:bg-white/10]="todoService.filter().view !== 'all'">
       <i-lucide name="list-todo" class="w-4 h-4 text-surface-500"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.all_tasks' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ todoService.activeCount() }}</span>
@@ -28,7 +30,9 @@
     <button (click)="selectView('today')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
       [class.bg-white/70]="todoService.filter().view === 'today'"
-      [class.dark:bg-white/15]="todoService.filter().view === 'today'">
+      [class.dark:bg-white/15]="todoService.filter().view === 'today'"
+      [class.hover:bg-white/50]="todoService.filter().view !== 'today'"
+      [class.dark:hover:bg-white/10]="todoService.filter().view !== 'today'">
       <i-lucide name="star" class="w-4 h-4 text-accent-amber"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.today' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ todayCount() }}</span>
@@ -37,7 +41,9 @@
     <button (click)="selectView('upcoming')"
       class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
       [class.bg-white/70]="todoService.filter().view === 'upcoming'"
-      [class.dark:bg-white/15]="todoService.filter().view === 'upcoming'">
+      [class.dark:bg-white/15]="todoService.filter().view === 'upcoming'"
+      [class.hover:bg-white/50]="todoService.filter().view !== 'upcoming'"
+      [class.dark:hover:bg-white/10]="todoService.filter().view !== 'upcoming'">
       <i-lucide name="calendar-days" class="w-4 h-4 text-accent-blue"></i-lucide>
       <span class="flex-1 text-left">{{ 'sidebar.upcoming' | translate }}</span>
       <span class="text-xs text-surface-400 font-mono">{{ upcomingCount() }}</span>
