@@ -46,6 +46,10 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    // Zoneless change detection: removes Zone.js from the application entirely.
+    // Angular relies exclusively on Signals and markForCheck() to schedule re-renders,
+    // eliminating Zone.js's global async monkey-patching.
+    // Benefits: smaller bundle, less per-event overhead, fully predictable reactivity.
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideAnimationsAsync(),

@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { TodoService } from '../../core/services/todo.service';
 import { ProjectService } from '../../core/services/project.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { I18nService } from '../../core/services/i18n.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { Project } from '../../core/models/project.model';
+import { ProjectFormComponent } from '../components/project-form/project-form.component';
+import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule, TranslatePipe],
+  imports: [LucideAngularModule, TranslatePipe, ProjectFormComponent, ThemeToggleComponent],
   templateUrl: './sidebar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -18,17 +19,24 @@ export class SidebarComponent {
   protected authService = inject(AuthService);
   protected todoService = inject(TodoService);
   protected projectService = inject(ProjectService);
-  protected themeService = inject(ThemeService);
   protected i18nService = inject(I18nService);
 
   // --- Navigation counts ---
   protected todayCount = computed(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}-${String(d.getDate()).padStart(2, '0')}`;
     return this.todoService.todos().filter((t) => t.dueDate === today && !t.completed).length;
   });
 
   protected upcomingCount = computed(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}-${String(d.getDate()).padStart(2, '0')}`;
     return this.todoService.todos().filter((t) => t.dueDate && t.dueDate > today && !t.completed)
       .length;
   });
@@ -48,72 +56,36 @@ export class SidebarComponent {
   // --- Project form ---
   readonly showProjectForm = signal(false);
   readonly editingProject = signal<Project | null>(null);
-  readonly projectFormName = signal('');
-  readonly projectFormColor = signal('#7C3AED');
-  readonly projectFormIcon = signal('home');
-
-  readonly projectColors = [
-    '#7C3AED',
-    '#2563EB',
-    '#059669',
-    '#F59E0B',
-    '#EF4444',
-    '#EC4899',
-    '#8B5CF6',
-  ];
-
-  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
 
   openNewProjectForm(): void {
     this.editingProject.set(null);
-    this.projectFormName.set('');
-    this.projectFormColor.set('#7C3AED');
-    this.projectFormIcon.set('home');
     this.showProjectForm.set(!this.showProjectForm());
   }
 
   openEditProjectForm(project: Project, event: Event): void {
     event.stopPropagation();
     this.editingProject.set(project);
-    this.projectFormName.set(project.name);
-    this.projectFormColor.set(project.color);
-    this.projectFormIcon.set(project.icon);
     this.showProjectForm.set(true);
   }
 
-  saveProject(): void {
-    const name = this.projectFormName().trim();
-    if (!name) return;
-
+  onProjectSaved(value: { name: string; color: string; icon: string }): void {
     const editing = this.editingProject();
     if (editing) {
-      this.projectService.update(editing.id, {
-        name,
-        color: this.projectFormColor(),
-        icon: this.projectFormIcon(),
-      });
+      this.projectService.update(editing.id, value);
     } else {
-      this.projectService.addProject({
-        name,
-        color: this.projectFormColor(),
-        icon: this.projectFormIcon(),
-      });
+      this.projectService.addProject(value);
     }
     this.showProjectForm.set(false);
+    this.editingProject.set(null);
   }
 
-  cancelProjectForm(): void {
-    this.showProjectForm.set(false);
-  }
-
-  deleteProject(id: string, event: Event): void {
-    event.stopPropagation();
+  onProjectDeleted(id: string): void {
     this.projectService.delete(id);
-
     if (this.todoService.filter().projectId === id) {
       this.todoService.updateFilter({ view: 'all', projectId: undefined, dateFilter: undefined });
     }
     this.showProjectForm.set(false);
+    this.editingProject.set(null);
   }
 
   // --- Navigation ---

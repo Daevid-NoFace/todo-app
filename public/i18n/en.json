@@ -99,7 +99,11 @@
     "update_password": "Update Password",
     "light_mode": "Light mode",
     "dark_mode": "Dark mode",
-    "language": "Language"
+    "language": "Language",
+    "lang_name": "English",
+    "error_passwords_mismatch": "Passwords do not match",
+    "error_password_too_short": "Password must be at least 6 characters",
+    "error_current_password_wrong": "Current password is incorrect"
   },
   "right_panel": {
     "weekly_activity": "Weekly activity",
@@ -117,5 +121,10 @@
     "new": "New project",
     "edit": "Edit project",
     "delete_confirm": "Delete project and keep its tasks?"
+  },
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
   }
 }

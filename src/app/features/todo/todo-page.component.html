@@ -5,13 +5,24 @@
   </aside>
 
   <!-- MAIN CONTENT -->
-  <main class="main-scrollable px-4 sm:px-6 py-6 pb-24 md:pb-6 space-y-6">
+  <main class="main-scrollable px-4 sm:px-6 overflow-y-auto md:overflow-hidden py-6 pb-24 md:py-0 md:pb-0
+  space-y-6 md:space-y-0">
     <!-- ── DESKTOP: contenido fijo ─────────────────── -->
     <ng-container>
-      <div class="hidden md:block space-y-6">
-        <h2 class="text-lg text-center font-bold text-surface-800 dark:text-surface-100">
-          {{ 'app.subtitle' | translate }}
-        </h2>
+      <div class="hidden md:flex md:flex-col md:flex-1 md:min-h-0 py-6 space-y-4">
+        <div class="shrink-0 space-y-4 px-2">
+          <div class="text-center space-y-1">
+            <h2 class="text-3xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
+              {{ greeting() }},
+              <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
+                {{ authService.currentUser()?.name }}
+              </span>
+            </h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">
+              {{ 'app.subtitle' | translate }}
+            </p>
+          </div>
+        </div>
         <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)" />
         <app-todo-filters />
         <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
@@ -28,18 +39,28 @@
           </button>
           }
         </div>
-        <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
-          (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        <div class="flex-1 min-h-0 overflow-y-auto scroll-fade px-2 pb-8">
+          <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
+            (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        </div>
       </div>
 
       <!-- ── MOBILE: vistas por tab ──────────────────── -->
       <div class="md:hidden">
-        @switch (activeMobileTab()) {
+        @switch (mobileNav.activeTab()) {
         <!-- HOME -->
         @case ('home') {
-        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100">
-          {{ 'app.subtitle' | translate }}
-        </h2>
+        <div class="space-y-0.5 mb-1">
+          <h2 class="text-2xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
+            {{ greeting() }},
+            <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
+              {{ authService.currentUser()?.name }}
+            </span>
+          </h2>
+          <p class="text-xs text-surface-500 dark:text-surface-400">
+            {{ 'app.subtitle' | translate }}
+          </p>
+        </div>
 
         <!-- PROJECT FILTER CHIPS -->
         @let activeProjectId = todoService.filter().view === 'project' ? todoService.filter().projectId : null;
@@ -100,8 +121,9 @@
           </button>
         </div>
 
+        <!-- Filters -->
         <app-todo-filters />
-        <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
+        <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400 p-1.5">
           <span>
             {{
             todoService.activeCount() === 1
@@ -126,10 +148,13 @@
           <i-lucide name="search" [size]="18" class="text-surface-400 shrink-0" />
           <input type="text" [placeholder]="'filter.search' | translate"
             class="flex-1 bg-transparent outline-none text-sm text-surface-800 dark:text-surface-100 placeholder-surface-400 dark:placeholder-surface-500"
-            (input)="todoService.updateFilter({ searchTerm: $any($event.target).value })" />
+            #searchRef (input)="todoService.updateFilter({ searchTerm: searchRef.value })" />
         </div>
-        <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
-          (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        <div class="py-3">
+          <app-todo-list [todos]="todoService.filteredTodos()" (toggled)="onTodoToggled($event)"
+            (deleted)="onTodoDeleted($event)" (edited)="onTodoEdited($event)" />
+        </div>
+
         }
 
         <!-- CALENDAR -->
@@ -167,7 +192,7 @@
           <!-- Name -->
           @if (editingName()) {
           <div class="flex items-center gap-2 w-full max-w-xs">
-            <input type="text" [value]="nameInput()" (input)="nameInput.set($any($event.target).value)"
+            <input type="text" [value]="nameInput()" #nameInputRef (input)="nameInput.set(nameInputRef.value)"
               class="flex-1 px-3 py-2 rounded-xl text-sm text-center font-semibold bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500"
               (keydown.enter)="saveName()" (keydown.escape)="cancelEditName()" />
             <button (click)="saveName()"
@@ -204,16 +229,15 @@
 
           <div class="p-4 space-y-3">
             <input type="password" [placeholder]="'profile.current_password' | translate" [value]="currentPassword()"
-              (input)="currentPassword.set($any($event.target).value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              #currentPasswordRef (input)="currentPassword.set(currentPasswordRef.value)"
+              class="input-field px-4 py-2.5" />
 
             <input type="password" [placeholder]="'profile.new_password' | translate" [value]="newPassword()"
-              (input)="newPassword.set($any($event.target).value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              #newPasswordRef (input)="newPassword.set(newPasswordRef.value)" class="input-field px-4 py-2.5" />
 
             <input type="password" [placeholder]="'profile.confirm_password' | translate" [value]="confirmPassword()"
-              (input)="confirmPassword.set($any($event.target).value)"
-              class="w-full px-4 py-2.5 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 placeholder-surface-400 dark:placeholder-surface-500 text-surface-900 dark:text-surface-100 outline-none focus:border-primary-500 transition-all duration-200" />
+              #confirmPasswordRef (input)="confirmPassword.set(confirmPasswordRef.value)"
+              class="input-field px-4 py-2.5" />
 
             @if (passwordError()) {
             <p class="text-xs text-red-500 px-1">{{ passwordError() }}</p>
@@ -231,27 +255,14 @@
 
         <!-- Settings -->
         <div class="glass rounded-2xl shadow-card overflow-hidden mt-4">
-          <button (click)="themeService.toggle()"
-            class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200">
-            <div class="flex items-center gap-3">
-              @if (themeService.darkMode()) {
-              <i-lucide name="sun" [size]="18" class="text-accent-amber" />
-              } @else {
-              <i-lucide name="moon" [size]="18" class="text-primary-400" />
-              }
-              <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
-                {{ themeService.darkMode() ? ('profile.light_mode' | translate) : ('profile.dark_mode' | translate) }}
-              </span>
-            </div>
-            <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
-          </button>
+          <app-theme-toggle variant="row"></app-theme-toggle>
 
           <button (click)="switchLanguage()"
             class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-white/40 dark:hover:bg-white/5 border-b border-border-glass dark:border-border-glass-dark transition-colors duration-200">
             <div class="flex items-center gap-3">
               <i-lucide name="list-todo" [size]="18" class="text-accent-blue" />
               <span class="text-sm font-medium text-surface-700 dark:text-surface-300">
-                {{ 'profile.language' | translate }}: {{ i18nService.currentLang() === 'en' ? 'English' : 'Português' }}
+                {{ 'profile.language' | translate }}: {{ 'profile.lang_name' | translate }}
               </span>
             </div>
             <i-lucide name="chevron-right" [size]="16" class="text-surface-400" />
@@ -324,60 +335,12 @@
   <!-- PROJECT SHEET: mobile only -->
   @if (showProjectSheet()) {
   <div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden" (click)="showProjectSheet.set(false)"></div>
-  <div @sheetSlideUp
-    class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl rounded-t-3xl shadow-card px-4 pt-3 pb-8 max-h-[75dvh] flex flex-col">
+  <div @sheetSlideUp class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 dark:bg-surface-900/95 backdrop-blur-xl
+  rounded-t-3xl shadow-card px-4 pt-3 pb-8 max-h-[75dvh] flex flex-col">
     <div class="w-10 h-1 rounded-full bg-surface-300 dark:bg-surface-600 mx-auto mb-4 shrink-0"></div>
-    <h3 class="text-base font-semibold text-surface-800 dark:text-surface-100 mb-4">
-      {{ editingMobileProject() ? ('project.edit' | translate ) : ('project.new' | translate) }}
-    </h3>
-
     <div class="space-y-4">
-      <!-- Name -->
-      <input type="text" [placeholder]="'project.name_placeholder' | translate" [value]="mobileProjectName()"
-        (input)="mobileProjectName.set($any($event.target).value)" (keydown.enter)="saveMobileProject()"
-        class="w-full px-4 py-3 rounded-xl text-sm bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 outline-none focus:border-primary-500 text-surface-900 dark:text-surface-100 placeholder-surface-400" />
-
-      <!-- Colors -->
-      <div class="flex gap-2 flex-wrap justify-between">
-        @for (color of projectColors; track color) {
-        <button (click)="mobileProjectColor.set(color)"
-          class="w-8 h-8 rounded-full transition-all duration-200 ring-offset-2" [style.background-color]="color"
-          [class.ring-2]="mobileProjectColor() === color" [class.ring-white]="mobileProjectColor() === color">
-        </button>
-        }
-      </div>
-
-      <!-- Icons -->
-      <div class="flex gap-2 flex-wrap justify-between">
-        @for (icon of projectIcons; track icon) {
-        <button (click)="mobileProjectIcon.set(icon)"
-          class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
-          [class.bg-primary-500]="mobileProjectIcon() === icon" [class.bg-surface-100]="mobileProjectIcon() !== icon"
-          [class.dark:bg-white/10]="mobileProjectIcon() !== icon">
-          <i-lucide [name]="icon" [size]="18" [class.text-white]="mobileProjectIcon() === icon"
-            [class.text-surface-500]="mobileProjectIcon() !== icon">
-          </i-lucide>
-        </button>
-        }
-      </div>
-
-      <!-- Actions -->
-      <div class="flex gap-2 pt-1">
-        <button (click)="saveMobileProject()"
-          class="flex-1 py-3 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200">
-          {{ editingMobileProject() ? ('project.save' | translate) : ('project.create' | translate) }}
-        </button>
-        @if (editingMobileProject()) {
-        <button (click)="deleteMobileProject(editingMobileProject()!.id)"
-          class="px-4 py-3 rounded-xl hover:bg-red-500/10 transition-colors duration-200">
-          <i-lucide name="trash-2" [size]="18" class="text-red-400" />
-        </button>
-        }
-        <button (click)="showProjectSheet.set(false)"
-          class="px-4 py-3 rounded-xl hover:bg-surface-100 dark:hover:bg-white/10 transition-colors duration-200">
-          <i-lucide name="x" [size]="18" class="text-surface-400" />
-        </button>
-      </div>
+      <app-project-form variant="sheet" [editingProject]="editingMobileProject()" (saved)="onMobileProjectSaved($event)"
+        (cancelled)="showProjectSheet.set(false)" (deleted)="onMobileProjectDeleted($event)" />
     </div>
   </div>
   }

@@ -4,8 +4,8 @@
     "subtitle": "Organize as suas tarefas de forma eficiente"
   },
   "todo": {
-    "add": "Adicionar Tarefa",
-    "edit": "Editar Tarefa",
+    "add": "Adicionar",
+    "edit": "Editar",
     "save": "Salvar",
     "cancel": "Cancelar",
     "delete": "Excluir",
@@ -21,7 +21,7 @@
     "created": "Tarefa criada com sucesso",
     "updated": "Tarefa atualizada com sucesso",
     "deleted": "Tarefa excluída com sucesso",
-    "due_date": "Data de vencimento",
+    "due_date": "Vencimento",
     "project": "Projeto",
     "no_project": "Nenhum",
     "all_projects": "Todos os Projetos",
@@ -99,7 +99,11 @@
     "update_password": "Atualizar Palavra-passe",
     "light_mode": "Modo claro",
     "dark_mode": "Modo escuro",
-    "language": "Idioma"
+    "language": "Idioma",
+    "lang_name": "Português",
+    "error_passwords_mismatch": "As palavras-passe não coincidem",
+    "error_password_too_short": "A palavra-passe deve ter pelo menos 6 caracteres",
+    "error_current_password_wrong": "A palavra-passe atual está incorreta"
   },
   "right_panel": {
     "weekly_activity": "Atividade semanal",
@@ -117,5 +121,10 @@
     "new": "Novo projeto",
     "edit": "Editar projeto",
     "delete_confirm": "Excluir projeto e manter as tarefas?"
+  },
+  "greeting": {
+    "morning": "Bom dia",
+    "afternoon": "Boa tarde",
+    "evening": "Boa noite"
   }
 }

@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-
-type NavTab = 'home' | 'search' | 'calendar' | 'profile';
+import { MobileNavService, MobileTab } from '../../../../core/services/mobile-nav.service';
 
 @Component({
   selector: 'app-bottom-nav',
@@ -10,13 +9,13 @@ type NavTab = 'home' | 'search' | 'calendar' | 'profile';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BottomNavComponent {
+  protected mobileNav = inject(MobileNavService);
 
-  readonly activeTab = signal<NavTab>('home');
   readonly fabClick = output<void>();
-  readonly tabChange = output<NavTab>();
+  readonly tabChange = output<MobileTab>();
 
-  setTab(tab: NavTab): void {
-    this.activeTab.set(tab);
+  setTab(tab: MobileTab): void {
+    this.mobileNav.activeTab.set(tab);
     this.tabChange.emit(tab);
   }
 }

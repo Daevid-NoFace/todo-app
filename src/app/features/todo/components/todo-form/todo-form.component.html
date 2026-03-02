@@ -21,61 +21,64 @@
     </textarea>
   </div>
 
-  <div class="flex items-center gap-2">
-    <label for="project" class="text-sm font-medium text-surface-700 dark:text-surface-300">
-      {{ 'todo.project' | translate }}
-    </label>
-    <select formControlName="projectId" id="project" class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none">
-      <option value="">{{ 'todo.no_project' | translate }}</option>
-      @for (project of projectService.projects(); track project.id) {
-      <option [value]="project.id">{{ project.name }}</option>
-      }
-    </select>
-  </div>
-
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col lg:flex-row lg:items-center gap-3">
     <div class="flex items-center gap-2">
-      <label for="dueDate" class="text-sm font-medium text-surface-700 dark:text-surface-300">
-        {{ 'todo.due_date' | translate }}
+      <label for="project" class="text-sm font-medium text-surface-700 dark:text-surface-300">
+        {{ 'todo.project' | translate }}
       </label>
-      <input formControlName="dueDate" type="date" id="dueDate"
-        class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none" />
-    </div>
-    @if (submitted() && form.controls.dueDate.errors?.['required']) {
-    <p role="alert" class="text-sm text-red-500">
-      {{ 'validation.required' | translate }}
-    </p>
-    }
-  </div>
-
-  <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-    <div class="flex items-center gap-2">
-      <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">
-        {{ 'priority.label' | translate }}
-      </label>
-      <select formControlName="priority" id="priority"
+      <select formControlName="projectId" id="project"
         class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none">
-        <option value="low">{{ 'priority.low' | translate }}</option>
-        <option value="medium">{{ 'priority.medium' | translate }}</option>
-        <option value="high">{{ 'priority.high' | translate }}</option>
+        <option value="">{{ 'todo.no_project' | translate }}</option>
+        @for (project of projectService.projects(); track project.id) {
+        <option [value]="project.id">{{ project.name }}</option>
+        }
       </select>
     </div>
 
-    <div class="flex gap-2">
-      @if (editTodo()) {
-      <button type="button" (click)="cancelled.emit()"
-        class="px-4 py-2 rounded-xl text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-white/50 dark:hover:bg-white/10 transition-colors duration-200">
-        {{ 'todo.cancel' | translate }}
-      </button>
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center gap-2">
+        <label for="dueDate" class="text-sm font-medium text-surface-700 dark:text-surface-300">
+          {{ 'todo.due_date' | translate }}
+        </label>
+        <input formControlName="dueDate" type="date" id="dueDate"
+          class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none" />
+      </div>
+      @if (submitted() && form.controls.dueDate.errors?.['required']) {
+      <p role="alert" class="text-sm text-red-500">
+        {{ 'validation.required' | translate }}
+      </p>
       }
-      <button type="submit"
-        class="px-6 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200">
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+      <div class="flex items-center gap-2">
+        <label for="priority" class="text-sm font-medium text-surface-700 dark:text-surface-300">
+          {{ 'priority.label' | translate }}
+        </label>
+        <select formControlName="priority" id="priority"
+          class="px-3 py-2 rounded-xl bg-white/50 dark:bg-white/5 border border-surface-200/60 dark:border-white/10 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 text-sm text-surface-700 dark:text-surface-300 transition-all duration-200 outline-none">
+          <option value="low">{{ 'priority.low' | translate }}</option>
+          <option value="medium">{{ 'priority.medium' | translate }}</option>
+          <option value="high">{{ 'priority.high' | translate }}</option>
+        </select>
+      </div>
+
+      <div class="flex gap-2">
         @if (editTodo()) {
-        {{ 'todo.update' | translate }}
-        } @else {
-        {{ 'todo.add' | translate }}
+        <button type="button" (click)="cancelled.emit()"
+          class="px-4 py-2 rounded-xl text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-white/50 dark:hover:bg-white/10 transition-colors duration-200">
+          {{ 'todo.cancel' | translate }}
+        </button>
         }
-      </button>
+        <button type="submit"
+          class="px-6 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-fab transition-all duration-200">
+          @if (editTodo()) {
+          {{ 'todo.update' | translate }}
+          } @else {
+          {{ 'todo.add' | translate }}
+          }
+        </button>
+      </div>
     </div>
   </div>
 </form>

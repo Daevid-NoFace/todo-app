@@ -13,12 +13,11 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
 import { sheetSlideUp } from '../../shared/animations/todo.animations';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
-import { ThemeService } from '../../core/services/theme.service';
-import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../core/services/project.service';
 import { Project } from '../../core/models/project.model';
-
-type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
+import { MobileNavService, MobileTab } from '../../core/services/mobile-nav.service';
+import { ProjectFormComponent } from '../../shared/components/project-form/project-form.component';
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-todo-page',
@@ -31,7 +30,8 @@ type MobileTab = 'home' | 'search' | 'calendar' | 'profile';
     RightPanelComponent,
     BottomNavComponent,
     LucideAngularModule,
-    FormsModule,
+    ProjectFormComponent,
+    ThemeToggleComponent,
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.css',
@@ -43,71 +43,47 @@ export class TodoPageComponent {
   protected authService = inject(AuthService);
   protected toastService = inject(ToastService);
   protected i18nService = inject(I18nService);
-  protected themeService = inject(ThemeService);
   protected projectService = inject(ProjectService);
+  protected mobileNav = inject(MobileNavService);
 
   readonly showSheet = signal(false);
-  readonly activeMobileTab = signal<MobileTab>('home');
   readonly showDateSheet = signal(false);
+
+  // Greetings
+  readonly greeting = computed(() => {
+    const hour = new Date().getHours();
+    const key =
+      hour < 12 ? 'greeting.morning' : hour < 18 ? 'greeting.afternoon' : 'greeting.evening';
+    return this.i18nService.translate(key);
+  });
 
   // Project signals
   readonly showProjectSheet = signal(false);
   readonly editingMobileProject = signal<Project | null>(null);
-  readonly mobileProjectName = signal('');
-  readonly mobileProjectColor = signal('#7C3AED');
-  readonly mobileProjectIcon = signal('home');
-
-  readonly projectColors = [
-    '#7C3AED',
-    '#2563EB',
-    '#059669',
-    '#F59E0B',
-    '#EF4444',
-    '#EC4899',
-    '#8B5CF6',
-  ];
-
-  readonly projectIcons = ['home', 'briefcase', 'heart', 'star', 'flag', 'bookmark', 'tag'];
 
   // --- Project mobile management ---
   openNewProjectSheet(): void {
     this.editingMobileProject.set(null);
-    this.mobileProjectName.set('');
-    this.mobileProjectColor.set('#7C3AED');
-    this.mobileProjectIcon.set('home');
     this.showProjectSheet.set(true);
   }
 
   openEditProjectSheet(project: Project, event: Event): void {
     event.stopPropagation();
     this.editingMobileProject.set(project);
-    this.mobileProjectName.set(project.name);
-    this.mobileProjectColor.set(project.color);
-    this.mobileProjectIcon.set(project.icon);
     this.showProjectSheet.set(true);
   }
 
-  saveMobileProject(): void {
-    const name = this.mobileProjectName().trim();
-    if (!name) return;
+  onMobileProjectSaved(value: { name: string; color: string; icon: string }): void {
     const editing = this.editingMobileProject();
     if (editing) {
-      this.projectService.update(editing.id, {
-        name,
-        color: this.mobileProjectColor(),
-        icon: this.mobileProjectIcon(),
-      });
+      this.projectService.update(editing.id, value);
     } else {
-      this.projectService.addProject({
-        name,
-        color: this.mobileProjectColor(),
-        icon: this.mobileProjectIcon(),
-      });
+      this.projectService.addProject(value);
     }
     this.showProjectSheet.set(false);
   }
 
-  deleteMobileProject(id: string): void {
+  onMobileProjectDeleted(id: string): void {
     this.projectService.delete(id);
     if (this.todoService.filter().projectId === id) {
       this.todoService.updateFilter({ view: 'all', projectId: undefined });
@@ -122,7 +98,10 @@ export class TodoPageComponent {
   });
 
   onTabChange(tab: MobileTab): void {
-    this.activeMobileTab.set(tab);
+    this.mobileNav.activeTab.set(tab);
+    if (tab !== 'search') {
+      this.todoService.updateFilter({ searchTerm: '' });
+    }
   }
 
   openSheet(): void {
@@ -235,18 +214,18 @@ export class TodoPageComponent {
     this.passwordSuccess.set(false);
 
     if (this.newPassword() !== this.confirmPassword()) {
-      this.passwordError.set('Passwords do not match');
+      this.passwordError.set(this.i18nService.translate('profile.error_passwords_mismatch'));
       return;
     }
     if (this.newPassword().length < 6) {
-      this.passwordError.set('Password must be at least 6 characters');
+      this.passwordError.set(this.i18nService.translate('profile.error_password_too_short'));
       return;
     }
 
     const error = this.authService.updatePassword(this.currentPassword(), this.newPassword());
 
     if (error) {
-      this.passwordError.set('Current password is incorrect');
+      this.passwordError.set(this.i18nService.translate('profile.error_current_password_wrong'));
     } else {
       this.passwordSuccess.set(true);
       this.currentPassword.set('');

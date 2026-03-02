@@ -6,6 +6,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
+  DestroyRef,
 } from '@angular/core';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { Todo, Priority } from '../../../../core/models/todo.model';
@@ -14,31 +15,44 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { TodoService } from '../../../../core/services/todo.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { LucideAngularModule } from 'lucide-angular';
-import { animate, style, transition, trigger } from '@angular/animations';
-import { checkBounce } from '../../../../shared/animations/todo.animations';
+import { checkBounce, expandCollapse } from '../../../../shared/animations/todo.animations';
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   imports: [TodoFormComponent, TranslatePipe, ConfirmDialog, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('expandCollapse', [
-      transition(':enter', [
-        style({ opacity: 0, height: 0, overflow: 'hidden' }),
-        animate('300ms ease-out', style({ opacity: 1, height: '*' })),
-      ]),
-      transition(':leave', [
-        style({ opacity: 1, height: '*', overflow: 'hidden' }),
-        animate('300ms ease-out', style({ opacity: 0, height: 0 })),
-      ]),
-    ]),
-    checkBounce,
-  ],
+  animations: [expandCollapse, checkBounce],
 })
 export class TodoItemComponent {
   protected todoService = inject(TodoService);
   protected projectService = inject(ProjectService);
+  private destroyRef = inject(DestroyRef);
+
+  // Timer leak prevention pattern.
+  // Blur handlers use a 150ms delay so that click events on action buttons can fire
+  // before the inputs are hidden (blur fires before click in the browser event order).
+  // If the component is destroyed while a timer is still pending (e.g. fast mobile
+  // navigation), Angular would emit a "signal set on destroyed view" warning.
+  // DestroyRef ensures every pending timer is cancelled when the component is removed.
+  private readonly pendingTimers = new Set<ReturnType<typeof setTimeout>>();
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      this.pendingTimers.forEach(clearTimeout);
+      this.pendingTimers.clear();
+    });
+  }
+
+  // Registers the timer ID in the Set so it can be cancelled on destroy.
+  // Removes itself from the Set once it fires (self-cleaning).
+  private safeTimeOut(fn: () => void, delay: number): void {
+    const id = setTimeout(() => {
+      this.pendingTimers.delete(id);
+      fn();
+    }, delay);
+    this.pendingTimers.add(id);
+  }
 
   todo = input.required<Todo>();
 
@@ -126,11 +140,11 @@ export class TodoItemComponent {
   }
 
   onAddSubtaskBlur(): void {
-    setTimeout(() => this.showAddSubtask.set(false), 150);
+    this.safeTimeOut(() => this.showAddSubtask.set(false), 150);
   }
 
   onEditSubtaskBlur(subtaskId: string, inputEl: HTMLInputElement): void {
-    setTimeout(() => {
+    this.safeTimeOut(() => {
       if (inputEl.value.trim()) {
         this.todoService.updateSubtask(this.todo().id, subtaskId, inputEl.value.trim());
       }
@@ -158,6 +172,8 @@ export class TodoItemComponent {
   dueDateClass(): string {
     const due = new Date(this.todo().dueDate!);
     const today = new Date();
+    // Normalise both dates to midnight to compare calendar days, not timestamps.
+    // Without this, a task due today would appear overdue if checked later in the day.
     today.setHours(0, 0, 0, 0);
     due.setHours(0, 0, 0, 0);
 
@@ -171,6 +187,9 @@ export class TodoItemComponent {
   }
 
   formatDueDate(): string {
+    // Appending T00:00:00 forces local-timezone parsing.
+    // new Date('YYYY-MM-DD') without a time part is parsed as UTC midnight,
+    // which in UTC+ timezones would display the previous calendar day.
     const due = new Date(this.todo().dueDate! + 'T00:00:00');
     return due.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
   }

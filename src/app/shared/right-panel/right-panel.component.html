@@ -22,7 +22,7 @@
 
     <!-- Week day headers -->
     <div class="grid grid-cols-7 mb-1">
-      @for (day of weekDays; track day) {
+      @for (day of weekDays(); track day) {
       <span class="text-center text-xs font-medium text-surface-400 dark:text-surface-500 py-1">
         {{ day }}
       </span>
