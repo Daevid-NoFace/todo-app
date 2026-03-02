@@ -6,7 +6,8 @@
     </div>
 
     <div class="flex-1 min-w-0">
-      <p class="text-sm font-semibold truncate">{{ authService.currentUser()?.name }}</p>
+      <p class="text-sm font-semibold truncate text-surface-900 dark:text-surface-100">{{
+        authService.currentUser()?.name }}</p>
       <p class="text-xs text-surface-500 dark:text-surface-400">
         {{ todoService.activeCount() }} {{ 'sidebar.tasks_active' | translate }}
       </p>

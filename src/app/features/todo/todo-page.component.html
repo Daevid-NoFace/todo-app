@@ -9,9 +9,17 @@
     <!-- ── DESKTOP: contenido fijo ─────────────────── -->
     <ng-container>
       <div class="hidden md:block space-y-6">
-        <h2 class="text-lg text-center font-bold text-surface-800 dark:text-surface-100">
-          {{ 'app.subtitle' | translate }}
-        </h2>
+        <div class="text-center space-y-1">
+          <h2 class="text-3xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
+            {{ greeting() }},
+            <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
+              {{ authService.currentUser()?.name }}
+            </span>
+          </h2>
+          <p class="text-sm text-surface-500 dark:text-surface-400">
+            {{ 'app.subtitle' | translate }}
+          </p>
+        </div>
         <app-todo-form [preselectedProjectId]="preselectedProjectId()" (todoCreated)="onTodoCreated($event)" />
         <app-todo-filters />
         <div class="flex items-center justify-between text-sm text-surface-500 dark:text-surface-400">
@@ -37,9 +45,17 @@
         @switch (mobileNav.activeTab()) {
         <!-- HOME -->
         @case ('home') {
-        <h2 class="text-lg font-bold text-surface-800 dark:text-surface-100">
-          {{ 'app.subtitle' | translate }}
-        </h2>
+        <div class="space-y-0.5 mb-1">
+          <h2 class="text-2xl font-extrabold tracking-tight text-surface-900 dark:text-surface-100">
+            {{ greeting() }},
+            <span class="bg-linear-to-r from-primary-500 to-accent-pink bg-clip-text text-transparent">
+              {{ authService.currentUser()?.name }}
+            </span>
+          </h2>
+          <p class="text-xs text-surface-500 dark:text-surface-400">
+            {{ 'app.subtitle' | translate }}
+          </p>
+        </div>
 
         <!-- PROJECT FILTER CHIPS -->
         @let activeProjectId = todoService.filter().view === 'project' ? todoService.filter().projectId : null;

@@ -121,5 +121,10 @@
     "new": "Novo projeto",
     "edit": "Editar projeto",
     "delete_confirm": "Excluir projeto e manter as tarefas?"
+  },
+  "greeting": {
+    "morning": "Bom dia",
+    "afternoon": "Boa tarde",
+    "evening": "Boa noite"
   }
 }

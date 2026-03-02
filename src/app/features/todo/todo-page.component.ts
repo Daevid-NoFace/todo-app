@@ -49,6 +49,14 @@ export class TodoPageComponent {
   readonly showSheet = signal(false);
   readonly showDateSheet = signal(false);
 
+  // Greetings
+  readonly greeting = computed(() => {
+    const hour = new Date().getHours();
+    const key =
+      hour < 12 ? 'greeting.morning' : hour < 18 ? 'greeting.afternoon' : 'greeting.evening';
+    return this.i18nService.translate(key);
+  });
+
   // Project signals
   readonly showProjectSheet = signal(false);
   readonly editingMobileProject = signal<Project | null>(null);

@@ -121,5 +121,10 @@
     "new": "New project",
     "edit": "Edit project",
     "delete_confirm": "Delete project and keep its tasks?"
+  },
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
   }
 }
